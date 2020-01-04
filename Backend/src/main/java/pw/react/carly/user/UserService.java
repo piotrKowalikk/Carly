@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class UserService {
 
@@ -17,13 +15,13 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User findByLogin(String login) {
-        List<User> users = userRepository.findByLogin(login);
-        if(!users.isEmpty()) {
-            return users.get(0);
-        }
-        throw new ResourceNotFoundException("User not found");
-    }
+//    public User findByLogin(String login) {
+//        List<User> users = userRepository.findByLogin(login);
+//        if(!users.isEmpty()) {
+//            return users.get(0);
+//        }
+//        throw new ResourceNotFoundException("User not found");
+//    }
 
 
     public User updateUser(User user){

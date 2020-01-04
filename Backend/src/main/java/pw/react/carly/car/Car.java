@@ -1,9 +1,6 @@
 package pw.react.carly.car;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity(name = "Cars")
 @Table(name = "Cars")
@@ -19,10 +16,11 @@ public class Car {
     private String licensePlate;
     private String localization;
     private int price;
+    @Enumerated(EnumType.STRING)
     private Availability availability;
 
     public Car() {
-        availability = Availability.AVAILABLE;
+
     }
 
     public String getModel() {

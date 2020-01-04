@@ -47,11 +47,11 @@ public class UserController {
     public ResponseEntity<User> addUser(@RequestBody @Valid User user) {
             return ResponseEntity.ok().body(userRepository.save(user));
     }
-    @GetMapping("/login/{login}")
-    public ResponseEntity<User> getUserByLogin(@PathVariable String login){
-        return ResponseEntity.ok().body(userService.findByLogin(login));
-
-    }
+//    @GetMapping("/login/{login}")
+//    public ResponseEntity<Userd> getUserByLogin(@PathVariable String login){
+//        return ResponseEntity.ok().body(userService.findByLogin(login));
+//
+//    }
 
 
 }

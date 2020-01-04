@@ -1,83 +1,45 @@
 package pw.react.carly.user;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-@Entity(name = "Users")
-@Table(name = "Users")
+import javax.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
-    @Id
-    @GeneratedValue
-    private Long id;
-    private String login;
-    private String firstName;
-    private String lastName;
-    private Date birthDate;
-    private boolean isActive;
 
-    public User() {
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
+	@Column
+	private String email;
+	@Column
+	@JsonIgnore
+	private String password;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public long getId() {
+		return id;
+	}
 
-    public String getLogin() {
-        return login;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public void setLogin(String login) {
-        this.login = login;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public String getFirstName() {
-        return firstName;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
+	public String getPassword() {
+		return password;
+	}
 
-    public String getLastName() {
-        return lastName;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public void setBirthDate(Date birthDate) {
-        this.birthDate = birthDate;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
-
-    public User(String login) {
-        this.login = login;
-    }
-
-    public User(String login, String firstName, String lastName, Date birthDate, boolean isActive) {
-        this.login = login;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.birthDate = birthDate;
-        this.isActive = isActive;
-    }
 }
