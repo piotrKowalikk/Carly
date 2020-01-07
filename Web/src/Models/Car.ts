@@ -12,7 +12,7 @@ export class Car {
         this.id = data.id ?? null;
         this.carMake = data.carMake ?? null;
         this.carModel = data.carModel ?? null;
-        this.licenseNumber = data.licenseNumber ?? null;
+        this.licenseNumber = data.lisenseNumber ?? null;//TYPO
         this.availability = data.availability ?? null;
     }
 }

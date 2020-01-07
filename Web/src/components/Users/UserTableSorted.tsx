@@ -141,7 +141,7 @@ function EnhancedTable(props: IEnhancedTableProps) {
 
     return (
         <div>
-            <Container>
+            <Container className="mt-4">
                 {props.data.length != 0 &&
                     <div>
                         <Paper className="mb-3">
