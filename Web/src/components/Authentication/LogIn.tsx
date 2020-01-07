@@ -2,10 +2,10 @@ import * as React from 'react'
 import { Form, InputGroup, Button, Container } from 'react-bootstrap'
 import TextField from '@material-ui/core/TextField'
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Route, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
 
-interface ILogInProps {
+interface ILogInProps extends RouteComponentProps {
 
 }
 
@@ -13,7 +13,7 @@ interface ILogInState {
     email: string;
     emailError: string
     password: string;
-    passwordError :string;
+    passwordError: string;
 }
 
 class LogIn extends React.Component<ILogInProps, ILogInState>{
@@ -24,7 +24,7 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             emailError: '',
             email: '',
             password: '',
-            passwordError:''
+            passwordError: ''
         }
     }
 
@@ -51,7 +51,7 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
     }
 
     passwordChanged = (e) => {
-        if (e.target.value.length <3) {
+        if (e.target.value.length < 3) {
             this.setState({
                 passwordError: 'Password too short.',
                 password: e.target.value
@@ -66,24 +66,25 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
     }
 
     onSubmit = (e) => {
-        var anyError: boolean= false;
-        if (!this.ValidateEmail(this.state.email)){
+        var anyError: boolean = false;
+        if (!this.ValidateEmail(this.state.email)) {
             this.setState({
                 emailError: 'Incorrect email address.'
             });
-            anyError=true;
+            anyError = true;
         }
-        if (this.state.password.length <3 ){
+        if (this.state.password.length < 3) {
             this.setState({
                 passwordError: 'Password too short.'
             });
-            anyError= true;
+            anyError = true;
         }
-        if(anyError){
-         e.preventDefault();
-         return;
+        if (anyError) {
+            e.preventDefault();
+            return;
         }
         console.log('zapytajmy backend')
+        this.props.history.push('/cars');
         e.preventDefault();
     }
 
