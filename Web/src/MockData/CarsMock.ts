@@ -51,5 +51,5 @@ new Car({"id":46,"lisenseNumber":"19-840-2606","availability":"Available","carMa
 new Car({"id":47,"lisenseNumber":"29-073-2894","availability":"Available","carMake":"Buick","carModel":"Regal"}),
 new Car({"id":48,"lisenseNumber":"76-871-3588","availability":"Available","carMake":"Chevrolet","carModel":"Corvette"}),
 new Car({"id":49,"lisenseNumber":"03-605-3755","availability":"Booked","carMake":"Buick","carModel":"LeSabre"}),
-new Car({"id":50,"lisenseNumber":"36-849-6810","availability":"Available","carMake":"Jeep","carModel":"Liberty"})]
-}
+new Car({"id":50,"lisenseNumber":"36-849-6810","availability":"Available","carMake":"Jeep","carModel":"Liberty"})
+];
