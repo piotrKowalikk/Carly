@@ -10,6 +10,8 @@ import { Container } from 'react-bootstrap';
 import thunk from 'redux-thunk';
 import { NavBar } from './NavBar';
 import LogIn from './Authentication/LogIn';
+import UserTable from './Users/UserTable';
+import {EnhancedTableWrapper} from './Users/UserTableSorted';
 
 //const reactLogo = require("./../assets/img/react_logo.svg");
 const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunk)))
@@ -28,6 +30,10 @@ class App extends React.Component<{}, undefined> {
             </Route>
             <Route path="/logIn">
                 <LogIn />
+            </Route>
+            <Route path="/users">
+              {/* <UserTable/> */}
+            <EnhancedTableWrapper/>
             </Route>
           </Switch>
         </Router>
