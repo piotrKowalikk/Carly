@@ -1,50 +1,48 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
-import { Header, ListItem } from 'react-native-elements';
+import { Text, StyleSheet, View } from 'react-native';
+import { ListItem, Left, Right } from 'native-base';
+import { FlatList } from 'react-native-gesture-handler';
 
-class CarDetails extends Component {
+class CarDetails extends Component<any, any> {
+   static navigationOptions = ({ navigation }) => ({
+      title: navigation.state.params.title,
+   });
+
    constructor(props) {
       super(props);
 
+      const car = this.props.navigation.getParam('car', null);
+      this.props.navigation.setParams({ title: car.name });
+
       this.state = {
-         isLoading: true,
-         cars: []
+         data: [
+            { name: 'Name', value: car.name },
+            { name: 'Location', value: car.location },
+            { name: 'Seats', value: car.seats.toString() }
+         ]
       }
    }
 
-   componentDidMount() {
-      // fetch('http://localhost:3004/cars')
-      //    .then(data => data.json())
-      //    .then(cars => {
-      //       this.setState({ cars, isLoading: false });
-      //    });
-   }
-
    render() {
-      const { cars, isLoading } = this.state;
-
+      const data = this.state.data;
+      
       return (
          <View style={styles.container}>
-            <Header
-               containerStyle={{backgroundColor: '#0E90E1'}}
-               //leftComponent={{ icon: 'menu', color: '#fff' }}
-               centerComponent={{ text: 'CARS', style: { color: '#fff' } }}
-               //rightComponent={{ icon: 'home', color: '#fff' }}
+            <FlatList
+               data={data}
+               keyExtractor={(item: any) => item.name}
+               renderItem={({item}) => (
+                  <ListItem style={styles.listItem}>
+                     <Left style={styles.flexHalf}>
+                        <Text style={styles.leftText}>{item.name}</Text>
+                     </Left>
+                     <Right style={styles.flexHalf}>
+                        <Text numberOfLines={1} style={styles.rightText}>{item.value}</Text>
+                     </Right>
+                  </ListItem>
+               )}
             />
-            {isLoading ?
-            <View style={{ flex: 1, justifyContent: 'center' }}>
-               <ActivityIndicator size="large" color="#0E90E1" />
-            </View>
-            : cars.map((l, i: number) => (
-            <ListItem
-               key={i}
-               leftAvatar={{ source: { uri: l.avatar_url } }}
-               title={l.name}
-               subtitle={l.subtitle}
-               bottomDivider
-            />
-            ))}
-            </View>
+         </View>
       );
    }
 }
@@ -52,7 +50,21 @@ class CarDetails extends Component {
 const styles = StyleSheet.create({
    container: {
       flex: 1,
+      backgroundColor: 'white'
    },
+   listItem: {
+      height: 60
+   },
+   leftText: {
+      fontSize: 16
+   },
+   rightText: {
+      fontSize: 16,
+      color: 'grey'
+   },
+   flexHalf: {
+      flex: 0.5
+   }
 });
 
 export default CarDetails;
