@@ -13,11 +13,8 @@ public class Car {
     private int seats;
     private int doors;
     private int year;
-    private String licensePlate;
-    private String localization;
-    private int price;
-    @Enumerated(EnumType.STRING)
-    private Availability availability;
+    private String licence;
+    private String location;
 
     public Car() {
 
@@ -29,17 +26,6 @@ public class Car {
 
     public void setModel(String model) {
         this.model = model;
-    }
-
-    public Car(String engine, int seats, int doors, int year, String licensePlate, String localization, int price, String model) {
-        this.engine = engine;
-        this.seats = seats;
-        this.doors = doors;
-        this.model = model;
-        this.year = year;
-        this.licensePlate = licensePlate;
-        this.localization = localization;
-        this.price = price;
     }
 
     public Long getId() {
@@ -82,35 +68,20 @@ public class Car {
         this.year = year;
     }
 
-    public String getLicensePlate() {
-        return licensePlate;
+    public String getLicence() {
+        return licence;
     }
 
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
+    public void setLicence(String licence) {
+        this.licence = licence;
     }
 
-    public String getLocalization() {
-        return localization;
+    public String getLocation() {
+        return location;
     }
 
-    public void setLocalization(String localization) {
-        this.localization = localization;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public Availability getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Availability availability) {
-        this.availability = availability;
-    }
 }
