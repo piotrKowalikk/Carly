@@ -170,10 +170,10 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                                 return (
-                                                    <TableRow key={row.title} hover selected={isItemSelected}>
-                                                        <TableCell >{row.user}</TableCell>
-                                                        <TableCell >{row.datefrom}</TableCell>
-                                                        <TableCell >{row.dateto}</TableCell>                                               
+                                                    <TableRow key={row.id} hover selected={isItemSelected}>
+                                                        <TableCell >{row.userId}</TableCell>
+                                                        <TableCell >{row.dateFrom}</TableCell>
+                                                        <TableCell >{row.dateTo}</TableCell>                                               
                                                     </TableRow>
                                                 );
                                             })}
