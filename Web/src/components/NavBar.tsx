@@ -15,6 +15,7 @@ export function NavBar() {
                 <Button>  <Link style={{ color: 'white' }} to="/">Home</Link></Button>
                 <Button>  <Link style={{ color: 'white' }} to="/users">Users</Link></Button>
                 <Button>  <Link style={{ color: 'white' }} to="/cars">Cars</Link></Button>
+                <Button>  <Link style={{ color: 'white' }} to="/reservations">Reservations</Link></Button>
             </Form>
             <Form inline>
                 <Button>  <Link style={{ color: 'white' }} to="/logIn">Log In</Link></Button>

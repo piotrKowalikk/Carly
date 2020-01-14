@@ -4,23 +4,23 @@ import TextField from '@material-ui/core/TextField'
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
-import {usersMock} from '../../MockData/UsersMock'
-import { User } from '../../Models/User';
+import {reservationsMock} from '../../MockData/ReservationMock'
+import { Reservation } from '../../Models/Reservation';
 
 interface IUsersTableProps {
 
 }
 
 interface IUsersTableState {
-    users: User[];
+    reservations: Reservation[];
 }
 
-class UsersTable extends React.Component<IUsersTableProps, IUsersTableState>{
+class ReservationsTable extends React.Component<IUsersTableProps, IUsersTableState>{
 
     constructor(props) {
         super(props);
         this.state = {
-            users: usersMock
+            reservations: reservationsMock
         }
     }
 
@@ -29,43 +29,34 @@ class UsersTable extends React.Component<IUsersTableProps, IUsersTableState>{
     }
 
     render() {
-        const style: React.CSSProperties = {
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            width: '30em',
-            padding: '20px',
-            marginTop: '-9em', /*set to a negative number 1/2 of your height*/
-            marginLeft: '-15em', /*set to a negative number 1/2 of your width*/
-            border: ' 1px solid #ccc',
-            'backgroundColor': '#f3f3f3',
-        }
+      
         return (
-            <Container >
+        
                 <Table striped bordered hover>
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
+                            <th>User</th>
+                            <th>Date From</th>
+                            <th>Date To</th>
+                            <th>Type</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            this.state.users.map(x => {
+                            this.state.reservations.map(x => {
                                return ( <tr>
                                     <td></td>
-                                    <td>{x.name}</td>
-                                    <td>{x.lastName}</td>
-                                    <td>{x.email}</td>
+                                    <td>{x.userId}</td>
+                                    <td>{x.dateFrom}</td>
+                                    <td>{x.dateTo}</td>
+                                    <td>{x.type}</td>
                                 </tr>);
                             })
                         }
 
                     </tbody>
                 </Table>
-            </Container>
         );
     }
 }
@@ -85,4 +76,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withRouter(UsersTable));
+)(withRouter(ReservationsTable));

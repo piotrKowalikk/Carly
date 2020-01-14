@@ -13,6 +13,8 @@ import LogIn from './Authentication/LogIn';
 import UserTable from './Users/UserTable';
 import { EnhancedTableWrapper } from './Users/UserTableSorted';
 import { EnhancedTableWrapperCars } from './Cars/CarsTable';
+import CarsDetails from './Cars/CarsDetails';
+import { EnhancedTableWrapperReservation } from './Reservations/ReservationsTableSorted';
 
 //const reactLogo = require("./../assets/img/react_logo.svg");
 const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunk)))
@@ -38,6 +40,12 @@ class App extends React.Component<{}, undefined> {
             <Route path="/cars">
               {/* <UserTable/> */}
               <EnhancedTableWrapperCars />
+            </Route>
+            <Route path="/car-details" component={CarsDetails}>
+            </Route>
+            <Route path="/reservations">
+              {/* <UserTable/> */}
+              <EnhancedTableWrapperReservation />
             </Route>
           </Switch>
         </Router>
