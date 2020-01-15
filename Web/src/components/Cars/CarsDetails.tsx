@@ -2,22 +2,23 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { withRouter , RouteComponentProps} from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import { withRouter , RouteComponentProps,Link} from 'react-router-dom';
 import { cars } from '../../MockData/CarsMock'
-import { Container, Form, Button, Col,ButtonToolbar } from 'react-bootstrap';
+import { Container, Form, Button, Col,ButtonToolbar,Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
 import ReservationsTable from '../Reservations/ReservationsTable';
 import { EnhancedTableWrapperReservation } from '../Reservations/ReservationsTableSorted';
 
-interface IUsersTableProps extends RouteComponentProps {
+interface ICarTableProps extends RouteComponentProps {
 
 }
 
-interface IUsersTableState {
+interface ICarTableState {
     car: Car;
 }
-class CarsDetails extends React.Component<IUsersTableProps, IUsersTableState>{
+class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     constructor(props) {
         super(props);
         this.state = {
@@ -32,32 +33,33 @@ class CarsDetails extends React.Component<IUsersTableProps, IUsersTableState>{
 
     render() {
         const { car } = this.state;
-        const style1: React.CSSProperties = {
-            position: 'fixed',
-            top: '40%',
-            left: '50%',
+        const styleForm: React.CSSProperties = {
             width: '60em',
             padding: '20px',
-            marginTop: '-9em', /*set to a negative number 1/2 of your height*/
-            marginLeft: '-30em', /*set to a negative number 1/2 of your width*/
+            marginTop: '1em', /*set to a negative number 1/2 of your height*/
             border: ' 1px solid #ccc',
             backgroundColor: '#f3f3f3',
+           
         }
         const styleButton: React.CSSProperties = {
             marginLeft: '.5em', /*set to a negative number 1/2 of your width*/
         }
         const styleReservations: React.CSSProperties = {
-            position: 'fixed',
-            top: '80%',
-            left: '50%',
             width: '60em',
             padding: '20px',
+            marginTop: '1em', /*set to a negative number 1/2 of your height*/
             border: ' 1px solid #ccc',
-            backgroundColor: '#f3f3f3',
         }
         return (
-            <div>
-            <Form style={style1}  > 
+            <Grid
+                container
+                direction="column"
+                justify="space-evenly"
+                alignItems="center"
+
+             >
+               
+            <Form style={styleForm} > 
                 <Form.Row>
                     <Form.Group as={Col} controlId="formGridModel">
                         <Form.Label>Model</Form.Label>
@@ -72,11 +74,6 @@ class CarsDetails extends React.Component<IUsersTableProps, IUsersTableState>{
                 </Form.Row>
 
                 <Form.Row>
-                    <Form.Group as={Col} controlId="formGridEngine">
-                        <Form.Label>Engine</Form.Label>
-                        <Form.Control placeholder="{car.engine}" />
-                    </Form.Group>
-
                     <Form.Group as={Col} controlId="formGridSeats">
                         <Form.Label>Number of seats</Form.Label>
                         <Form.Control placeholder="{car.seats}" />
@@ -98,13 +95,18 @@ class CarsDetails extends React.Component<IUsersTableProps, IUsersTableState>{
                     <Button  variant="primary"  type="submit" >
                         Save
                     </Button>
-                    
-                    <Button  variant="info" style={styleButton} type="button" >
-                        Make unavailable
-                    </Button>
+
+                    <Link to="/make-unavailable">
+                        <Button  variant="info" style={styleButton} type="button" >
+                            Make unavailable
+                        </Button>
+                    </Link>
             </Form>
             
-            </div>
+            
+            <EnhancedTableWrapperReservation ></EnhancedTableWrapperReservation>
+          
+            </Grid>
         );
     }
 }

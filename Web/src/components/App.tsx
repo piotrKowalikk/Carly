@@ -15,6 +15,7 @@ import { EnhancedTableWrapper } from './Users/UserTableSorted';
 import { EnhancedTableWrapperCars } from './Cars/CarsTable';
 import CarsDetails from './Cars/CarsDetails';
 import { EnhancedTableWrapperReservation } from './Reservations/ReservationsTableSorted';
+import MakeUnavailable from './Cars/MakeUnavailable';
 
 //const reactLogo = require("./../assets/img/react_logo.svg");
 const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunk)))
@@ -41,8 +42,9 @@ class App extends React.Component<{}, undefined> {
               {/* <UserTable/> */}
               <EnhancedTableWrapperCars />
             </Route>
-            <Route path="/car-details" component={CarsDetails}>
-            </Route>
+            <Route path="/car-details" component={CarsDetails}/>
+            <Route path="/make-unavailable" component={MakeUnavailable}/>
+           
             <Route path="/reservations">
               {/* <UserTable/> */}
               <EnhancedTableWrapperReservation />

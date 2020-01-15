@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles,createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -53,9 +53,9 @@ function getSorting(order, orderBy) {
 }
 
 const headCells = [
-    { id: 'user', numeric: false, disablePadding: true, label: 'User' },
-    { id: 'datefrom', numeric: false, disablePadding: true, label: 'Date From' },
-    { id: 'dateto', numeric: false, disablePadding: false, label: 'Date To' }
+    { id: 'userId', numeric: false, disablePadding: true, label: 'User' },
+    { id: 'dateFrom', numeric: false, disablePadding: true, label: 'Date From' },
+    { id: 'dateTo', numeric: false, disablePadding: false, label: 'Date To' }
 ];
 
 function EnhancedTableHead(props) {
@@ -67,17 +67,17 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
-                <TableCell key={'user'} style={{ width: '180px' }} sortDirection={orderBy === 'user' ? order : false}>
-                    <TableSortLabel active={orderBy === 'user'} direction={order} onClick={createSortHandler('year')}>
+                <TableCell key={'userId'} style={{ width: '180px' }} sortDirection={orderBy === 'userId' ? order : false}>
+                    <TableSortLabel active={orderBy === 'userId'} direction={order} onClick={createSortHandler('year')}>
                         User
                         </TableSortLabel>
                 </TableCell>
-                <TableCell key={'datefrom'} sortDirection={orderBy === 'datefrom' ? order : false}>
-                    <TableSortLabel active={orderBy === 'datefrom'} direction={order} onClick={createSortHandler('datefrom')}>
+                <TableCell key={'dateFrom'} sortDirection={orderBy === 'dateFrom' ? order : false}>
+                    <TableSortLabel active={orderBy === 'dateFrom'} direction={order} onClick={createSortHandler('dateFrom')}>
                         Date From
                         </TableSortLabel>
                 </TableCell>
-                <TableCell key={'dateto'} >
+                <TableCell key={'dateTo'} >
                     Date To
                 </TableCell>
             </TableRow>
@@ -88,7 +88,7 @@ function EnhancedTableHead(props) {
 const EnhancedTableToolbar = props => {
     const { numSelected } = props;
     return (
-        <Toolbar className={clsx({})} style={{ paddingLeft: 16, minHeight: 40 }}>
+        <Toolbar className={clsx(props)} style={{ paddingLeft: 16, minHeight: 40 }}>
             <Typography style={{ flex: '1 1 100%' }} variant="h6" id="tableTitle">Reservations</Typography>
         </Toolbar>
     );
@@ -96,11 +96,11 @@ const EnhancedTableToolbar = props => {
 
 const useStyles = makeStyles(theme => ({
 
-}));
+  }));
 export function EnhancedTableWrapperReservation(){
     const [mockData,setMockData] = React.useState(reservationsMock);
     return (
-        <EnhancedTableReservation data={mockData} setData={e=>
+        <EnhancedTableReservation  data={mockData} setData={e=>
             setMockData(e)}/>
     );
 }
@@ -143,12 +143,12 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
 
     return (
         <div>
-            <Container className="mt-4">
+            <Container className="mt-4" style={{ width: 998 }}>
                 {props.data.length != 0 &&
                     <div>
                         <Paper className="mb-3">
                             <EnhancedTableToolbar numSelected={selected.length} />
-                            <TableContainer>
+                            <TableContainer >
                                 <Table
                                     aria-labelledby="tableTitle"
                                     size={dense ? 'small' : 'medium'}
@@ -170,11 +170,11 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                                 return (
-                                                    <TableRow key={row.title} hover selected={isItemSelected}>
-                                                        <TableCell >{row.user}</TableCell>
-                                                        <TableCell >{row.datefrom}</TableCell>
-                                                        <TableCell >{row.dateto}</TableCell>                                               
-                                                    </TableRow>
+                                                    <TableRow key={row.id} hover selected={isItemSelected}>
+                                                    <TableCell >{row.userId}</TableCell>
+                                                    <TableCell >{row.dateFrom}</TableCell>
+                                                    <TableCell >{row.dateTo}</TableCell>                                               
+                                                </TableRow>
                                                 );
                                             })}
                                         {emptyRows > 0 && (
