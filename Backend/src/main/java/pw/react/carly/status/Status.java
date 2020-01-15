@@ -4,6 +4,7 @@ import pw.react.carly.car.Car;
 import pw.react.carly.bookingUserInfo.BookingUserInfo;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -12,14 +13,21 @@ public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+
+    @NotNull
+    @ManyToOne//(fetch=FetchType.LAZY,optional = false)
     private Car car;
     @ManyToOne
     private BookingUserInfo bookingUserInfo;
     private String comment;
 
+    @NotNull
     private Date dateFrom;
+
+    @NotNull
     private Date dateTo;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     private StatusType type;
 

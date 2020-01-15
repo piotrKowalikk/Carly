@@ -1,12 +1,17 @@
 package pw.react.carly.status;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
+
+import static pw.react.carly.status.StatusSpecifications.*;
 
 @RestController
 @RequestMapping("/statuses")
@@ -25,8 +30,24 @@ public class StatusController {
         return ResponseEntity.ok().body(statusService.getStatus(id));
     }
     @GetMapping("")
-    public ResponseEntity<List<Status>> getAllStatuses(){
-        return ResponseEntity.ok().body(statusRepository.findAll());
+    public ResponseEntity<List<Status>> getStatuses(
+
+            @RequestParam(name="from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
+            @RequestParam(name="to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
+            @RequestParam(name="type",required = false) StatusType type,
+            @RequestParam(name="carID",required = false) Long carID
+    ){
+        Specification<Status> spec = Specification.where(null);
+        if(from != null)
+            spec = spec.and(fromDateBefore(from));
+        if(to != null)
+            spec = spec.and(toDateAfter(to));
+        if(type != null)
+            spec = spec.and(isType(type));
+        if(carID != null)
+            spec = spec.and(getStatusesByCarId(carID));
+
+        return ResponseEntity.ok().body(statusRepository.findAll(spec));
     }
 
     @DeleteMapping("/{id}")
