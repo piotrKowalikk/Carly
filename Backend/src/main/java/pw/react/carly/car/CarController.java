@@ -1,11 +1,16 @@
 package pw.react.carly.car;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
+
+import static pw.react.carly.car.CarSpecification.*;
 
 @RestController
 @RequestMapping("/cars")
@@ -19,13 +24,29 @@ public class CarController {
         this.carRepository = carRepository;
     }
 
+    @GetMapping()
+    public ResponseEntity<List> getCars(
+            //TODO dodac wyszukiwanie dostepnych aut
+           // @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
+           // @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
+            @RequestParam(required = false,name="seats") Integer seats,
+            @RequestParam(required = false,name="doors") Integer doors,
+            @RequestParam(required = false,name="year") Integer year
+    ){
+
+        Specification<Car> spec = Specification.where(null);
+        if(seats != null)
+            spec = spec.and(bySeats(seats));
+        if(doors != null)
+            spec = spec.and(byDoors(doors));
+        if(year != null)
+            spec = spec.and(byYear(year));
+
+        return ResponseEntity.ok().body(carRepository.findAll(spec));
+    }
     @GetMapping("/{id}")
     public ResponseEntity<Car> getCar(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(carService.getCar(id));
-    }
-    @GetMapping("")
-    public ResponseEntity<List<Car>> getAllCars(){
-        return ResponseEntity.ok().body(carRepository.findAll());
     }
 
     @DeleteMapping("/{id}")
