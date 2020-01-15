@@ -41,6 +41,17 @@ public class StatusSpecifications {
     public static Specification<Status> isBetweenDate(Date from,Date to){
         return fromDateAfter(from).and(toDateBefore(to));
     }
+
+    public static Specification<Status> isUnavailableOrBooked(){
+        return isType(StatusType.BOOKED).or(isType(StatusType.UNAVAILABLE));
+    }
+
+    public static Specification<Status> colidesWithDateSpan(Date start, Date end){
+                //  <start  |from---------to| end>|
+        return (toDateAfter(end).and(fromDateBefore(end)))
+                //  |from---- <start-----to| end>|
+                .or(toDateBefore(end).and(toDateAfter(start)));
+    }
     
 
 }

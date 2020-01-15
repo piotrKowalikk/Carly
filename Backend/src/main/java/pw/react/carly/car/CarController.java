@@ -1,10 +1,12 @@
 package pw.react.carly.car;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pw.react.carly.status.StatusRepository;
 
 import javax.validation.Valid;
 import java.util.Date;
@@ -17,23 +19,27 @@ import static pw.react.carly.car.CarSpecification.*;
 public class CarController {
     private CarService carService;
     private CarRepository carRepository;
+    private StatusRepository statusRepository;
 
     @Autowired
-    public CarController(CarService carService, CarRepository carRepository) {
+    public CarController(CarService carService, CarRepository carRepository, StatusRepository statusRepository) {
         this.carService = carService;
         this.carRepository = carRepository;
+        this.statusRepository = statusRepository;
     }
+
+
 
     @GetMapping()
     public ResponseEntity<List> getCars(
             //TODO dodac wyszukiwanie dostepnych aut
-           // @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
-           // @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
+            @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
+            @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
             @RequestParam(required = false,name="seats") Integer seats,
-            @RequestParam(required = false,name="doors") Integer doors,
             @RequestParam(required = false,name="year") Integer year,
             @RequestParam(required = false,name="make") String make
     ){
+
 
         Specification<Car> spec = Specification.where(null);
         if(seats != null)
@@ -44,6 +50,21 @@ public class CarController {
             spec = spec.and(byMake(make));
 
         return ResponseEntity.ok().body(carRepository.findAll(spec));
+    }
+    //TODO usunac oddzielne endpointy. Polaczyc w jeden, albo dodac jako enum do GET:/cars
+    @GetMapping("/available")
+    public ResponseEntity<List<Car>> getAvailable(
+             @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
+             @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to
+    ){
+        return ResponseEntity.ok().body(carService.findAvailableCars(from,to));
+    }
+    @GetMapping("/unavailable")
+    public ResponseEntity<List<Car>> getUnavailable(
+            @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
+            @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to
+    ){
+        return ResponseEntity.ok().body(carService.findUnavailableCars(from,to));
     }
     @GetMapping("/{id}")
     public ResponseEntity<Car> getCar(@PathVariable("id") Long id){

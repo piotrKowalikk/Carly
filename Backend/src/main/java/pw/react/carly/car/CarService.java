@@ -4,14 +4,16 @@ package pw.react.carly.car;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import pw.react.carly.exceptions.WrongDateSpanException;
 import pw.react.carly.status.Status;
 import pw.react.carly.status.StatusRepository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static pw.react.carly.status.StatusSpecifications.toDateAfter;
-import static pw.react.carly.status.StatusSpecifications.toDateBefore;
+import static pw.react.carly.status.StatusSpecifications.colidesWithDateSpan;
+import static pw.react.carly.status.StatusSpecifications.isUnavailableOrBooked;
 
 
 @Service
@@ -25,8 +27,6 @@ public class CarService {
         this.statusRepository = statusRepository;
         this.carRepository = carRepository;
     }
-
-
 
     public Car updateCar(Car car){
         if(carRepository.existsById(car.getId())) {
@@ -43,18 +43,47 @@ public class CarService {
         }
         throw new ResourceNotFoundException("Car not found");
     }
-//TODO
-//    public List<Status> findAvailableCars(Date start, Date end){
-//        //Retrieves all statuses that are in the segment <start,end>
-//        List<Status> statuses =
-//                statusRepository.findAll(
-//                        //     <start       |from-----end>|-----to|
-//                        (toDateAfter(end).and(toDateBefore(end)))
-//                                //     <start  |from---------to| end>|
-//                                //  |from---- <start-----to| end>|
-//                        .or(toDateBefore(end).and(toDateAfter(start))));
-//        return statuses;
-//    }
+        //TODO testy, na paru prostych przykladach dziala, idk czy uwzglednia wszystko
+    public List<Car> findAvailableCars(Date start, Date end){
+        if((start != null && end== null) || (start == null && end!=null))
+            throw new WrongDateSpanException();
+
+        //Retrieves all statuses that apre in the segment <start,end>
+        //and are of type booked/unavailable
+        List<Status> statusesWhichDenyReservation =
+                statusRepository.findAll(
+                        isUnavailableOrBooked().and(colidesWithDateSpan(start,end))
+                );
+        List<Long> unavailableCarsIds = new ArrayList<>();
+
+        for(Status s : statusesWhichDenyReservation) {
+            Long id = s.getCar().getId();
+            if(!unavailableCarsIds.contains(id))
+                unavailableCarsIds.add(id);
+        }
+        List<Car> availableCars = carRepository.findByIdNotIn(unavailableCarsIds);
+
+        return availableCars;
+    }
+    //TODO testy, na paru prostych przykladach dziala, idk czy uwzglednia wszystko
+    public List<Car> findUnavailableCars(Date start, Date end) {
+        if((start != null && end== null) || (start == null && end!=null))
+            throw new WrongDateSpanException();
+        List<Status> statusesWhichDenyReservation =
+                statusRepository.findAll(
+                        isUnavailableOrBooked().and(colidesWithDateSpan(start,end))
+                );
+        List<Car> unavailableCars = new ArrayList<>();
+
+        for(Status s : statusesWhichDenyReservation) {
+            Car c = s.getCar();
+            if(!unavailableCars.contains(c))
+                unavailableCars.add(c);
+        }
+        return unavailableCars;
+
+
+    }
 
     public Car getCar(Long id){
         if(carRepository.existsById(id)) {
@@ -62,4 +91,9 @@ public class CarService {
         }
         throw new ResourceNotFoundException("Car not found");
     }
+
+
 }
+
+
+
