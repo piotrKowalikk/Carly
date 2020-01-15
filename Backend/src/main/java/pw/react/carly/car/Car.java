@@ -9,9 +9,8 @@ public class Car {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String model;
-    private String engine;
+    private String make;
     private int seats;
-    private int doors;
     private int year;
     private String licence;
     private String location;
@@ -36,12 +35,12 @@ public class Car {
         this.id = id;
     }
 
-    public String getEngine() {
-        return engine;
+    public String getMake() {
+        return make;
     }
 
-    public void setEngine(String engine) {
-        this.engine = engine;
+    public void setMake(String make) {
+        this.make = make;
     }
 
     public int getSeats() {
@@ -52,13 +51,7 @@ public class Car {
         this.seats = seats;
     }
 
-    public int getDoors() {
-        return doors;
-    }
 
-    public void setDoors(int doors) {
-        this.doors = doors;
-    }
 
     public int getYear() {
         return year;

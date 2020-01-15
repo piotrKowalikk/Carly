@@ -31,16 +31,17 @@ public class CarController {
            // @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
             @RequestParam(required = false,name="seats") Integer seats,
             @RequestParam(required = false,name="doors") Integer doors,
-            @RequestParam(required = false,name="year") Integer year
+            @RequestParam(required = false,name="year") Integer year,
+            @RequestParam(required = false,name="make") String make
     ){
 
         Specification<Car> spec = Specification.where(null);
         if(seats != null)
             spec = spec.and(bySeats(seats));
-        if(doors != null)
-            spec = spec.and(byDoors(doors));
         if(year != null)
             spec = spec.and(byYear(year));
+        if(make!= null)
+            spec = spec.and(byMake(make));
 
         return ResponseEntity.ok().body(carRepository.findAll(spec));
     }
