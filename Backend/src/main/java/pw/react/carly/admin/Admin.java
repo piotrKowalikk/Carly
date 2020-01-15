@@ -3,6 +3,8 @@ package pw.react.carly.admin;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "admins")
@@ -12,6 +14,8 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
+    @NotNull
+    @Email
     private String email;
     @Column
     @JsonIgnore

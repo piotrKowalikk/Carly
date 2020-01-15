@@ -60,4 +60,4 @@ VALUES (1002, 'Anulowana rezerwacja', '2020-01-23','2020-01-25','BOOKINGCANCELED
 
 INSERT INTO public.status(
     id, comment, date_from, date_to, type, booking_user_info_id, car_id)
-VALUES (1003, 'Auto niedostepne', '2020-01-25','2020-01-28','UNAVAILABLE', 1000, 1003);
+VALUES (1003, 'Auto niedostepne', '2020-01-25','2020-01-28','UNAVAILABLE',null, 1003);

@@ -25,8 +25,14 @@ public class AdminController {
         return ResponseEntity.ok().body(adminService.getAdmin(id));
     }
     @GetMapping("")
-    public ResponseEntity<List<Admin>> getAllAdmins(){
-        return ResponseEntity.ok().body(adminRepository.findAll());
+    public ResponseEntity<List<Admin>> getAdmins(
+            @RequestParam(required = false,name="email") String email){
+        List<Admin> admins;
+        if(email!=null)
+            admins = adminRepository.findAdminByEmail(email);
+        else
+            admins = adminRepository.findAll();
+        return ResponseEntity.ok().body(admins);
     }
 
     @DeleteMapping("/{id}")
