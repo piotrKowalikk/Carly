@@ -34,8 +34,8 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     render() {
         const { car } = this.state;
         const styleForm: React.CSSProperties = {
-            width: '60em',
-            padding: '20px',
+            width:'60em',
+            padding:'20px',
             marginTop: '1em', /*set to a negative number 1/2 of your height*/
             border: ' 1px solid #ccc',
             backgroundColor: '#f3f3f3',
@@ -56,10 +56,9 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                 direction="column"
                 justify="space-evenly"
                 alignItems="center"
-
              >
-               
-            <Form style={styleForm} > 
+            <Grid item  > 
+            <Form className="w-responsive mx-auto p-3 mt-2" style={styleForm} > 
                 <Form.Row>
                     <Form.Group as={Col} controlId="formGridModel">
                         <Form.Label>Model</Form.Label>
@@ -102,10 +101,12 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                         </Button>
                     </Link>
             </Form>
-            
-            
+            </Grid>
+
+            <Grid item xs>
             <EnhancedTableWrapperReservation ></EnhancedTableWrapperReservation>
-          
+            </Grid>
+
             </Grid>
         );
     }
