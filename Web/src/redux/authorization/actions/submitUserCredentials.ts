@@ -13,7 +13,8 @@ export const submitUserCredentials = (login: string, password: string) => {
                     login: login,
                     password: password
                 }
-            })
+            });
+            dispatch(successHandle(null));
             // response = await axios.get('http://localhost:8080/scan/' + deviceNumber, {
             //     headers: {
             //         crossDomain: true,

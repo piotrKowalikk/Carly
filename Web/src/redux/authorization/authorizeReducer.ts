@@ -8,11 +8,11 @@ export const initialState: IAuthorizeState = {
     login: null,
     password: null,
     message: null,
-    isLoading: true
+    isLoading: false
 }
 
-const authorizeReducer: Reducer<IAuthorizeState, AuthorizeActionTypes> = (state = initialState, action) => {
-    switch (action) {
+const authorizeReducer: Reducer<IAuthorizeState, IReturnType> = (state = initialState, action :IReturnType) => {
+    switch (action.type) {
         case AuthorizeActionTypes.BAD_PASSWORD: {
             const message = badLogin;
             return Object.assign({}, state, { ...state, message, isLoading: false })

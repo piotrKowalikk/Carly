@@ -23,6 +23,7 @@ interface ILogInState {
 
 class LogIn extends React.Component<ILogInProps, ILogInState>{
 
+    submitButton = React.createRef<any>();
     constructor(props) {
         super(props);
         this.state = {
@@ -58,13 +59,13 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
     passwordChanged = (e) => {
         if (e.target.value.length < 3) {
             this.setState({
-                passwordError: 'Password too short.',
+        //        passwordError: 'Password too short.',
                 password: e.target.value
             });
             return;
         } else {
             this.setState({
-                passwordError: '',
+          //      passwordError: '',
                 password: e.target.value
             });
         }
@@ -91,7 +92,7 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
         this.props.submitUserCredentials(this.state.email, this.state.password);
         console.log('zapytajmy backend')
         // this.props.history.push('/cars');
-         e.preventDefault();
+        e.preventDefault();
     }
 
     render() {
@@ -129,10 +130,11 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
                         <Form.Text style={{ color: 'red' }} >{this.state.passwordError}</Form.Text>
                     </Form.Group>
                     <div>
-
-                        <Button variant="primary" type="submit">Submit</Button>
+                        <Button ref={this.submitButton} disabled={this.props.isLoading } className="btn-primary" type="submit">Submit</Button>
                         {this.props.isLoading &&
-                            <CircularProgress style={buttonProgress} disableShrink />
+                            <div style={{ marginLeft: (-1)*(this.submitButton.current ? this.submitButton.current.offsetWidth / 2 +6 : 0) }} className="spinner-border spinner-border-sm" role="status">
+                                <span  className="sr-only">Loading...</span>
+                            </div>
                         }
                     </div>
                 </Form>
