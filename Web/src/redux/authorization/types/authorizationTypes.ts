@@ -10,5 +10,6 @@ export enum AuthorizeActionTypes {
     BAD_PASSWORD = '@@authorize/BAD_PASSWORD',
     BAD_LOGIN = '@@authorize/BAD_LOGIN',
     LOADING = '@@authorize/LOADING',
-    AUTHORIZED = '@@authorize/AUTHORIZED'
+    AUTHORIZED = '@@authorize/AUTHORIZED',
+    LOGOUT = '@@authorize/LOGOUT'
 }

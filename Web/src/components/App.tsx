@@ -16,6 +16,7 @@ import { EnhancedTableWrapperCars } from './Cars/CarsTable';
 import CarsDetails from './Cars/CarsDetails';
 import { EnhancedTableWrapperReservation } from './Reservations/ReservationsTableSorted';
 import MakeUnavailable from './Cars/MakeUnavailable';
+import LogOut from './Authentication/LogOut';
 
 //const reactLogo = require("./../assets/img/react_logo.svg");
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))
@@ -28,27 +29,14 @@ class App extends React.Component<{}, undefined> {
         <Router>
           <NavBar />
           <Switch>
-            <Route exact path="/">
-              Home here
-              {/*robimy home?*/}
-            </Route>
-            <Route path="/logIn" component={LogIn}>
-            </Route>
-            <Route path="/users">
-              {/* <UserTable/> */}
-              <EnhancedTableWrapper />
-            </Route>
-            <Route path="/cars">
-              {/* <UserTable/> */}
-              <EnhancedTableWrapperCars />
-            </Route>
-            <Route path="/car-details" component={CarsDetails}/>
-            <Route path="/make-unavailable" component={MakeUnavailable}/>
-           
-            <Route path="/reservations">
-              {/* <UserTable/> */}
-              <EnhancedTableWrapperReservation />
-            </Route>
+            <Route exact path="/">Home here</Route>
+            <Route path="/logIn" component={LogIn} />
+            <Route path="/users" component={EnhancedTableWrapper} />
+            <Route path="/cars" component={EnhancedTableWrapperCars} />
+            <Route path="/car-details" component={CarsDetails} />
+            <Route path="/make-unavailable" component={MakeUnavailable} />
+            <Route path="/logOut" component={LogOut} />
+            <Route path="/reservations" component={EnhancedTableWrapperReservation} />
           </Switch>
         </Router>
       </Provider>
