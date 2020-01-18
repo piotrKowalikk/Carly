@@ -4,9 +4,14 @@ import TextField from '@material-ui/core/TextField'
 import { connect } from 'react-redux';
 import { withRouter, Route, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
+import { submitUserCredentials } from '../../redux/authorization/actions/submitUserCredentials';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { IApplicationState } from '../../redux/rootReducer';
+import { IAuthorizeState } from '../../redux/authorization/types/authorizationTypes';
 
 interface ILogInProps extends RouteComponentProps {
-
+    submitUserCredentials: Function;
+    isLoading: boolean;
 }
 
 interface ILogInState {
@@ -83,9 +88,10 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             e.preventDefault();
             return;
         }
+        this.props.submitUserCredentials(this.state.email, this.state.password);
         console.log('zapytajmy backend')
-        this.props.history.push('/cars');
-        e.preventDefault();
+        // this.props.history.push('/cars');
+         e.preventDefault();
     }
 
     render() {
@@ -100,6 +106,15 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             border: ' 1px solid #ccc',
             'backgroundColor': '#f3f3f3',
         }
+
+        const buttonProgress: React.CSSProperties = {
+            //    position: 'absolute',
+            top: '50%',
+            left: '50%',
+            // marginTop: -12,
+            // marginLeft: -12,
+        }
+
         return (
             <Container >
                 <Form style={style} onSubmit={this.onSubmit}>
@@ -113,25 +128,35 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
                         <Form.Control type="password" placeholder="Password" onChange={this.passwordChanged} />
                         <Form.Text style={{ color: 'red' }} >{this.state.passwordError}</Form.Text>
                     </Form.Group>
-                    <Button variant="primary" type="submit">Submit</Button>
+                    <div>
+
+                        <Button variant="primary" type="submit">Submit</Button>
+                        {this.props.isLoading &&
+                            <CircularProgress style={buttonProgress} disableShrink />
+                        }
+                    </div>
                 </Form>
+
             </Container>
         );
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ authorize }: IApplicationState) => {
+    var authorize: IAuthorizeState = authorize;
     return {
-
+        isLoading: authorize.isLoading
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    // searchTypeChange: sth => dispatch(searchTypeChangeAction(sth)),
-    // searchStringChange: sth => dispatch(deviceChangeAction(sth)),
-
-})
-
+const mapDispatchToProps = (dispatch) => {
+    var props = {
+        submitUserCredentials: (login, password) => dispatch(submitUserCredentials(login, password))
+    };
+    return (
+        props
+    );
+}
 export default connect(
     mapStateToProps,
     mapDispatchToProps

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { rootReducer, initialState } from '../redux/reducers/searchReducer'
+import { rootReducer } from '../redux/rootReducer'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux'
@@ -18,7 +18,7 @@ import { EnhancedTableWrapperReservation } from './Reservations/ReservationsTabl
 import MakeUnavailable from './Cars/MakeUnavailable';
 
 //const reactLogo = require("./../assets/img/react_logo.svg");
-const store = createStore(rootReducer, initialState, composeWithDevTools(applyMiddleware(thunk)))
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))
 
 class App extends React.Component<{}, undefined> {
 

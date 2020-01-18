@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { deviceChangeAction } from '../redux/actions/deviceChangeAction';
+import { deviceChangeAction } from '../redux/users/actions/fetchUsers';
 
 interface IExampleComponentProps {
     searchTypeChange: Function;
