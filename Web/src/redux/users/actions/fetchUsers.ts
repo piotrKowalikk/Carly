@@ -1,11 +1,11 @@
 import axios from 'axios'
 
-export const deviceChangeAction = (deviceNumber, searchType: any) => {
+export const fetchUsers = () => {
     return async dispatch => {
         try {
             //lefted as example of requesting data
             var response;
-            response = await axios.get('http://localhost:8080/scan/' + deviceNumber, {
+            response = await axios.get('http://localhost:8080/scan/', {
                 headers: {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
