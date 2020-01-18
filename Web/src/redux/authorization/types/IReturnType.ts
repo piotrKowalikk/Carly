@@ -1,4 +1,4 @@
-interface IReturnType {
+export interface IReturnType {
     type: any;
     payload: any;
 }

@@ -8,7 +8,7 @@ import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux'
 import { Container } from 'react-bootstrap';
 import thunk from 'redux-thunk';
-import { NavBar } from './NavBar';
+import NavBar from './NavBar';
 import LogIn from './Authentication/LogIn';
 import UserTable from './Users/UserTable';
 import { EnhancedTableWrapper } from './Users/UserTableSorted';

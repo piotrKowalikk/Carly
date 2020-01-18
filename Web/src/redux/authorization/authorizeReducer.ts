@@ -1,7 +1,7 @@
 import { Reducer } from "react";
 import { badLogin, badPassword } from "./authorizeMessages";
 import { IAuthorizeState, AuthorizeActionTypes } from "./types/authorizationTypes";
-
+import {IReturnType } from "./types/IReturnType"
 export const initialState: IAuthorizeState = {
     isAuthorized: false,
     //user data should be stored here
