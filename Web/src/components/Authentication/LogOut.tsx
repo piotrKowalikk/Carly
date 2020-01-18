@@ -7,9 +7,7 @@ import { IAuthorizeState } from '../../redux/authorization/types/authorizationTy
 import { logOutAction } from '../../redux/authorization/actions/logOutAction';
 
 interface ILogOutProps extends RouteComponentProps {
-    submitUserCredentials: Function;
     logOutAction: Function;
-    isLoading: boolean;
 }
 
 interface ILogOutState {
@@ -56,5 +54,6 @@ const mapDispatchToProps = (dispatch) => {
     );
 }
 export default connect(
+    null,
     mapDispatchToProps
 )(LogOut);
