@@ -1,45 +1,54 @@
 import axios from 'axios'
+import { UserActionTypes } from '../types/userTypes';
+import { getAdmins, mainURL } from '../../.resources/apiURLs';
+import { User } from '../../../Models/User';
 
 export const fetchUsers = () => {
     return async dispatch => {
         try {
-            //lefted as example of requesting data
-            var response;
-            response = await axios.get('http://localhost:8080/scan/', {
+            dispatch({
+                type: UserActionTypes.LOADING,
+                payload: {
+                    isLoading: true,
+                }
+            });
+            //   await delay(2000);
+
+            var response = await axios.get(getAdmins(), {
                 headers: {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',
                 },
-            }).then(response => {
-                dispatch(successHandle(response));
-            }, error => {
-                dispatch(errorHandle());
             });
-
-
+            dispatch(successHandle(response.data));
         }
         catch (error) {
             dispatch(errorHandle());
         }
-        return 'done';
     }
 }
 
-//enums would be better
-const successHandle = (mockData) => {
+function delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+const successHandle = (data) => {
     return {
-        type: 'SEARCH',
+        type: UserActionTypes.GET_USERS,
         payload: {
+            users: User.parseData(data),
             errorMessage: null
         }
     }
 }
 
 const errorHandle = () => {
+    //handle message from server
     return {
-        type: 'ERROR',
+        type: UserActionTypes.GET_USERS,
         payload: {
+            cars: [],
             errorMessage: 'Not valid input.'
         }
     }

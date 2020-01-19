@@ -9,31 +9,31 @@ import { IAuthorizeState } from '../redux/authorization/types/authorizationTypes
 import { connect } from 'react-redux';
 
 
-export interface INavBarProps  {
+export interface INavBarProps {
     isAuthorized: boolean;
 }
 
 
 const NavBar = (props: INavBarProps) => {
-     return (
+    return (
         <Navbar className="bg-dark justify-content-between">
             <Form inline>
-                <Button>  <Link style={{ color: 'white' }} to="/">Home</Link></Button>
+                <Link className='btn shadow-none' style={{ color: 'white' }} to="/">Home</Link>
                 {/* {props.isAuthorized && */}
-                    <div>
-                        <Button>  <Link style={{ color: 'white' }} to="/users">Users</Link></Button>
-                        <Button>  <Link style={{ color: 'white' }} to="/cars">Cars</Link></Button>
-                        <Button>  <Link style={{ color: 'white' }} to="/reservations">Reservations</Link></Button>
-                    </div>
-                
+                <div>
+                    <Link className='btn shadow-none' style={{ color: 'white' }} to="/users">Users</Link>
+                    <Link className='btn shadow-none' style={{ color: 'white' }} to="/cars">Cars</Link>
+                    <Link className='btn shadow-none' style={{ color: 'white' }} to="/reservations">Reservations</Link>
+                </div>
+
             </Form>
             <Form inline>
                 {/* {props.isAuthorized && */}
-                    <Button>  <Link style={{ color: 'white' }} to="/logOut">Log Out</Link></Button>
-                
+                <Link className='btn shadow-none' style={{ color: 'white' }} to="/logOut">Log Out</Link>
+
                 {/* {!props.isAuthorized && */}
-                    <Button>  <Link style={{ color: 'white' }} to="/logIn">Log In</Link></Button>
-                
+                <Link className='btn shadow-none' style={{ color: 'white' }} to="/logIn">Log In</Link>
+
             </Form>
         </Navbar>
     );

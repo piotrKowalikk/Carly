@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { CarActionTypes } from '../types/carTypes';
-import { getCars } from '../../.resources/apiURLs'
+import { getAdmins, getCars } from '../../.resources/apiURLs'
 import { Car } from '../../../Models/Car';
 
 export const fetchCars = () => {
@@ -12,9 +12,9 @@ export const fetchCars = () => {
                     isLoading: true,
                 }
             });
-            await delay(2000);
+            //       await delay(2000);
 
-            var response = await axios.get('http://localhost:8080' + getCars(), {
+            var response = await axios.get(getCars(), {
                 headers: {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
@@ -30,7 +30,7 @@ export const fetchCars = () => {
 }
 
 function delay(ms: number) {
-    return new Promise( resolve => setTimeout(resolve, ms) );
+    return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 //enums would be better
