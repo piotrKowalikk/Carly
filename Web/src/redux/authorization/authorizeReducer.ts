@@ -1,7 +1,7 @@
 import { Reducer } from "react";
 import { badLogin, badPassword } from "./authorizeMessages";
 import { IAuthorizeState, AuthorizeActionTypes } from "./types/authorizationTypes";
-import { IReturnType } from "./types/IReturnType"
+
 export const initialState: IAuthorizeState = {
     isAuthorized: false,
     //user data should be stored here
@@ -11,7 +11,7 @@ export const initialState: IAuthorizeState = {
     isLoading: false
 }
 
-const authorizeReducer: Reducer<IAuthorizeState, IReturnType> = (state = initialState, action: IReturnType) => {
+const authorizeReducer: Reducer<IAuthorizeState, any> = (state = initialState, action) => {
     switch (action.type) {
         case AuthorizeActionTypes.BAD_PASSWORD: {
             const message = badLogin;

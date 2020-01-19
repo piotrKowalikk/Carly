@@ -12,7 +12,7 @@ import NavBar from './NavBar';
 import LogIn from './Authentication/LogIn';
 import UserTable from './Users/UserTable';
 import { EnhancedTableWrapper } from './Users/UserTableSorted';
-import { EnhancedTableWrapperCars } from './Cars/CarsTable';
+import EnhancedTableCars from './Cars/CarsTable';
 import CarsDetails from './Cars/CarsDetails';
 import { EnhancedTableWrapperReservation } from './Reservations/ReservationsTableSorted';
 import MakeUnavailable from './Cars/MakeUnavailable';
@@ -32,7 +32,7 @@ class App extends React.Component<{}, undefined> {
             <Route exact path="/">Home here</Route>
             <Route path="/logIn" component={LogIn} />
             <Route path="/users" component={EnhancedTableWrapper} />
-            <Route path="/cars" component={EnhancedTableWrapperCars} />
+            <Route path="/cars" component={EnhancedTableCars} />
             <Route path="/car-details" component={CarsDetails} />
             <Route path="/make-unavailable" component={MakeUnavailable} />
             <Route path="/logOut" component={LogOut} />
