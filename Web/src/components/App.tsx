@@ -15,7 +15,8 @@ import CarsDetails from './Cars/CarsDetails';
 import { EnhancedTableWrapperReservation } from './Reservations/ReservationsTableSorted';
 import MakeUnavailable from './Cars/MakeUnavailable';
 import LogOut from './Authentication/LogOut';
-
+import CarsEdit from './Cars/CarsEdit';
+import CarsAdd from './Cars/CarsAdd';
 //const reactLogo = require("./../assets/img/react_logo.svg");
 const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)))
 
@@ -30,6 +31,8 @@ class App extends React.Component<{}, undefined> {
         <Route path="/users" component={EnhancedTableUsers} />
         <Route path="/cars" component={EnhancedTableCars} />
         <Route path="/car-details" component={CarsDetails} />
+        <Route path="/car-edit" component={CarsEdit} />
+        <Route path="/car-add" component={CarsAdd} />
         <Route path="/make-unavailable" component={MakeUnavailable} />
         <Route path="/logOut" component={LogOut} />
         <Route path="/reservations" component={EnhancedTableWrapperReservation} />

@@ -34,7 +34,6 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
     }
 
     onCancel = (e) => {
-        console.log("jestem");
         this.props.history.push('/car-details');
         e.preventDefault();
     }
@@ -75,7 +74,7 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
        
             <Form style={styleForm} title="aaaa"> 
                 <Form.Group controlId="formGridTitle">
-                    <Form.Label>MODEL MARKA</Form.Label>
+                    <Form.Label>{car.carMake}</Form.Label>
                 </Form.Group>
                 <Form.Row>
                     <Form.Group as={Col} controlId="formGridDateFrom">

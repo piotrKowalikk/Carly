@@ -24,7 +24,7 @@ import { Car } from '../../Models/Car';
 import { fetchCars } from '../../redux/cars/actions/fetchCars';
 import { IApplicationState } from '../../redux/rootReducer';
 import { cleanupAction } from '../../redux/cars/actions/cleanUpAction';
-
+import {AddBox, Edit, DriveEta} from '@material-ui/icons'
 
 
 function desc(a, b, orderBy) {
@@ -90,6 +90,13 @@ const EnhancedTableToolbar = props => {
     return (
         <Toolbar className={clsx({})} style={{ paddingLeft: 16, minHeight: 40 }}>
             <Typography style={{ flex: '1 1 100%' }} variant="h6" id="tableTitle">Cars</Typography>
+            <Link to="/car-add">
+                <Tooltip title="Add a new car">
+                    <IconButton aria-label="new car">
+                        <AddBox color='primary'/>
+                    </IconButton>
+                </Tooltip>
+            </Link>
         </Toolbar>
     );
 };
@@ -186,9 +193,13 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                                         <TableCell >{row.carMake}</TableCell>
                                                         <TableCell >{row.carModel}</TableCell>
                                                         <TableCell >{row.location}</TableCell>
-                                                        <TableCell>
+                                                        <TableCell title='edit this car'>
                                                             <Link to="/car-details">
-                                                                <Button className="btn btn-primary">Edit</Button>
+                                                                <Tooltip title="Car details">
+                                                                    <IconButton aria-label="car deatils">
+                                                                        <DriveEta color='primary'/>
+                                                                    </IconButton>
+                                                                </Tooltip>
                                                             </Link>
                                                         </TableCell>
                                                     </TableRow>

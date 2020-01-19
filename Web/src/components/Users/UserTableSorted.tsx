@@ -21,7 +21,7 @@ import { Container, Button } from 'react-bootstrap';
 import { User } from '../../Models/User';
 import { IApplicationState } from '../../redux/rootReducer';
 import { fetchUsers } from '../../redux/users/actions/fetchUsers';
-
+import {DeleteOutline,AddBox, Edit} from '@material-ui/icons'
 
 
 function desc(a, b, orderBy) {
@@ -187,11 +187,16 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
                                                         <TableCell >{row.lastName}</TableCell> */}
                                                     <TableCell >{row.email}</TableCell>
                                                     <TableCell>
-                                                        <Button className="btn btn-danger mr-1"
+                                                    <IconButton aria-label="delete user" onClick={(e) => {
+                                                                removeFromSource(row.id)
+                                                            }}>
+                                                        <DeleteOutline color='error' ></DeleteOutline>
+                                                    </IconButton>
+                                                       {/* <Button className="btn btn-danger mr-1"
                                                             onClick={(e) => {
                                                                 removeFromSource(row.id)
                                                             }}>Delete</Button>
-                                                        {/* <Button className="btn btn-primary">Details</Button> */}
+                                                        */}
                                                     </TableCell>
                                                 </TableRow>
                                             );

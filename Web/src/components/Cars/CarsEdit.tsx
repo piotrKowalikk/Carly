@@ -11,31 +11,40 @@ import { Reservation } from '../../Models/Reservation';
 import ReservationsTable from '../Reservations/ReservationsTable';
 import { EnhancedTableWrapperReservation } from '../Reservations/ReservationsTableSorted';
 
-interface ICarTableProps extends RouteComponentProps {
+interface ICarsEditProps extends RouteComponentProps {
 
 }
 
-interface ICarTableState {
+interface ICarsEditState {
     car: Car;
+    seats: Number;
 }
-class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
+class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
     constructor(props) {
         super(props);
         this.state = {
             car: new Car({}),
+            seats:0,
         }
     }
 
-
+    SeatsChanged = (e) => {
+        this.setState({seats: e.target.value});
+       }
     componentDidMount() {
+        console.log("jestem");
     }
 
     render() {
         const { car } = this.state;
         const styleForm: React.CSSProperties = {
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
             width: '60em',
             padding: '20px',
-            marginTop: '1em', /*set to a negative number 1/2 of your height*/
+            marginTop: '-9em', /*set to a negative number 1/2 of your height*/
+            marginLeft: '-30em', /*set to a negative number 1/2 of your width*/
             border: ' 1px solid #ccc',
             backgroundColor: '#f3f3f3',
 
@@ -43,21 +52,12 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
         const styleButton: React.CSSProperties = {
             marginLeft: '.5em', /*set to a negative number 1/2 of your width*/
         }
-        const styleReservations: React.CSSProperties = {
-            width: '60em',
-            padding: '20px',
-            marginTop: '1em', /*set to a negative number 1/2 of your height*/
-            border: ' 1px solid #ccc',
-        }
+
         return (
             <div
-            // container
-            // direction="column"
-            // justify="space-evenly"
-            // alignItems="center"
             >
                 <Container >
-                    <Form className="w-responsive mx-auto p-3 mt-2" style={styleForm} >
+                    <Form  style={styleForm} >
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridModel">
                                 <Form.Label>Model</Form.Label>
@@ -74,45 +74,35 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridSeats">
                                 <Form.Label>Number of seats</Form.Label>
-                                <Form.Text defaultValue={car.seats} />
+                                <Form.Control type="number" onChange={this.SeatsChanged} />
                             </Form.Group>
 
-                            <Form.Group as={Col} controlId="formGridYear">
-                                <Form.Label>Year</Form.Label>
-                                <Form.Text defaultValue={car.year} />
-                            </Form.Group>
-                        </Form.Row>
-
-                        <Form.Row>
                             <Form.Group as={Col} controlId="formGridLicense">
                                 <Form.Label>License</Form.Label>
-                                <Form.Text placeholder={car.licenseNumber} />
-                            </Form.Group>
-
-                            <Form.Group as={Col} controlId="formGridLocation">
-                                <Form.Label>Location</Form.Label>
-                                <Form.Text placeholder={car.location}/>
+                                <Form.Control  placeholder={car.licenseNumber}/>
                             </Form.Group>
                         </Form.Row>
 
-                        <Link to="/car-edit">
-                            <Button variant="primary" type="button" >
-                                Edit
-                        </Button>
-                        </Link>
 
-                        <Link to="/make-unavailable">
-                            <Button variant="info" style={styleButton} type="button" >
-                                Make unavailable
+
+
+                        <Form.Group controlId="formGridLocation">
+                            <Form.Label>Location</Form.Label>
+                            <Form.Control placeholder="{car.location}" />
+                        </Form.Group>
+
+
+                        <Button variant="primary" type="submit" >
+                            Save
+                        </Button>
+
+                        <Link to="/car-details">
+                            <Button variant="danger" style={styleButton} type="button" >
+                                Cancel
                         </Button>
                         </Link>
                     </Form>
                 </Container>
-
-                <Container>
-                    <EnhancedTableWrapperReservation ></EnhancedTableWrapperReservation>
-                </Container>
-
             </div>
         );
     }
@@ -128,5 +118,5 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(withRouter(CarsDetails))
+)(withRouter(CarsEdit))
 
