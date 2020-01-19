@@ -4,9 +4,14 @@ import TextField from '@material-ui/core/TextField'
 import { connect } from 'react-redux';
 import { withRouter, Route, RouteComponentProps } from 'react-router-dom';
 import { useHistory } from "react-router-dom";
+import { submitUserCredentials } from '../../redux/authorization/actions/submitUserCredentials';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { IApplicationState } from '../../redux/rootReducer';
+import { IAuthorizeState } from '../../redux/authorization/types/authorizationTypes';
 
 interface ILogInProps extends RouteComponentProps {
-
+    submitUserCredentials: Function;
+    isLoading: boolean;
 }
 
 interface ILogInState {
@@ -18,6 +23,7 @@ interface ILogInState {
 
 class LogIn extends React.Component<ILogInProps, ILogInState>{
 
+    submitButton = React.createRef<any>();
     constructor(props) {
         super(props);
         this.state = {
@@ -53,13 +59,13 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
     passwordChanged = (e) => {
         if (e.target.value.length < 3) {
             this.setState({
-                passwordError: 'Password too short.',
+        //        passwordError: 'Password too short.',
                 password: e.target.value
             });
             return;
         } else {
             this.setState({
-                passwordError: '',
+          //      passwordError: '',
                 password: e.target.value
             });
         }
@@ -83,8 +89,9 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             e.preventDefault();
             return;
         }
+        this.props.submitUserCredentials(this.state.email, this.state.password);
         console.log('zapytajmy backend')
-        this.props.history.push('/cars');
+        // this.props.history.push('/cars');
         e.preventDefault();
     }
 
@@ -100,6 +107,15 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             border: ' 1px solid #ccc',
             'backgroundColor': '#f3f3f3',
         }
+
+        const buttonProgress: React.CSSProperties = {
+            //    position: 'absolute',
+            top: '50%',
+            left: '50%',
+            // marginTop: -12,
+            // marginLeft: -12,
+        }
+
         return (
             <Container >
                 <Form style={style} onSubmit={this.onSubmit}>
@@ -113,25 +129,36 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
                         <Form.Control type="password" placeholder="Password" onChange={this.passwordChanged} />
                         <Form.Text style={{ color: 'red' }} >{this.state.passwordError}</Form.Text>
                     </Form.Group>
-                    <Button variant="primary" type="submit">Submit</Button>
+                    <div>
+                        <Button ref={this.submitButton} disabled={this.props.isLoading } className="btn-primary" type="submit">Submit</Button>
+                        {this.props.isLoading &&
+                            <div style={{ marginLeft: (-1)*(this.submitButton.current ? this.submitButton.current.offsetWidth / 2 +6 : 0) }} className="spinner-border spinner-border-sm" role="status">
+                                <span  className="sr-only">Loading...</span>
+                            </div>
+                        }
+                    </div>
                 </Form>
+
             </Container>
         );
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ authorize }: IApplicationState) => {
+    var authorize: IAuthorizeState = authorize;
     return {
-
+        isLoading: authorize.isLoading
     }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-    // searchTypeChange: sth => dispatch(searchTypeChangeAction(sth)),
-    // searchStringChange: sth => dispatch(deviceChangeAction(sth)),
-
-})
-
+const mapDispatchToProps = (dispatch) => {
+    var props = {
+        submitUserCredentials: (login, password) => dispatch(submitUserCredentials(login, password))
+    };
+    return (
+        props
+    );
+}
 export default connect(
     mapStateToProps,
     mapDispatchToProps

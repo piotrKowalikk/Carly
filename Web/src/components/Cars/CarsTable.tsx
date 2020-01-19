@@ -21,6 +21,9 @@ import { withRouter } from 'react-router-dom';
 import { cars } from '../../MockData/CarsMock'
 import { Container, Button } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
+import { fetchCars } from '../../redux/cars/actions/fetchCars';
+import { IApplicationState } from '../../redux/rootReducer';
+import { cleanupAction } from '../../redux/cars/actions/cleanUpAction';
 
 
 
@@ -94,19 +97,26 @@ const EnhancedTableToolbar = props => {
 const useStyles = makeStyles(theme => ({
 
 }));
-export function EnhancedTableWrapperCars() {
-    const [mockData, setMockData] = React.useState(cars);
-    return (
-        <EnhancedTable data={mockData} setData={e =>
-            setMockData(e)} />
-    );
-}
-interface IEnhancedTableProps {
+
+interface IEnhancedTableCarsProps {
     data: Car[];
-    setData: Function;
+    fetchCars: Function;
+    cleanupAction: Function;
+    error: string;
 }
 
-function EnhancedTable(props: IEnhancedTableProps) {
+function EnhancedTableCars(props: IEnhancedTableCarsProps) {
+
+    if (props.data.length == 0 && !props.error) {
+        props.fetchCars();
+    }
+
+    React.useEffect(() => {
+        return () => {
+            props.cleanupAction();
+        }
+    }, []);
+
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('year');
@@ -132,14 +142,18 @@ function EnhancedTable(props: IEnhancedTableProps) {
     };
 
     const isSelected = name => selected.indexOf(name) !== -1;
-    const removeFromSource = (id) => {
-        var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
-        props.setData(props.data);
-    };
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
+
+    if (props.error)
+        return (
+            <Container>
+                <label style={{ color: 'red' }}>{props.error}</label>
+            </Container>
+        );
 
     return (
         <div>
+
             <Container className="mt-4">
                 {props.data.length != 0 &&
                     <div>
@@ -162,16 +176,16 @@ function EnhancedTable(props: IEnhancedTableProps) {
                                     <TableBody>
                                         {stableSort(props.data, getSorting(order, orderBy))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map((row, index) => {
-                                                const isItemSelected = isSelected(row.name);
+                                            .map((row: Car, index) => {
+                                                const isItemSelected = isSelected(row.id);
                                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                                 return (
-                                                    <TableRow key={row.title} hover selected={isItemSelected}>
+                                                    <TableRow key={row.id} hover selected={isItemSelected}>
+                                                        <TableCell >{row.licenseNumber}</TableCell>
                                                         <TableCell >{row.carMake}</TableCell>
                                                         <TableCell >{row.carModel}</TableCell>
-                                                        <TableCell >{row.licenseNumber}</TableCell>
-                                                        <TableCell >{row.availability}</TableCell>
+                                                        <TableCell >{row.location}</TableCell>
                                                         <TableCell>
                                                             <Link to="/car-details">
                                                                 <Button className="btn btn-primary">Edit</Button>
@@ -205,28 +219,18 @@ function EnhancedTable(props: IEnhancedTableProps) {
     );
 }
 
-const mapStateToProps = (state) => {
-    // var deepCopy: WebDevice = JSON.parse(JSON.stringify(state.webDevice));
-    // deepCopy.vulnerabilities = deepCopy.vulnerabilities.filter(x => {
-    //     if (state.filterYear != null && state.filterNumber != null)
-    //         return x.year && x.year == state.filterYear && x.number && x.number == state.filterNumber;
-
-    //     if (state.filterYear != null)
-    //         return x.year && x.year == state.filterYear;
-
-    //     if (state.filterNumber != null)
-    //         return x.number && x.number == state.filterNumber;
-    //     return true;
-    // });
-    // return {
-    //     webDevice: deepCopy,
-    // };
+const mapStateToProps = ({ cars }: IApplicationState) => {
+    return {
+        data: cars.cars,
+        error: cars.errorMessage
+    }
 }
-
 const mapDispatchToProps = (dispatch) => ({
+    fetchCars: () => dispatch(fetchCars()),
+    cleanupAction: () => dispatch(cleanupAction())
 })
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(EnhancedTable);
+)(EnhancedTableCars);

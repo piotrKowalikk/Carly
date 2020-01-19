@@ -1,6 +1,6 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { makeStyles,createStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -19,7 +19,7 @@ import { connect } from 'react-redux';
 import { usersMock } from '../../MockData/UsersMock'
 import { Container, Button } from 'react-bootstrap';
 import { User } from '../../Models/User';
-import {reservationsMock} from '../../MockData/ReservationMock'
+import { reservationsMock } from '../../MockData/ReservationMock'
 import { Reservation } from '../../Models/Reservation';
 
 
@@ -96,12 +96,12 @@ const EnhancedTableToolbar = props => {
 
 const useStyles = makeStyles(theme => ({
 
-  }));
-export function EnhancedTableWrapperReservation(){
-    const [mockData,setMockData] = React.useState(reservationsMock);
+}));
+export function EnhancedTableWrapperReservation() {
+    const [mockData, setMockData] = React.useState(reservationsMock);
     return (
-        <EnhancedTableReservation  data={mockData} setData={e=>
-            setMockData(e)}/>
+        <EnhancedTableReservation data={mockData} setData={e =>
+            setMockData(e)} />
     );
 }
 interface IEnhancedTableProps {
@@ -135,18 +135,18 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
     };
 
     const isSelected = name => selected.indexOf(name) !== -1;
-    const removeFromSource = (id)=>{
-      var v=  props.data.splice(props.data.findIndex(x=>id == x.id),1);
+    const removeFromSource = (id) => {
+        var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
         props.setData(props.data);
     };
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
 
     return (
         <div>
-            <Container className="mt-4" style={{ width: 998 }}>
+            <Container className="mt-2" style={{ width: 998, paddingLeft: 1, paddingRight: 1 }}>
                 {props.data.length != 0 &&
                     <div>
-                        <Paper className="mb-3">
+                        <Paper className="mb-3 m-0">
                             <EnhancedTableToolbar numSelected={selected.length} />
                             <TableContainer >
                                 <Table
@@ -171,10 +171,10 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
 
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
-                                                    <TableCell >{row.userId}</TableCell>
-                                                    <TableCell >{row.dateFrom}</TableCell>
-                                                    <TableCell >{row.dateTo}</TableCell>                                               
-                                                </TableRow>
+                                                        <TableCell >{row.userId}</TableCell>
+                                                        <TableCell >{row.dateFrom}</TableCell>
+                                                        <TableCell >{row.dateTo}</TableCell>
+                                                    </TableRow>
                                                 );
                                             })}
                                         {emptyRows > 0 && (
