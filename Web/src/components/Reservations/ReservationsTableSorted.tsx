@@ -1,8 +1,7 @@
 import * as React from 'react';
 import clsx from 'clsx';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
-import { Link } from 'react-router-dom';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -17,14 +16,12 @@ import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { cars } from '../../MockData/CarsMock'
+import { usersMock } from '../../MockData/UsersMock'
 import { Container, Button } from 'react-bootstrap';
-import { Car } from '../../Models/Car';
-import { fetchCars } from '../../redux/cars/actions/fetchCars';
-import { IApplicationState } from '../../redux/rootReducer';
-import { cleanupAction } from '../../redux/cars/actions/cleanUpAction';
-import {AddBox, Edit, DriveEta} from '@material-ui/icons'
+import { User } from '../../Models/User';
+import { reservationsMock } from '../../MockData/ReservationMock'
+import { Reservation } from '../../Models/Reservation';
+
 
 
 function desc(a, b, orderBy) {
@@ -55,6 +52,12 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
+const headCells = [
+    { id: 'userId', numeric: false, disablePadding: true, label: 'User' },
+    { id: 'dateFrom', numeric: false, disablePadding: true, label: 'Date From' },
+    { id: 'dateTo', numeric: false, disablePadding: false, label: 'Date To' }
+];
+
 function EnhancedTableHead(props) {
     const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
     const createSortHandler = property => event => {
@@ -64,21 +67,18 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
-                <TableCell key={'carMake'} style={{ width: '180px' }} sortDirection={orderBy === 'carMake' ? order : false}>
-                    <TableSortLabel active={orderBy === 'carMake'} direction={order} onClick={createSortHandler('year')}>
-                        Car Make
+                <TableCell key={'userId'} style={{ width: '180px' }} sortDirection={orderBy === 'userId' ? order : false}>
+                    <TableSortLabel active={orderBy === 'userId'} direction={order} onClick={createSortHandler('year')}>
+                        User
                         </TableSortLabel>
                 </TableCell>
-                <TableCell key={'carModel'} sortDirection={orderBy === 'carModel' ? order : false}>
-                    <TableSortLabel active={orderBy === 'carModel'} direction={order} onClick={createSortHandler('carModel')}>
-                        Car Model
+                <TableCell key={'dateFrom'} sortDirection={orderBy === 'dateFrom' ? order : false}>
+                    <TableSortLabel active={orderBy === 'dateFrom'} direction={order} onClick={createSortHandler('dateFrom')}>
+                        Date From
                         </TableSortLabel>
                 </TableCell>
-                <TableCell key={'licenseNumber'} >
-                    License number
-                </TableCell>
-                <TableCell key={'availability'} >
-                    Availability
+                <TableCell key={'dateTo'} >
+                    Date To
                 </TableCell>
             </TableRow>
         </TableHead>
@@ -88,15 +88,8 @@ function EnhancedTableHead(props) {
 const EnhancedTableToolbar = props => {
     const { numSelected } = props;
     return (
-        <Toolbar className={clsx({})} style={{ paddingLeft: 16, minHeight: 40 }}>
-            <Typography style={{ flex: '1 1 100%' }} variant="h6" id="tableTitle">Cars</Typography>
-            <Link to="/car-add">
-                <Tooltip title="Add a new car">
-                    <IconButton aria-label="new car">
-                        <AddBox color='primary'/>
-                    </IconButton>
-                </Tooltip>
-            </Link>
+        <Toolbar className={clsx(props)} style={{ paddingLeft: 16, minHeight: 40 }}>
+            <Typography style={{ flex: '1 1 100%' }} variant="h6" id="tableTitle">Reservations</Typography>
         </Toolbar>
     );
 };
@@ -104,26 +97,19 @@ const EnhancedTableToolbar = props => {
 const useStyles = makeStyles(theme => ({
 
 }));
-
-interface IEnhancedTableCarsProps {
-    data: Car[];
-    fetchCars: Function;
-    cleanupAction: Function;
-    error: string;
+export function EnhancedTableWrapperReservation() {
+    const [mockData, setMockData] = React.useState(reservationsMock);
+    return (
+        <EnhancedTableReservation data={mockData} setData={e =>
+            setMockData(e)} />
+    );
+}
+interface IEnhancedTableProps {
+    data: Reservation[];
+    setData: Function;
 }
 
-function EnhancedTableCars(props: IEnhancedTableCarsProps) {
-
-    if (props.data.length == 0 && !props.error) {
-        props.fetchCars();
-    }
-
-    React.useEffect(() => {
-        return () => {
-            props.cleanupAction();
-        }
-    }, []);
-
+function EnhancedTableReservation(props: IEnhancedTableProps) {
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('year');
@@ -149,24 +135,20 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
     };
 
     const isSelected = name => selected.indexOf(name) !== -1;
+    const removeFromSource = (id) => {
+        var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
+        props.setData(props.data);
+    };
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
-
-    if (props.error)
-        return (
-            <Container>
-                <label style={{ color: 'red' }}>{props.error}</label>
-            </Container>
-        );
 
     return (
         <div>
-
-            <Container className="mt-4">
+            <Container className="mt-2" style={{ paddingLeft: 1, paddingRight: 1 }}>
                 {props.data.length != 0 &&
                     <div>
-                        <Paper className="mb-3">
+                        <Paper className="mb-3 m-0">
                             <EnhancedTableToolbar numSelected={selected.length} />
-                            <TableContainer>
+                            <TableContainer >
                                 <Table
                                     aria-labelledby="tableTitle"
                                     size={dense ? 'small' : 'medium'}
@@ -183,25 +165,15 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                     <TableBody>
                                         {stableSort(props.data, getSorting(order, orderBy))
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map((row: Car, index) => {
-                                                const isItemSelected = isSelected(row.id);
+                                            .map((row, index) => {
+                                                const isItemSelected = isSelected(row.user);
                                                 const labelId = `enhanced-table-checkbox-${index}`;
 
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
-                                                        <TableCell >{row.licenseNumber}</TableCell>
-                                                        <TableCell >{row.carMake}</TableCell>
-                                                        <TableCell >{row.carModel}</TableCell>
-                                                        <TableCell >{row.location}</TableCell>
-                                                        <TableCell title='edit this car'>
-                                                            <Link to="/car-details">
-                                                                <Tooltip title="Car details">
-                                                                    <IconButton aria-label="car deatils">
-                                                                        <DriveEta color='primary'/>
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                            </Link>
-                                                        </TableCell>
+                                                        <TableCell >{row.userId}</TableCell>
+                                                        <TableCell >{row.dateFrom}</TableCell>
+                                                        <TableCell >{row.dateTo}</TableCell>
                                                     </TableRow>
                                                 );
                                             })}
@@ -230,18 +202,14 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
     );
 }
 
-const mapStateToProps = ({ cars }: IApplicationState) => {
-    return {
-        data: cars.cars,
-        error: cars.errorMessage
-    }
+const mapStateToProps = (state) => {
+
 }
+
 const mapDispatchToProps = (dispatch) => ({
-    fetchCars: () => dispatch(fetchCars()),
-    cleanupAction: () => dispatch(cleanupAction())
 })
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(EnhancedTableCars);
+)(EnhancedTableReservation);

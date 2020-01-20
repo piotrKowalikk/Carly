@@ -19,7 +19,9 @@ import { connect } from 'react-redux';
 import { usersMock } from '../../MockData/UsersMock'
 import { Container, Button } from 'react-bootstrap';
 import { User } from '../../Models/User';
-
+import { IApplicationState } from '../../redux/rootReducer';
+import { fetchUsers } from '../../redux/users/actions/fetchUsers';
+import {DeleteOutline,AddBox, Edit} from '@material-ui/icons'
 
 
 function desc(a, b, orderBy) {
@@ -50,9 +52,10 @@ function getSorting(order, orderBy) {
     return order === 'desc' ? (a, b) => desc(a, b, orderBy) : (a, b) => -desc(a, b, orderBy);
 }
 
+//not used anywhere
 const headCells = [
-    { id: 'name', numeric: false, disablePadding: true, label: 'First Name' },
-    { id: 'lastName', numeric: true, disablePadding: true, label: 'Last Name' },
+    // { id: 'name', numeric: false, disablePadding: true, label: 'First Name' },
+    // { id: 'lastName', numeric: true, disablePadding: true, label: 'Last Name' },
     { id: 'email', numeric: false, disablePadding: false, label: 'Email' }
 ];
 
@@ -65,19 +68,20 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
-                <TableCell key={'name'} style={{ width: '180px' }} sortDirection={orderBy === 'name' ? order : false}>
+                {/* <TableCell key={'name'} style={{ width: '180px' }} sortDirection={orderBy === 'name' ? order : false}>
                     <TableSortLabel active={orderBy === 'name'} direction={order} onClick={createSortHandler('year')}>
                         First name
                         </TableSortLabel>
-                </TableCell>
-                <TableCell key={'lastName'} sortDirection={orderBy === 'lastName' ? order : false}>
+                </TableCell> */}
+                {/* <TableCell key={'lastName'} sortDirection={orderBy === 'lastName' ? order : false}>
                     <TableSortLabel active={orderBy === 'lastName'} direction={order} onClick={createSortHandler('lastName')}>
                         Lastname
                         </TableSortLabel>
-                </TableCell>
+                </TableCell> */}
                 <TableCell key={'email'} >
                     Email
                 </TableCell>
+                <TableCell></TableCell>
             </TableRow>
         </TableHead>
     );
@@ -95,22 +99,23 @@ const EnhancedTableToolbar = props => {
 const useStyles = makeStyles(theme => ({
 
 }));
-export function EnhancedTableWrapper(){
-    const [mockData,setMockData] = React.useState(usersMock);
-    return (
-        <EnhancedTable data={mockData} setData={e=>
-            setMockData(e)}/>
-    );
-}
-interface IEnhancedTableProps {
+
+
+interface IEnhancedTableUsersProps {
     data: User[];
-    setData: Function;
+    error: string;
+    isLoading: boolean;
+    fetchData: Function;
 }
 
-function EnhancedTable(props: IEnhancedTableProps) {
+function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
+
+    if (!props.error && props.data.length == 0){
+        props.fetchData();
+    }
     const classes = useStyles({});
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('year');
+    const [order, setOrder] = React.useState('asc');//TODO
+    const [orderBy, setOrderBy] = React.useState('year');//TODO
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
@@ -133,81 +138,99 @@ function EnhancedTable(props: IEnhancedTableProps) {
     };
 
     const isSelected = name => selected.indexOf(name) !== -1;
-    const removeFromSource = (id)=>{
-      var v=  props.data.splice(props.data.findIndex(x=>id == x.id),1);
-        props.setData(props.data);
+
+    const removeFromSource = (id) => {
+        var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
+        //TODO: action remove
+        //   props.setData(props.data);
+
     };
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
 
-    return (
-        <div>
-            <Container className="mt-4">
-                {props.data.length != 0 &&
-                    <div>
-                        <Paper className="mb-3">
-                            <EnhancedTableToolbar numSelected={selected.length} />
-                            <TableContainer>
-                                <Table
-                                    aria-labelledby="tableTitle"
-                                    size={dense ? 'small' : 'medium'}
-                                    aria-label="enhanced table"
-                                >
-                                    <EnhancedTableHead
-                                        classes={classes}
-                                        numSelected={selected.length}
-                                        order={order}
-                                        orderBy={orderBy}
-                                        onRequestSort={handleRequestSort}
-                                        rowCount={props.data.length}
-                                    />
-                                    <TableBody>
-                                        {stableSort(props.data, getSorting(order, orderBy))
-                                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                            .map((row, index) => {
-                                                const isItemSelected = isSelected(row.name);
-                                                const labelId = `enhanced-table-checkbox-${index}`;
-
-                                                return (
-                                                    <TableRow key={row.title} hover selected={isItemSelected}>
-                                                        <TableCell >{row.name}</TableCell>
-                                                        <TableCell >{row.lastName}</TableCell>
-                                                        <TableCell >{row.email}</TableCell>
-                                                        <TableCell>
-                                                            <Button className="btn btn-danger mr-1"
-                                                             onClick={(e)=>{
-                                                                 removeFromSource(row.id)
-                                                                 }}>Delete</Button>
-                                                            <Button className="btn btn-primary">Edit</Button>
-                                                        </TableCell>
-                                                    </TableRow>
-                                                );
-                                            })}
-                                        {emptyRows > 0 && (
-                                            <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                                                <TableCell colSpan={6} />
-                                            </TableRow>
-                                        )}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
-                                component="div"
-                                count={props.data.length}
-                                rowsPerPage={rowsPerPage}
-                                page={page}
-                                onChangePage={handleChangePage}
-                                onChangeRowsPerPage={handleChangeRowsPerPage}
-                            />
-                        </Paper>
-                    </div>
-                }
+    if (props.error) {
+        return (
+            <Container className="mt-4" >
+                <p style={{ color: 'red' }}>{props.error}</p>
             </Container>
-        </div>
+        );
+    }
+    return (
+        <Container className="mt-4">
+            {props.data.length != 0 &&
+                <div>
+                    <Paper className="mb-3">
+                        <EnhancedTableToolbar numSelected={selected.length} />
+                        <TableContainer>
+                            <Table
+                                aria-labelledby="tableTitle"
+                                size={dense ? 'small' : 'medium'}
+                                aria-label="enhanced table"
+                            >
+                                <EnhancedTableHead
+                                    classes={classes}
+                                    numSelected={selected.length}
+                                    order={order}
+                                    orderBy={orderBy}
+                                    onRequestSort={handleRequestSort}
+                                    rowCount={props.data.length}
+                                />
+                                <TableBody>
+                                    {stableSort(props.data, getSorting(order, orderBy))
+                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                        .map((row, index) => {
+                                            const isItemSelected = isSelected(row.name);
+                                            const labelId = `enhanced-table-checkbox-${index}`;
+
+                                            return (
+                                                <TableRow key={row.title} hover selected={isItemSelected}>
+                                                    {/* <TableCell >{row.name}</TableCell>
+                                                        <TableCell >{row.lastName}</TableCell> */}
+                                                    <TableCell >{row.email}</TableCell>
+                                                    <TableCell>
+                                                    <IconButton aria-label="delete user" onClick={(e) => {
+                                                                removeFromSource(row.id)
+                                                            }}>
+                                                        <DeleteOutline color='error' ></DeleteOutline>
+                                                    </IconButton>
+                                                       {/* <Button className="btn btn-danger mr-1"
+                                                            onClick={(e) => {
+                                                                removeFromSource(row.id)
+                                                            }}>Delete</Button>
+                                                        */}
+                                                    </TableCell>
+                                                </TableRow>
+                                            );
+                                        })}
+                                    {emptyRows > 0 && (
+                                        <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                            <TableCell colSpan={6} />
+                                        </TableRow>
+                                    )}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <TablePagination
+                            rowsPerPageOptions={[5, 10, 25]}
+                            component="div"
+                            count={props.data.length}
+                            rowsPerPage={rowsPerPage}
+                            page={page}
+                            onChangePage={handleChangePage}
+                            onChangeRowsPerPage={handleChangeRowsPerPage}
+                        />
+                    </Paper>
+                </div>
+            }
+        </Container>
     );
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = ({ users }: IApplicationState) => {
+    return {
+        isLoading: users.isLoading,
+        error: users.errorMessage,
+        data: users.users
+    }
     // var deepCopy: WebDevice = JSON.parse(JSON.stringify(state.webDevice));
     // deepCopy.vulnerabilities = deepCopy.vulnerabilities.filter(x => {
     //     if (state.filterYear != null && state.filterNumber != null)
@@ -226,9 +249,10 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
+    fetchData: ()=>dispatch(fetchUsers())
 })
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(EnhancedTable);
+)(EnhancedTableUsers);
