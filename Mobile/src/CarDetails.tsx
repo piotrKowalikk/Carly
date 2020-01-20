@@ -15,6 +15,7 @@ class CarDetails extends Component<any, any> {
       this.props.navigation.setParams({ title: car.name });
 
       this.state = {
+         car,
          data: [
             { name: 'Name', value: car.name },
             { name: 'Location', value: car.location },
@@ -24,20 +25,20 @@ class CarDetails extends Component<any, any> {
    }
 
    render() {
-      const data = this.state.data;
-      
+      const { car } = this.state;
+
       return (
          <View style={styles.container}>
             <FlatList
-               data={data}
-               keyExtractor={(item: any) => item.name}
+               data={Object.entries(car)}
+               keyExtractor={(item: any) => item[0]}
                renderItem={({item}) => (
                   <ListItem style={styles.listItem}>
                      <Left style={styles.flexHalf}>
-                        <Text style={styles.leftText}>{item.name}</Text>
+                        <Text style={styles.leftText}>{item[0][0].toUpperCase() + item[0].slice(1)}</Text>
                      </Left>
                      <Right style={styles.flexHalf}>
-                        <Text numberOfLines={1} style={styles.rightText}>{item.value}</Text>
+                        <Text numberOfLines={1} style={styles.rightText}>{item[1]}</Text>
                      </Right>
                   </ListItem>
                )}

@@ -2,8 +2,8 @@
   "name": "CarlyMobile",
   "displayName": "Carly",
   "expo": {
-    "name": "CarlyMobile",
-    "slug": "expo-template-bare",
+    "name": "Carly",
+    "slug": "carly",
     "privacy": "unlisted",
     "sdkVersion": "36.0.0",
     "version": "1.0.0",
@@ -12,6 +12,13 @@
       "ios",
       "android",
       "web"
-    ]
+    ],
+    "ios": {
+      "bundleIdentifier": "pw.carly"
+    },
+    "android": {
+      "package": "pw.carly"
+    },
+    "description": ""
   }
 }
