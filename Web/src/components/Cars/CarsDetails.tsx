@@ -8,7 +8,6 @@ import { cars } from '../../MockData/CarsMock'
 import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
-import ReservationsTable from '../Reservations/ReservationsTable';
 import { EnhancedTableWrapperReservation } from '../Reservations/ReservationsTableSorted';
 
 interface ICarTableProps extends RouteComponentProps {
@@ -50,62 +49,62 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
         }
         return (
             <Container>
-                
-                    <Form  style={styleForm} >
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="formGridModel">
-                                <Form.Label>Model</Form.Label>
-                                <Form.Text placeholder={car.carModel} />
-                            </Form.Group>
 
-                            <Form.Group as={Col} controlId="formGridCarMake">
-                                <Form.Label>Car Make</Form.Label>
-                                <Form.Text placeholder={car.carMake} />
-                            </Form.Group>
+                <Form style={styleForm} >
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="formGridModel">
+                            <Form.Label>Model</Form.Label>
+                            <Form.Text placeholder={car.carModel} />
+                        </Form.Group>
 
-                        </Form.Row>
+                        <Form.Group as={Col} controlId="formGridCarMake">
+                            <Form.Label>Car Make</Form.Label>
+                            <Form.Text placeholder={car.carMake} />
+                        </Form.Group>
 
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="formGridSeats">
-                                <Form.Label>Number of seats</Form.Label>
-                                <Form.Text defaultValue={car.seats} />
-                            </Form.Group>
+                    </Form.Row>
 
-                            <Form.Group as={Col} controlId="formGridYear">
-                                <Form.Label>Year</Form.Label>
-                                <Form.Text defaultValue={car.year} />
-                            </Form.Group>
-                        </Form.Row>
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="formGridSeats">
+                            <Form.Label>Number of seats</Form.Label>
+                            <Form.Text defaultValue={car.seats} />
+                        </Form.Group>
 
-                        <Form.Row>
-                            <Form.Group as={Col} controlId="formGridLicense">
-                                <Form.Label>License</Form.Label>
-                                <Form.Text placeholder={car.licenseNumber} />
-                            </Form.Group>
+                        <Form.Group as={Col} controlId="formGridYear">
+                            <Form.Label>Year</Form.Label>
+                            <Form.Text defaultValue={car.year} />
+                        </Form.Group>
+                    </Form.Row>
 
-                            <Form.Group as={Col} controlId="formGridLocation">
-                                <Form.Label>Location</Form.Label>
-                                <Form.Text placeholder={car.location}/>
-                            </Form.Group>
-                        </Form.Row>
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="formGridLicense">
+                            <Form.Label>License</Form.Label>
+                            <Form.Text placeholder={car.licenseNumber} />
+                        </Form.Group>
 
-                        <Link to="/car-edit">
-                            <Button variant="primary" type="button" >
-                                Edit
+                        <Form.Group as={Col} controlId="formGridLocation">
+                            <Form.Label>Location</Form.Label>
+                            <Form.Text placeholder={car.location} />
+                        </Form.Group>
+                    </Form.Row>
+
+                    <Link to="/car-edit">
+                        <Button variant="primary" type="button" >
+                            Edit
                         </Button>
-                        </Link>
+                    </Link>
 
-                        <Link to="/make-unavailable">
-                            <Button variant="info" style={styleButton} type="button" >
-                                Make unavailable
+                    <Link to="/make-unavailable">
+                        <Button variant="info" style={styleButton} type="button" >
+                            Make unavailable
                         </Button>
-                        </Link>
-                    </Form>
-                
+                    </Link>
+                </Form>
 
-               
-                    <EnhancedTableWrapperReservation ></EnhancedTableWrapperReservation>
-               
+
+
+                <EnhancedTableWrapperReservation ></EnhancedTableWrapperReservation>
+
 
             </Container>
         );
