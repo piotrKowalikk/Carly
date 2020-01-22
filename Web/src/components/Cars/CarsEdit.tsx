@@ -8,7 +8,7 @@ import { cars } from '../../MockData/CarsMock'
 import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
-import { EnhancedTableWrapperReservation } from '../Reservations/ReservationsTableSorted';
+import EnhancedTableReservation from '../Reservations/ReservationsTableSorted';
 
 interface ICarsEditProps extends RouteComponentProps {
 

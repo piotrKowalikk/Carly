@@ -1,20 +1,20 @@
 import axios from 'axios'
-import { UserActionTypes } from '../types/userTypes';
-import { getAdmins } from '../../.resources/apiURLs';
-import { User } from '../../../Models/User';
+import { ReservationActionTypes } from '../types/reservationTypes';
+import { getReservations } from '../../.resources/apiURLs';
+import { Reservation } from '../../../Models/Reservation';
 
-export const fetchUsers = () => {
+export const fetchReservations = () => {
     return async dispatch => {
         try {
             dispatch({
-                type: UserActionTypes.LOADING,
+                type: ReservationActionTypes.LOADING,
                 payload: {
                     isLoading: true,
                 }
             });
             //   await delay(2000);
 
-            var response = await axios.get(getAdmins(), {
+            var response = await axios.get(getReservations(), {
                 headers: {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
@@ -35,9 +35,9 @@ function delay(ms: number) {
 
 const successHandle = (data) => {
     return {
-        type: UserActionTypes.GET_USERS,
+        type: ReservationActionTypes.GET_RESERVATIONS,
         payload: {
-            users: User.parseData(data),
+            reservations: Reservation.parseData(data),
             errorMessage: null
         }
     }
@@ -46,9 +46,9 @@ const successHandle = (data) => {
 const errorHandle = () => {
     //handle message from server
     return {
-        type: UserActionTypes.GET_USERS,
+        type: ReservationActionTypes.GET_RESERVATIONS,
         payload: {
-            users: [],
+            reservations: [],
             errorMessage: 'Not valid input.'
         }
     }

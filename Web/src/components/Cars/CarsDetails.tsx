@@ -8,7 +8,7 @@ import { cars } from '../../MockData/CarsMock'
 import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
-import { EnhancedTableWrapperReservation } from '../Reservations/ReservationsTableSorted';
+import EnhancedTableReservation from '../Reservations/ReservationsTableSorted';
 
 interface ICarTableProps extends RouteComponentProps {
 
@@ -100,12 +100,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                         </Button>
                     </Link>
                 </Form>
-
-
-
-                <EnhancedTableWrapperReservation ></EnhancedTableWrapperReservation>
-
-
+                <EnhancedTableReservation dense={false}/>
             </Container>
         );
     }

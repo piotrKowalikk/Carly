@@ -21,6 +21,8 @@ import { Container, Button } from 'react-bootstrap';
 import { User } from '../../Models/User';
 import { reservationsMock } from '../../MockData/ReservationMock'
 import { Reservation } from '../../Models/Reservation';
+import { IApplicationState } from '../../redux/rootReducer';
+import { fetchReservations } from '../../redux/reservations/actions/fetchReservations';
 
 
 
@@ -97,25 +99,51 @@ const EnhancedTableToolbar = props => {
 const useStyles = makeStyles(theme => ({
 
 }));
-export function EnhancedTableWrapperReservation() {
-    const [mockData, setMockData] = React.useState(reservationsMock);
-    return (
-        <EnhancedTableReservation data={mockData} setData={e =>
-            setMockData(e)} />
-    );
-}
-interface IEnhancedTableProps {
-    data: Reservation[];
-    setData: Function;
+
+interface IReservationsDispatchProps {
+    fetchReservations: typeof fetchReservations;
+    cleanup: Function;
 }
 
-function EnhancedTableReservation(props: IEnhancedTableProps) {
+interface IReservationsStateProps {
+    isLoading: boolean;
+    data: Reservation[];
+    error: string;
+}
+
+interface IReservationsOwnProps {
+    dense: boolean;
+}
+
+// not necessary to combine them into another type, but it cleans up the next line
+type IReservationsProps = IReservationsDispatchProps & IReservationsStateProps & IReservationsOwnProps;
+
+
+// interface IEnhancedTableProps {
+//     data: Reservation[];
+//     fetchReservations: Function;
+//     cleanup: Function;
+//     error: string;
+//     dense: boolean;
+// }
+
+function EnhancedTableReservation(props: IReservationsProps) {
+    if (props.data.length == 0 && !props.error) {
+        props.fetchReservations();
+    }
+
+    React.useEffect(() => {
+        return () => {
+            props.cleanup();
+        }
+    }, []);
+
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('year');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(true);
+    const [dense, setDense] = React.useState(props.dense);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (event, property) => {
@@ -136,14 +164,14 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
 
     const isSelected = name => selected.indexOf(name) !== -1;
     const removeFromSource = (id) => {
-        var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
-        props.setData(props.data);
+        // var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
+        // props.setData(props.data);
     };
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
 
     return (
         <div>
-            <Container className="mt-2" style={{ paddingLeft: 1, paddingRight: 1 }}>
+            <Container className="mt-3" style={{ paddingLeft: 1, paddingRight: 1 }}>
                 {props.data.length != 0 &&
                     <div>
                         <Paper className="mb-3 m-0">
@@ -202,14 +230,24 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
     );
 }
 
-const mapStateToProps = (state) => {
-
+const mapStateToProps = ({ reservations }: IApplicationState, props: IReservationsOwnProps): IReservationsStateProps => {
+    var rsl: IReservationsStateProps = {
+        isLoading: reservations.isLoading,
+        error: reservations.errorMessage,
+        data: reservationsMock//reservations.reservations
+    };
+    return rsl;
 }
 
-const mapDispatchToProps = (dispatch) => ({
-})
+const mapDispatchToProps = (dispatch, props): IReservationsDispatchProps => {
+    var rsl: IReservationsDispatchProps = {
+        cleanup: () => { },
+        fetchReservations: () => dispatch(fetchReservations)
+    };
+    return rsl;
+}
 
-export default connect(
+export default connect<IReservationsStateProps, IReservationsDispatchProps, IReservationsOwnProps>(
     mapStateToProps,
     mapDispatchToProps
 )(EnhancedTableReservation);

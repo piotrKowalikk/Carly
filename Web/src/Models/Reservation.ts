@@ -2,6 +2,9 @@
 import {EnumType} from './EnumType'
 
 export class Reservation {
+    static parseData(data: any) {
+        throw new Error("Method not implemented.");
+    }
     id: string;
     carId: string;
     userId: string;
