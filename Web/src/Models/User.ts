@@ -17,6 +17,8 @@ export class User {
 
     static parseData(data: any) {
         var cars: User[] = [];
+        if(!data)
+            return [];
         data.forEach(x => {
             cars.push(new User(
                 {

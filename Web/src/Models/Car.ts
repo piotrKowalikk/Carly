@@ -23,6 +23,8 @@ export class Car {
     }
     static parseData(data: any[]): Car[] {
         var cars: Car[] = [];
+        if (!data)
+            return [];
         data.forEach(x => {
             cars.push(new Car(
                 {

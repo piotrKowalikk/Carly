@@ -24,7 +24,7 @@ import { Car } from '../../Models/Car';
 import { fetchCars } from '../../redux/cars/actions/fetchCars';
 import { IApplicationState } from '../../redux/rootReducer';
 import { cleanupAction } from '../../redux/cars/actions/cleanUpAction';
-import {AddBox, Edit, DriveEta} from '@material-ui/icons'
+import { AddBox, Edit, DriveEta } from '@material-ui/icons'
 
 
 function desc(a, b, orderBy) {
@@ -64,6 +64,9 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
+                <TableCell key={'licenseNumber'} >
+                    License number
+                </TableCell>
                 <TableCell key={'carMake'} style={{ width: '180px' }} sortDirection={orderBy === 'carMake' ? order : false}>
                     <TableSortLabel active={orderBy === 'carMake'} direction={order} onClick={createSortHandler('year')}>
                         Car Make
@@ -74,12 +77,11 @@ function EnhancedTableHead(props) {
                         Car Model
                         </TableSortLabel>
                 </TableCell>
-                <TableCell key={'licenseNumber'} >
-                    License number
+
+                <TableCell key={'location'} >
+                    Location
                 </TableCell>
-                <TableCell key={'availability'} >
-                    Availability
-                </TableCell>
+                <TableCell></TableCell>
             </TableRow>
         </TableHead>
     );
@@ -93,7 +95,7 @@ const EnhancedTableToolbar = props => {
             <Link to="/car-add">
                 <Tooltip title="Add a new car">
                     <IconButton aria-label="new car">
-                        <AddBox color='primary'/>
+                        <AddBox color='primary' />
                     </IconButton>
                 </Tooltip>
             </Link>
@@ -197,7 +199,7 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                                             <Link to="/car-details">
                                                                 <Tooltip title="Car details">
                                                                     <IconButton aria-label="car deatils">
-                                                                        <DriveEta color='primary'/>
+                                                                        <DriveEta color='primary' />
                                                                     </IconButton>
                                                                 </Tooltip>
                                                             </Link>
