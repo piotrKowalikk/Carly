@@ -17,6 +17,7 @@ INSERT INTO public.admins(
 VALUES (1004,'email4@email','plain-text-password');
 
 
+
 -- Add inital cars
 INSERT INTO public.cars(
     id, make, licence, location, model, seats, year)
@@ -51,13 +52,13 @@ VALUES (1002,'booking3@mail.com', 'Adrian', 'Jaszczomp');
 
 -- Add initial statuses
 INSERT INTO public.status(
-    id, comment, date_from, date_to, type, booking_user_info_id, car_id)
-VALUES (1001, 'Normalna rezerwacja', '2020-01-17','2020-01-24','BOOKED', 1001, 1001);
+    id, comment, date_from, date_to, type, booking_user_info_id, car_id,created_at)
+VALUES (1001, 'Normalna rezerwacja', '2020-01-17','2020-01-24','BOOKED', 1001, 1001,CURRENT_TIMESTAMP(1));
 
 INSERT INTO public.status(
-    id, comment, date_from, date_to, type, booking_user_info_id, car_id)
-VALUES (1002, 'Anulowana rezerwacja', '2020-01-23','2020-01-25','BOOKINGCANCELED', 1002, 1002);
+    id, comment, date_from, date_to, type, booking_user_info_id, car_id,created_at)
+VALUES (1002, 'Anulowana rezerwacja', '2020-01-23','2020-01-25','BOOKINGCANCELED', 1002, 1002,CURRENT_TIMESTAMP(1));
 
 INSERT INTO public.status(
-    id, comment, date_from, date_to, type, booking_user_info_id, car_id)
-VALUES (1003, 'Auto niedostepne', '2020-01-25','2020-01-28','UNAVAILABLE',null, 1003);
+    id, comment, date_from, date_to, type, booking_user_info_id, car_id,created_at)
+VALUES (1003, 'Auto niedostepne', '2020-01-25','2020-01-28','UNAVAILABLE',null, 1003,CURRENT_TIMESTAMP(1));

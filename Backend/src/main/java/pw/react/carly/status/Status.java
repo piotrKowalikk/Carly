@@ -1,7 +1,7 @@
 package pw.react.carly.status;
 
-import pw.react.carly.car.Car;
 import pw.react.carly.bookingUserInfo.BookingUserInfo;
+import pw.react.carly.car.Car;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -20,6 +20,7 @@ public class Status {
     @ManyToOne
     private BookingUserInfo bookingUserInfo;
     private String comment;
+    private Date createdAt;
 
     @NotNull
     private Date dateFrom;
@@ -30,6 +31,7 @@ public class Status {
     @NotNull
     @Enumerated(EnumType.STRING)
     private StatusType type;
+
 
 
     public Status() {
@@ -91,6 +93,12 @@ public class Status {
     public void setDateTo(Date dateTo) {
         this.dateTo = dateTo;
     }
+    public Date getCreatedAt() {
+        return createdAt;
+    }
 
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
 
 }

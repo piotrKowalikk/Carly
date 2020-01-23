@@ -1,6 +1,7 @@
 package pw.react.carly.bookingUserInfo;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 
 @Entity
 @Table(name = "booking_user_infos")
@@ -10,9 +11,19 @@ public class BookingUserInfo {
 	private long id;
 	private String name;
 	private String surname;
+	@Email
 	private String email;
 
-	public String getName() {
+    public BookingUserInfo() {
+    }
+
+    public BookingUserInfo(String name, String surname, @Email String email) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+    }
+
+    public String getName() {
 		return name;
 	}
 
