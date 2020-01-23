@@ -3,11 +3,20 @@ package pw.react.carly.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static java.util.Collections.emptyList;
+
 
 
 @Service
-public class AdminService {
+public class AdminService implements UserDetailsService {
 
     private AdminRepository adminRepository;
 
@@ -21,6 +30,7 @@ public class AdminService {
             adminRepository.save(admin);
             return adminRepository.save(admin);
         }
+
         throw new ResourceNotFoundException("Admin not found");
     }
 
@@ -37,5 +47,15 @@ public class AdminService {
             return adminRepository.findById(id).get();
         }
         throw new ResourceNotFoundException("Admin not found");
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+       List<Admin> admins = adminRepository.findAdminByEmail(email);
+        if (admins.isEmpty()) {
+            throw new UsernameNotFoundException(email);
+        }
+        Admin admin = admins.get(0);
+        return new User(admin.getEmail(), admin.getPassword(),emptyList());
     }
 }

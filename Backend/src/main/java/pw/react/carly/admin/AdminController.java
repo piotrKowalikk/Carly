@@ -3,6 +3,7 @@ package pw.react.carly.admin;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -14,12 +15,15 @@ public class AdminController {
     private AdminService adminService;
     private AdminRepository adminRepository;
 
+
     @Autowired
-    public AdminController(AdminService adminService, AdminRepository adminRepository) {
+    public AdminController(AdminService adminService, AdminRepository adminRepository, BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.adminService = adminService;
         this.adminRepository = adminRepository;
+        this.encoder = bCryptPasswordEncoder;
     }
 
+    private BCryptPasswordEncoder encoder;
     @GetMapping("/{id}")
     public ResponseEntity<Admin> getAdmin(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(adminService.getAdmin(id));
@@ -35,6 +39,12 @@ public class AdminController {
         return ResponseEntity.ok().body(admins);
     }
 
+    @PostMapping("/sign-up")
+    public void signUp(@RequestBody Admin user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        adminRepository.save(user);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity deleteAdmin(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(adminService.deleteAdmin(adminService.getAdmin((id))));
@@ -48,8 +58,4 @@ public class AdminController {
         return ResponseEntity.ok().body(adminRepository.save(updatedAdmin));
     }
 
-    @PostMapping("")
-    public ResponseEntity<Admin> addAdmin(@RequestBody @Valid Admin Admin) {
-        return ResponseEntity.ok().body(adminRepository.save(Admin));
-    }
 }
