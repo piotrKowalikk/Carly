@@ -143,7 +143,7 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
 
     return (
         <div>
-            <Container className="mt-2" style={{ width: 998, paddingLeft: 1, paddingRight: 1 }}>
+            <Container className="mt-2" style={{ paddingLeft: 1, paddingRight: 1 }}>
                 {props.data.length != 0 &&
                     <div>
                         <Paper className="mb-3 m-0">
