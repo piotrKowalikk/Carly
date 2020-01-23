@@ -2,6 +2,8 @@ package pw.react.carly.car;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -34,13 +36,14 @@ public class CarController {
 
 
     @GetMapping()
-    public ResponseEntity<List> getCars(
+    public Page<Car> getCars(
             @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
             @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
             @RequestParam(required = false,name="seats") Integer seats,
             @RequestParam(required = false,name="year") Integer year,
             @RequestParam(required = false,name="make") String make,
-            @RequestParam(required = false,name="available", defaultValue = "true") Boolean available
+            @RequestParam(required = false,name="available", defaultValue = "true") Boolean available,
+            Pageable pageable
     ){
 
         Specification<Car> spec = Specification.where(null);
@@ -56,10 +59,7 @@ public class CarController {
             Specification<Car> availabilitySpec = available ? isNotDeniedByStatuses(statuses) : isDeniedByStatuses(statuses);
             spec = spec.and(availabilitySpec);
         }
-        if(from != null ^ to != null){
-            return ResponseEntity.badRequest().body(null);
-        }
-        return ResponseEntity.ok().body(carRepository.findAll(spec));
+        return carRepository.findAll(spec,pageable);
     }
 
     @GetMapping("/{id}")

@@ -1,6 +1,8 @@
 package pw.react.carly.status;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -8,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.List;
 
 import static pw.react.carly.status.StatusSpecifications.*;
 
@@ -17,6 +18,7 @@ import static pw.react.carly.status.StatusSpecifications.*;
 public class StatusController {
     private StatusService statusService;
     private StatusRepository statusRepository;
+
 
     @Autowired
     public StatusController(StatusService statusService, StatusRepository statusRepository) {
@@ -29,13 +31,13 @@ public class StatusController {
         return ResponseEntity.ok().body(statusService.getStatus(id));
     }
     @GetMapping("")
-    public ResponseEntity<List<Status>> getStatuses(
-
+    public Page<Status> getStatuses(
             @RequestParam(name="from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
             @RequestParam(name="to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
             @RequestParam(name="type",required = false) StatusType type,
-            @RequestParam(name="carID",required = false) Long carID
-    ){
+            @RequestParam(name="carID",required = false) Long carID,
+            Pageable pageable
+            ){
         Specification<Status> spec = Specification.where(null);
         if(from != null)
             spec = spec.and(fromDateBefore(from));
@@ -46,7 +48,7 @@ public class StatusController {
         if(carID != null)
             spec = spec.and(byCarId(carID));
 
-        return ResponseEntity.ok().body(statusRepository.findAll(spec));
+        return (statusRepository.findAll(spec,pageable));
     }
 
     @DeleteMapping("/{id}")

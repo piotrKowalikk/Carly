@@ -2,6 +2,7 @@ package pw.react.carly.status;
 
 import pw.react.carly.bookingUserInfo.BookingUserInfo;
 import pw.react.carly.car.Car;
+import pw.react.carly.reservation.ReservationInfo;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -32,7 +33,9 @@ public class Status {
     @Enumerated(EnumType.STRING)
     private StatusType type;
 
-
+    public static ReservationInfo convertToDTO(Status status){
+        return null;
+    }
 
     public Status() {
     }

@@ -1,8 +1,9 @@
 package pw.react.carly.status;
-import org.springframework.data.jpa.repository.JpaRepository;
+
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 
-public interface StatusRepository extends JpaRepository<Status, Long>, JpaSpecificationExecutor<Status> {
+public interface StatusRepository extends PagingAndSortingRepository<Status, Long>, JpaSpecificationExecutor<Status> {
 
 }

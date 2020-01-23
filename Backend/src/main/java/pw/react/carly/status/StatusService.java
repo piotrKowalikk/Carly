@@ -1,6 +1,7 @@
 
 package pw.react.carly.status;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
@@ -9,14 +10,16 @@ import pw.react.carly.bookingUserInfo.BookingUserInfo;
 import pw.react.carly.bookingUserInfo.BookingUserInfoDTO;
 import pw.react.carly.bookingUserInfo.BookingUserInfoService;
 import pw.react.carly.car.Car;
+import pw.react.carly.car.CarDTO;
 import pw.react.carly.car.CarService;
 import pw.react.carly.reservation.ReservationData;
+import pw.react.carly.reservation.ReservationInfo;
 
 
 @Service
 public class StatusService {
 
-
+    private static final ModelMapper mapper = new ModelMapper();
     private StatusRepository statusRepository;
     private CarService carService;
     private BookingUserInfoService bookingUserInfoService;
@@ -27,7 +30,12 @@ public class StatusService {
         this.bookingUserInfoService = bookingUserInfoService;
     }
 
+    public ReservationInfo getReservation(Long statusID){
+        Status status = getStatus(statusID);
 
+        CarDTO carDTO = mapper.map(status.getCar(),CarDTO.class);
+        return new ReservationInfo(carDTO,status.getDateFrom(),status.getDateTo());
+    }
 
     public Status saveReservation(ReservationData reservationData){
         long carId = reservationData.getCarId();

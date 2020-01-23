@@ -1,6 +1,7 @@
 package pw.react.carly.car;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity(name = "Cars")
 @Table(name = "Cars")
@@ -14,9 +15,17 @@ public class Car {
     private int year;
     private String licence;
     private String location;
-
+    private BigDecimal price;
     public Car() {
 
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
     }
 
     public String getModel() {

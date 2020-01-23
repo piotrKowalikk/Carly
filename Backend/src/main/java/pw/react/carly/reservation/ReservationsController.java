@@ -2,10 +2,7 @@ package pw.react.carly.reservation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pw.react.carly.status.StatusService;
 
 import javax.validation.constraints.NotNull;
@@ -20,6 +17,11 @@ public class ReservationsController {
     public ReservationsController(StatusService statusService) {
         this.statusService = statusService;
 
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity GetReservation(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(statusService.getReservation(id));
     }
 
     @PostMapping
