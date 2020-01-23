@@ -1,6 +1,10 @@
 package pw.react.carly.car;
 
 import org.springframework.data.jpa.domain.Specification;
+import pw.react.carly.status.Status;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CarSpecification {
     public static Specification<Car> bySeats(int seats){
@@ -19,6 +23,20 @@ public class CarSpecification {
             return criteriaBuilder.equal(root.get(Car_.make),make);
         };
     }
+
+
+
+    public static Specification<Car> isNotDeniedByStatuses(List<Status> statuses){
+        return (root,query,criteriaBuilder) -> {
+            List<Long>  unavailableCarsIds  = statuses.stream().map((el) -> el.getCar().getId()).collect(Collectors.toList());
+            return criteriaBuilder.in(root.get("id")).value(unavailableCarsIds).not();
+        };
+    }
+    public static Specification<Car> isDeniedByStatuses(List<Status> statuses){
+        return Specification.not(isNotDeniedByStatuses(statuses));
+    }
+
+
 
 
 }

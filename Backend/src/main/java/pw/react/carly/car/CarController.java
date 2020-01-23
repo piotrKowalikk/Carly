@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pw.react.carly.status.Status;
 import pw.react.carly.status.StatusRepository;
 
 import javax.validation.Valid;
@@ -13,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 import static pw.react.carly.car.CarSpecification.*;
+import static pw.react.carly.status.StatusSpecifications.colidesWithDateSpan;
+import static pw.react.carly.status.StatusSpecifications.isUnavailableOrBooked;
 
 @RestController
 @RequestMapping("/cars")
@@ -32,14 +35,13 @@ public class CarController {
 
     @GetMapping()
     public ResponseEntity<List> getCars(
-            //TODO dodac wyszukiwanie dostepnych aut
             @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
             @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
             @RequestParam(required = false,name="seats") Integer seats,
             @RequestParam(required = false,name="year") Integer year,
-            @RequestParam(required = false,name="make") String make
+            @RequestParam(required = false,name="make") String make,
+            @RequestParam(required = false,name="available", defaultValue = "true") Boolean available
     ){
-
 
         Specification<Car> spec = Specification.where(null);
         if(seats != null)
@@ -48,24 +50,18 @@ public class CarController {
             spec = spec.and(byYear(year));
         if(make!= null)
             spec = spec.and(byMake(make));
-
+        if(from != null && to != null){
+            List<Status> statuses = statusRepository.findAll(
+                            isUnavailableOrBooked().and(colidesWithDateSpan(from,to)));
+            Specification<Car> availabilitySpec = available ? isNotDeniedByStatuses(statuses) : isDeniedByStatuses(statuses);
+            spec = spec.and(availabilitySpec);
+        }
+        if(from != null ^ to != null){
+            return ResponseEntity.badRequest().body(null);
+        }
         return ResponseEntity.ok().body(carRepository.findAll(spec));
     }
-    //TODO usunac oddzielne endpointy. Polaczyc w jeden, albo dodac jako enum do GET:/cars
-    @GetMapping("/available")
-    public ResponseEntity<List<Car>> getAvailable(
-             @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
-             @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to
-    ){
-        return ResponseEntity.ok().body(carService.findAvailableCars(from,to));
-    }
-    @GetMapping("/unavailable")
-    public ResponseEntity<List<Car>> getUnavailable(
-            @RequestParam(name= "from",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date from,
-            @RequestParam(name= "to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to
-    ){
-        return ResponseEntity.ok().body(carService.findUnavailableCars(from,to));
-    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Car> getCar(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(carService.getCar(id));

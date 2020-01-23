@@ -6,7 +6,7 @@ import pw.react.carly.car.Car_;
 import java.util.Date;
 
 public class StatusSpecifications {
-    public static Specification<Status> getStatusesByCarId(Long carID){
+    public static Specification<Status> byCarId(Long carID){
         return (root,query,criteriaBuilder) -> {
             return criteriaBuilder.equal( root.get(Status_.car).get(Car_.id),carID);
         };

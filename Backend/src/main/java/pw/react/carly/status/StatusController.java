@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
@@ -45,7 +44,7 @@ public class StatusController {
         if(type != null)
             spec = spec.and(isType(type));
         if(carID != null)
-            spec = spec.and(getStatusesByCarId(carID));
+            spec = spec.and(byCarId(carID));
 
         return ResponseEntity.ok().body(statusRepository.findAll(spec));
     }
@@ -55,8 +54,8 @@ public class StatusController {
         return ResponseEntity.ok().body(statusService.deleteStatus(statusService.getStatus((id))));
     }
     @PatchMapping("")
-    public ResponseEntity<Status> updateStatus(@RequestBody @Valid Status Status){
-        return ResponseEntity.ok().body(statusService.updateStatus(Status));
+    public ResponseEntity<Status> updateStatus(@RequestBody @Valid Status status){
+        return ResponseEntity.ok().body(statusService.updateStatus(status));
     }
     @PutMapping(path = "")
     public ResponseEntity<Status> updateWholeStatus(@RequestBody @Valid Status updatedStatus) {
@@ -64,7 +63,8 @@ public class StatusController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Status> addStatus(@RequestBody @Valid Status Status) {
-            return ResponseEntity.ok().body(statusRepository.save(Status));
+    public ResponseEntity<Status> addStatus(@RequestBody @Valid Status status) {
+            status.setCreatedAt(new Date());
+            return ResponseEntity.ok().body(statusRepository.save(status));
     }
 }
