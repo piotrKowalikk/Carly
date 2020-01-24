@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { ReservationActionTypes } from '../types/reservationTypes';
-import { getReservations } from '../../.resources/apiURLs';
+import { getAllReservations } from '../../.resources/apiURLs';
 import { Reservation } from '../../../Models/Reservation';
 
 export const fetchReservations = () => {
@@ -14,7 +14,7 @@ export const fetchReservations = () => {
             });
             //   await delay(2000);
 
-            var response = await axios.get(getReservations(), {
+            var response = await axios.get(getAllReservations(), {
                 headers: {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',

@@ -9,9 +9,12 @@ import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstra
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
 import EnhancedTableReservation from '../Reservations/ReservationsTableSorted';
+import { removeCarAction } from '../../redux/cars/actions/removeCarAction';
+import { IApplicationState } from '../../redux/rootReducer';
 
 interface ICarTableProps extends RouteComponentProps {
     removeCar: typeof removeCarAction;
+    car: Car;
 }
 
 interface ICarTableState {
@@ -21,7 +24,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     constructor(props) {
         super(props);
         this.state = {
-            car: new Car({}),
+            car: this.props.car//new Car({}),
         }
     }
 
@@ -30,11 +33,12 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     }
 
     removeCar = (e) => {
-
+        console
+        //this.props.removeCar();
     }
 
     render() {
-        const { car } = this.state;
+        const car = this.props.car;
         const styleForm: React.CSSProperties = {
             width: 'auto',
             padding: '20px',
@@ -51,19 +55,33 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
             marginTop: '1em', /*set to a negative number 1/2 of your height*/
             border: ' 1px solid #ccc',
         }
+        if (!car)
+            return (<div></div>);
         return (
             <Container>
 
                 <Form style={styleForm} >
+
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="formGridLicense">
+                            <Form.Label>License</Form.Label>
+                            <Form.Control disabled value={car.licenseNumber} />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridLocation">
+                            <Form.Label>Location</Form.Label>
+                            <Form.Control disabled value={car.location} />
+                        </Form.Group>
+                    </Form.Row>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridModel">
                             <Form.Label>Model</Form.Label>
-                            <Form.Text placeholder={car.carModel} />
+                            <Form.Control disabled value={car.carModel} />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridCarMake">
                             <Form.Label>Car Make</Form.Label>
-                            <Form.Text placeholder={car.carMake} />
+                            <Form.Control disabled value={car.carMake} />
                         </Form.Group>
 
                     </Form.Row>
@@ -71,24 +89,12 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridSeats">
                             <Form.Label>Number of seats</Form.Label>
-                            <Form.Text defaultValue={car.seats} />
+                            <Form.Control disabled value={car.seats} />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridYear">
                             <Form.Label>Year</Form.Label>
-                            <Form.Text defaultValue={car.year} />
-                        </Form.Group>
-                    </Form.Row>
-
-                    <Form.Row>
-                        <Form.Group as={Col} controlId="formGridLicense">
-                            <Form.Label>License</Form.Label>
-                            <Form.Text placeholder={car.licenseNumber} />
-                        </Form.Group>
-
-                        <Form.Group as={Col} controlId="formGridLocation">
-                            <Form.Label>Location</Form.Label>
-                            <Form.Text placeholder={car.location} />
+                            <Form.Control disabled value={car.year} />
                         </Form.Group>
                     </Form.Row>
 
@@ -114,9 +120,11 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     }
 }
 
-const mapStateToProps = state => ({
-    car: state.car
-})
+const mapStateToProps = ({ cars }: IApplicationState) => {
+    return {
+        car: cars.selectedCar,
+    }
+}
 const mapDispatchToProps = (dispatch) => ({
 
 })

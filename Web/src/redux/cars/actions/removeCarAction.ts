@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { CarActionTypes } from '../types/carTypes';
-import { getAdmins, getCars } from '../../.resources/apiURLs'
+import { deleteCar } from '../../.resources/apiURLs'
 import { Car } from '../../../Models/Car';
 
-export const removeCarAction = () => {
+export const removeCarAction = (id: string) => {
     return async dispatch => {
         try {
             dispatch({
@@ -14,14 +14,14 @@ export const removeCarAction = () => {
             });
             //       await delay(2000);
 
-            var response = await axios.delete(getCars(), {
+            var response = await axios.delete(deleteCar(id), {
                 headers: {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',
                 },
             });
-            dispatch(successHandle(response.data));
+            dispatch(successHandle(response.data, id));
         }
         catch (error) {
             dispatch(errorHandle());
@@ -29,16 +29,13 @@ export const removeCarAction = () => {
     }
 }
 
-function delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
 
 //enums would be better
-const successHandle = (data) => {
+const successHandle = (data, id) => {
     return {
-        type: CarActionTypes.GET_CARS,
+        type: CarActionTypes.DELETE_CAR,
         payload: {
-            cars: Car.parseData(data),
+            deletedCarId: id,
             errorMessage: null
         }
     }
