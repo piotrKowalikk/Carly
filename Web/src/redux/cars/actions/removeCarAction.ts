@@ -14,7 +14,7 @@ export const removeCarAction = () => {
             });
             //       await delay(2000);
 
-            var response = await axios.get(getCars(), {
+            var response = await axios.delete(getCars(), {
                 headers: {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',

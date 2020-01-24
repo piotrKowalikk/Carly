@@ -11,7 +11,7 @@ import { Reservation } from '../../Models/Reservation';
 import EnhancedTableReservation from '../Reservations/ReservationsTableSorted';
 
 interface ICarTableProps extends RouteComponentProps {
-
+    removeCar: typeof removeCarAction;
 }
 
 interface ICarTableState {
@@ -27,6 +27,10 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
 
 
     componentDidMount() {
+    }
+
+    removeCar = (e) => {
+
     }
 
     render() {
@@ -99,8 +103,12 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                             Make unavailable
                         </Button>
                     </Link>
+                    <Button variant="info" style={styleButton} type="button" onClick={this.removeCar}>
+                        Remove
+                    </Button>
+
                 </Form>
-                <EnhancedTableReservation dense={false}/>
+                <EnhancedTableReservation dense={false} />
             </Container>
         );
     }
