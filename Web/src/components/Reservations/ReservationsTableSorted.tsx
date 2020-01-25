@@ -61,7 +61,7 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, showCarData } = props;
     const createSortHandler = property => event => {
         onRequestSort(event, property);
     };
@@ -74,6 +74,13 @@ function EnhancedTableHead(props) {
                         Date
                         </TableSortLabel>
                 </TableCell>
+                {showCarData &&
+                    <TableCell>
+                        <TableSortLabel >
+                            Car Data
+                        </TableSortLabel>
+                    </TableCell>
+                }
                 <TableCell sortDirection={orderBy === 'type' ? order : false}>
                     <TableSortLabel active={orderBy === 'type'} direction={order} onClick={createSortHandler('type')}>
                         Type
@@ -111,6 +118,7 @@ const useStyles = makeStyles(theme => ({
 
 interface IReservationsOwnProps {
     dense: boolean;
+    showCarData: boolean;
     title: string;
     data: Reservation[];
 }
@@ -172,6 +180,7 @@ export function EnhancedTableReservation(props: IReservationsProps) {
                                         orderBy={orderBy}
                                         onRequestSort={handleRequestSort}
                                         rowCount={props.data.length}
+                                        showCarData={props.showCarData}
                                     />
                                     <TableBody>
                                         {stableSort(props.data, getSorting(order, orderBy))
@@ -182,6 +191,9 @@ export function EnhancedTableReservation(props: IReservationsProps) {
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
                                                         <TableCell >{row.dateFrom.getDate() + '-' + row.dateTo.toLocaleDateString('en-GB')}</TableCell>
+                                                        {props.showCarData &&
+                                                            <TableCell >{row.carData ?? ''}</TableCell>
+                                                        }
                                                         <TableCell >{row.type ?? ''}</TableCell>
                                                         <TableCell >{row.surname && row.name ? row.surname + ' ' + row.name : ''}</TableCell>
                                                         <TableCell >{row.email ?? ''}</TableCell>

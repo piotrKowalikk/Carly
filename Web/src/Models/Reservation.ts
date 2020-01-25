@@ -12,6 +12,7 @@ export class Reservation {
     dateFrom: Date;
     dateTo: Date;
     type: EnumType;
+    carData: string;
 
 
 
@@ -34,6 +35,7 @@ export class Reservation {
         this.dateFrom = data.dateFrom ?? null;
         this.dateTo = data.dateTo ?? null;
         this.type = data.type ?? null;
+        this.carData = data.carData ?? null;
     }
 
     static parseData(data: any) {
@@ -51,7 +53,8 @@ export class Reservation {
                         comment: x.comment,
                         dateFrom: new Date(x.dateFrom),
                         dateTo: new Date(x.dateTo),
-                        type: x.type
+                        type: x.type,
+                        carData: x.car.licence + ' ' + x.car.make + ' ' + x.car.model
                     }
                 ));
             });

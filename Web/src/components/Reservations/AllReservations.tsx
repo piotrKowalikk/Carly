@@ -73,6 +73,7 @@ class AllReservations extends React.Component<any, IReservationsProps>{
             dense={false}
             title={"Reservations"}
             data={this.props.data}
+            showCarData={true}
         />);
     }
 }
