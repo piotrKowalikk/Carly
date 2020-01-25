@@ -49,6 +49,7 @@ class CarDetails extends Component<any, any> {
                   </ListItem>)}
                ListFooterComponent={
                   <ListElement
+                     style={{height: 50}}
                      leftIcon={{ type: 'material-community', color: '#0E4D92', name: 'calendar-multiple-check' }}
                      title='Reservations'
                      titleStyle={{ fontSize: 16, marginLeft: 0, paddingLeft: 0 }}

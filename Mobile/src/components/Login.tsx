@@ -32,11 +32,11 @@ class Login extends Component<any, any> {
         });
     }
 
-    handleEmailChange(value) {
+    handleEmailChange(value: string) {
         this.setState({ email: value });
     }
 
-    handlePasswordChange(value) {
+    handlePasswordChange(value: string) {
         this.setState({ password: value });
     }
 
@@ -50,7 +50,7 @@ class Login extends Component<any, any> {
             password: this.state.password
         }
 
-        var headers = new Headers();
+        const headers = new Headers();
         headers.append("Content-Type", "application/json");
         
         const requestOptions:any = {

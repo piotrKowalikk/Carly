@@ -23,7 +23,7 @@ class CarsList extends Component<any,any> {
 
    fetchData() {
       this.setState({ isFetching: true });
-      var headers = new Headers();
+      const headers = new Headers();
       headers.append("Authorization", this.props.token);
       fetch('http://carly.us-east-1.elasticbeanstalk.com/cars', { headers: headers })
          .then(response => {

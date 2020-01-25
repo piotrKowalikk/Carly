@@ -31,7 +31,7 @@ class Reservations extends Component<any,any> {
 
     fetchData() {
         this.setState({ isFetching: true });
-        var headers = new Headers();
+        const headers = new Headers();
         headers.append("Authorization", this.props.token);
         fetch('http://carly.us-east-1.elasticbeanstalk.com/statuses?carID=' + this.state.car.id, { headers: headers })
             .then(response => {
@@ -51,12 +51,29 @@ class Reservations extends Component<any,any> {
         <ListItem
             leftIcon={{ type: 'material-community', color: '#0E4D92', name: 'calendar-multiple-check' }}
             title={this.beautifyDate(item.dateFrom) + ' - ' + this.beautifyDate(item.dateTo)}
+            subtitle={this.getSubtitle(item)}
+            titleStyle={{ fontSize: 16 }}
+            subtitleStyle={{ fontSize: 12, color: 'grey' }}
             bottomDivider
         />
     );
 
     beautifyDate = (date: string) => {
         return (new Date(date.substring(0, date.indexOf('+')))).toDateString();
+    }
+
+    getSubtitle = (item: any) => {
+        switch (item.type)
+        {
+            case "UNAVAILABLE":
+                return "Unavailable"
+            case "BOOKINGCANCELED":
+                return "Booking canceled";
+            case "BOOKED":
+                return "Booked by " + item.bookingUserInfo.name + " " + item.bookingUserInfo.surname;
+            default:
+                return null;
+        }
     }
 
     render() {
