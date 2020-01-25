@@ -2,7 +2,7 @@
 
 //SECURITY
 
-POST: /admins/register
+POST: /admins/sign-up
     -body {email,password}
 POST /login
     -body {email,password}
