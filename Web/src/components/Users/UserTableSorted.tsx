@@ -22,6 +22,7 @@ import { User } from '../../Models/User';
 import { IApplicationState } from '../../redux/rootReducer';
 import { fetchUsers } from '../../redux/users/actions/fetchUsers';
 import { DeleteOutline, AddBox, Edit } from '@material-ui/icons'
+import { cleanUpUsersAction } from '../../redux/users/actions/cleanUpUsersAction';
 
 
 function desc(a, b, orderBy) {
@@ -105,7 +106,8 @@ interface IEnhancedTableUsersProps {
     data: User[];
     error: string;
     isLoading: boolean;
-    fetchData: Function;
+    fetchData: typeof fetchUsers;
+    cleanUpUsersAction: typeof cleanUpUsersAction;
 }
 
 function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
@@ -113,6 +115,13 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
     if (!props.error && props.data.length == 0) {
         props.fetchData();
     }
+
+    React.useEffect(() => {
+        return () => {
+            props.cleanUpUsersAction();
+        }
+    }, []);
+
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');//TODO
     const [orderBy, setOrderBy] = React.useState('year');//TODO
@@ -243,25 +252,11 @@ const mapStateToProps = ({ users }: IApplicationState) => {
         error: users.errorMessage,
         data: users.users
     }
-    // var deepCopy: WebDevice = JSON.parse(JSON.stringify(state.webDevice));
-    // deepCopy.vulnerabilities = deepCopy.vulnerabilities.filter(x => {
-    //     if (state.filterYear != null && state.filterNumber != null)
-    //         return x.year && x.year == state.filterYear && x.number && x.number == state.filterNumber;
-
-    //     if (state.filterYear != null)
-    //         return x.year && x.year == state.filterYear;
-
-    //     if (state.filterNumber != null)
-    //         return x.number && x.number == state.filterNumber;
-    //     return true;
-    // });
-    // return {
-    //     webDevice: deepCopy,
-    // };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchData: () => dispatch(fetchUsers())
+    fetchData: () => dispatch(fetchUsers()),
+    cleanUpUsersAction: () => dispatch(cleanUpUsersAction())
 })
 
 export default connect(

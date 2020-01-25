@@ -21,7 +21,7 @@ const carsReducer: Reducer<ICarState, any> = (state = initialState, action) => {
             return Object.assign({}, state, { ...state, isLoading: true })
         }
         case CarActionTypes.CLEANUP: {
-            return Object.assign({}, state, { cars: [] })
+            return Object.assign({}, state, { cars: [], errorMessage: null })
         }
         case CarActionTypes.DELETE_CAR: {
             var cars: Car[] = state.cars.filter(x => x.id != action.payload.deletedCarId);
