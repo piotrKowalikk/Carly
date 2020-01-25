@@ -1,49 +1,84 @@
 import React, { Component } from 'react';
+
+import { connect } from 'react-redux'
+import { saveToken } from '../redux/actions'
+
 import { StyleSheet, View, Button, AsyncStorage } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input, Card } from 'react-native-elements';
 
-class CarDetails extends Component<any, any> {
+class Login extends Component<any, any> {
     constructor(props) {
-       super(props);
+        super(props);
  
-        this.handleUsernameChange = this.handleUsernameChange.bind(this);
+        this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.login = this.login.bind(this);
+        this.showPassword = this.showPassword.bind(this);
 
-       this.state = {
-            username: '',
-            password: ''
-       }
+        this.state = {
+            email: '',
+            password: '',
+            passwordHidden: true,
+            errorMessage: null
+        }
     }
 
     componentDidMount() {
         this.getToken().then(user => {
             if (user) {
-                this.setState({ username: user.username, password: user.password });
+                this.setState({ email: user.email, password: user.password });
             }
         });
     }
 
-    handleUsernameChange(value) {
-        this.setState({ username: value });
+    handleEmailChange(value) {
+        this.setState({ email: value });
     }
 
     handlePasswordChange(value) {
         this.setState({ password: value });
     }
 
-    login() {
-        // login using server
+    showPassword() {
+        this.setState({ passwordHidden: !this.state.passwordHidden });
+    }
 
+    login() {
         const user = {
-            username: this.state.username,
+            email: this.state.email,
             password: this.state.password
         }
 
-        this.storeToken(user).then(x => {
-            this.props.navigation.navigate('AppNavigation');
-        });
+        var headers = new Headers();
+        headers.append("Content-Type", "application/json");
+        
+        const requestOptions:any = {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(user),
+            redirect: 'follow'
+        };
+
+        fetch("http://carly.us-east-1.elasticbeanstalk.com/login", requestOptions)
+            .then(response => {
+                if (response.status == 200) {
+                    this.props.saveToken(response.headers.get("authorization"));
+                    this.setState({ errorMessage: null });
+                    this.storeToken(user);
+                    this.props.navigation.navigate('AppNavigation');
+                }
+                else if (response.status == 403) {
+                    this.setState({ errorMessage: "Incorect email or password." })
+                }
+                else {
+                    this.setState({ errorMessage: "Unexpected error." })
+                }
+            })
+            .catch(error => {
+                this.setState({ errorMessage: "Unexpected error. Check your Internet conncection." })
+                console.log(error);
+            });
     }
 
     async storeToken(user) {
@@ -65,18 +100,18 @@ class CarDetails extends Component<any, any> {
     }
  
     render() {
-        const { username, password } = this.state;
+        const { email, password, passwordHidden, errorMessage } = this.state;
 
        return (
             <View style={styles.container}>
                 <View style={{flex: 0.4}}></View>
                 <Card>
-                    <Input
+                    <Input // email
                         autoCorrect={false}
                         keyboardType='email-address'
                         autoCapitalize='none'
-                        value={username}
-                        onChangeText={this.handleUsernameChange}
+                        value={email}
+                        onChangeText={this.handleEmailChange}
                         placeholder='email@address.com'
                         containerStyle={styles.input}
                         leftIconContainerStyle={styles.inputIcon}
@@ -85,26 +120,32 @@ class CarDetails extends Component<any, any> {
                                 name='user'
                                 size={24}
                                 color='darkgrey'
-                            />
-                        }
-                        label='Your email address'
+                            />}
+                        label='Email address'
                     />
-                    <Input
+                    <Input // password
                         autoCorrect={false}
                         autoCapitalize='none'
-                        secureTextEntry={true}
+                        secureTextEntry={passwordHidden}
                         value={password}
                         onChangeText={this.handlePasswordChange}
                         placeholder='password'
                         containerStyle={styles.input}
                         leftIconContainerStyle={styles.inputIcon}
+                        errorMessage={errorMessage}
                         leftIcon={
                             <Icon
                                 name='lock'
                                 size={24}
                                 color='darkgrey'
-                            />
-                        }
+                            />}
+                        rightIcon={
+                            <Icon
+                                name={passwordHidden ? 'eye' : 'eye-slash'}
+                                size={24}
+                                color='darkgrey'
+                                onPress={() => this.showPassword()}
+                            />}
                         label='Password'
                     />
                     <Button 
@@ -131,5 +172,9 @@ class CarDetails extends Component<any, any> {
         marginRight:10
     }
  });
+
+ const mapDispatchToProps = (dispatch) => ({
+    saveToken: (token: string) => dispatch(saveToken(token))
+ })
  
- export default CarDetails;
+ export default connect(null,  mapDispatchToProps)(Login);
