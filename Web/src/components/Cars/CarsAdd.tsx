@@ -9,10 +9,10 @@ import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstra
 import { Car } from '../../Models/Car';
 import { AddBox, Edit, Cancel } from '@material-ui/icons'
 import { IconButton } from 'material-ui';
-import { createCar } from '../../redux/cars/actions/createCarAction';
+import { createCarAction } from '../../redux/cars/actions/createCarAction';
 
 interface ICarsAddProps extends RouteComponentProps {
-    createCar: typeof createCar
+    createCar: typeof createCarAction
 }
 
 interface ICarsAddState {
@@ -136,7 +136,7 @@ const mapStateToProps = state => ({
     car: state.car
 })
 const mapDispatchToProps = (dispatch) => ({
-    createCar: (car: Car) => dispatch(createCar(car))
+    createCar: (car: Car) => dispatch(createCarAction(car))
 
 })
 

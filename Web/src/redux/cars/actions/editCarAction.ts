@@ -3,7 +3,7 @@ import { CarActionTypes } from '../types/carTypes';
 import { postCar } from '../../.resources/apiURLs'
 import { Car } from '../../../Models/Car';
 
-export const createCarAction = (car: Car) => {
+export const editCarAction = (car: Car) => {
     return async dispatch => {
         try {
 
@@ -15,14 +15,22 @@ export const createCarAction = (car: Car) => {
             // });
             //       await delay(2000);
 
-            var response = await axios.post(postCar(),
+            var response = await axios.put(postCar(),
                 {
+                    id: car.id,
                     model: car.carModel,
                     make: car.carMake,
                     seats: car.seats,
                     year: car.year,
                     licence: car.licenseNumber,
                     location: car.location
+                    // "id": 1003,
+                    // "model": "SuperModel3",
+                    // "make": "Marka3",
+                    // "seats": 5,
+                    // "year": 2016,
+                    // "licence": "WK2645",
+                    // "location": "Lublin, Al.Jerezolimskie 36"
                 },
                 {
                     headers: {
@@ -46,9 +54,9 @@ function delay(ms: number) {
 //enums would be better
 const successHandle = (data) => {
     return {
-        type: CarActionTypes.GET_CARS,
+        type: CarActionTypes.EDIT_CAR,
         payload: {
-            cars: Car.parseData(data),
+            changedCar: Car.parseData([data]),
             errorMessage: null
         }
     }

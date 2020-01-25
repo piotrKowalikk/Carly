@@ -2,6 +2,7 @@ import { ReservationStatus } from '../../Enums/ReservationStatuses'
 
 export const mainURL = (): string => {
     return 'http://localhost:8080';
+    //return 'http://carly.us-east-1.elasticbeanstalk.com';
 }
 
 export const getAllCarReservations = (carId: string): string => {
@@ -26,4 +27,7 @@ export const getAdmins = (): string => {
 
 export const deleteCar = (carID: string) => {
     return mainURL() + `/cars/${carID}`
+}
+export const deleteAdmin = (adminId: string) => {
+    return mainURL() + `/admins/${adminId}`
 }

@@ -1,32 +1,30 @@
 import * as React from 'react';
-import clsx from 'clsx';
 import { connect } from 'react-redux';
-import { compose } from 'redux';
-import Grid from '@material-ui/core/Grid';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
-import { cars } from '../../MockData/CarsMock'
 import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
-import { Reservation } from '../../Models/Reservation';
-import { EnhancedTableReservation } from '../Reservations/ReservationsTableSorted';
+import { IApplicationState } from '../../redux/rootReducer';
+import { editCarAction } from '../../redux/cars/actions/editCarAction';
 
 interface ICarsEditProps extends RouteComponentProps {
-
+    car: Car;
+    carEdit: typeof editCarAction;
 }
 
 interface ICarsEditState {
-    car: Car;
     seats: Number;
+    car: Car;
 }
 class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
     constructor(props) {
         super(props);
         this.state = {
-            car: new Car({}),
-            seats: 0,
+            car: new Car(this.props.car),
+            seats: 0
         }
     }
 
+    //only seats can change
     SeatsChanged = (e) => {
         this.setState({ seats: e.target.value });
     }
@@ -34,8 +32,17 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         console.log("jestem");
     }
 
+    editCar = () => {
+        var exampleCarEdit: Car = this.props.car;
+        exampleCarEdit.carMake = "Toyota";
+        //this.props.carEdit(this.state.car);
+        this.props.carEdit(exampleCarEdit);
+        this.props.history.push('/cars');
+
+    }
+
     render() {
-        const { car } = this.state;
+        const car = this.state.car;
         const styleForm: React.CSSProperties = {
             position: 'fixed',
             top: '50%',
@@ -67,7 +74,6 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
                                 <Form.Label>Car Make</Form.Label>
                                 <Form.Text placeholder={car.carMake} />
                             </Form.Group>
-
                         </Form.Row>
 
                         <Form.Row>
@@ -82,16 +88,13 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
                             </Form.Group>
                         </Form.Row>
 
-
-
-
                         <Form.Group controlId="formGridLocation">
                             <Form.Label>Location</Form.Label>
                             <Form.Control placeholder="{car.location}" />
                         </Form.Group>
 
 
-                        <Button variant="primary" type="submit" >
+                        <Button variant="primary" type="submit" onClick={this.editCar} >
                             Save
                         </Button>
 
@@ -107,11 +110,13 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
     }
 }
 
-const mapStateToProps = state => ({
-    car: state.car
-})
+const mapStateToProps = ({ cars }: IApplicationState) => {
+    return {
+        car: cars.selectedCar
+    };
+}
 const mapDispatchToProps = (dispatch) => ({
-
+    carEdit: (car: Car) => dispatch(editCarAction(car))
 })
 
 export default connect(

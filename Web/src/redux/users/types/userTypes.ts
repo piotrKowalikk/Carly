@@ -9,5 +9,6 @@ export interface IUserState {
 export enum UserActionTypes {
     LOADING="LOADING",
     GET_USERS="GET_USERS",
-    CLEANUP="CLEANUP"
+    CLEANUP="CLEANUP",
+    DELETE="DELETE"
 }
