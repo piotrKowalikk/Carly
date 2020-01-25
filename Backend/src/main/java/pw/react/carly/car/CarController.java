@@ -14,6 +14,7 @@ import java.util.List;
 
 import static pw.react.carly.car.CarSpecification.*;
 
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 @RequestMapping("/cars")
 public class CarController {

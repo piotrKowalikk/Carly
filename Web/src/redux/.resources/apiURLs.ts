@@ -17,7 +17,7 @@ export const getCars = (): string => {
 
 export const postCar = (): string => {
     //TODO:
-    return mainURL() + ``;
+    return mainURL() + `/cars`;
 }
 
 export const getAdmins = (): string => {

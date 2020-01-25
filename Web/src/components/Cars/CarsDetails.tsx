@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import Grid from '@material-ui/core/Grid';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { cars } from '../../MockData/CarsMock'
-import { Container, Form, Button, Col, ButtonToolbar, Row, Alert } from 'react-bootstrap';
+import { Container, Form, Button, Col, ButtonToolbar, Row, Alert, Spinner } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
 import { EnhancedTableReservation } from '../Reservations/ReservationsTableSorted';
@@ -14,39 +14,50 @@ import { IApplicationState } from '../../redux/rootReducer';
 import { getAllCarReservations } from '../../redux/.resources/apiURLs';
 
 interface ICarTableProps extends RouteComponentProps {
-    removeCar: typeof removeCarAction;
+    removeCar: Function;
     car: Car;
     reservations: Reservation[];
 }
 
 interface ICarTableState {
-    car: Car;
+    isLoading: boolean;
 }
 class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     constructor(props) {
         super(props);
         this.state = {
-            car: this.props.car//new Car({}),
+            isLoading: false
         }
     }
 
-
-    componentDidMount() {
-    }
-
     removeCar = async (e) => {
-        await this.props.removeCar(this.props.car.id);
-        this.props.history.push("/cars")
+        this.setState({
+            isLoading: true
+        })
+        var a = await this.props.removeCar(this.props.car.id);
+        if (a == true) {
+            this.props.history.push("/cars");
+        }
+        this.setState({
+            isLoading: false
+        })
     }
 
     render() {
+        if (this.state.isLoading) {
+            return (<Container style={{ textAlign: "center" }}>
+                <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                </Spinner>
+            </Container>)
+
+        }
         const car = this.props.car;
         const styleForm: React.CSSProperties = {
             width: 'auto',
             padding: '20px',
             marginTop: '1em', /*set to a negative number 1/2 of your height*/
             border: ' 1px solid #ccc',
-
         }
         const styleButton: React.CSSProperties = {
             marginLeft: '.5em', /*set to a negative number 1/2 of your width*/
@@ -117,7 +128,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                             Make unavailable
                         </Button>
                     </Link>
-                    <Button variant="info" style={styleButton} type="button" onClick={this.removeCar}>
+                    <Button variant="info" style={styleButton} type="button" onClick={(e) => this.removeCar(e)}>
                         Remove
                     </Button>
                 </Form>
@@ -140,7 +151,9 @@ const mapStateToProps = ({ cars }: IApplicationState) => {
 }
 const mapDispatchToProps = (dispatch) => ({
     getCatReservations: (car: Car) => dispatch((car.id)),
-    removeCar: (id: string) => dispatch(removeCarAction(id))
+    removeCar: async (id: string) => {
+        return await removeCarAction(dispatch, id);
+    }
 })
 
 export default connect(
