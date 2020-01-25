@@ -6,12 +6,12 @@ import { Car } from '../../../Models/Car';
 export const removeCarAction = (id: string) => {
     return async dispatch => {
         try {
-            dispatch({
-                type: CarActionTypes.LOADING,
-                payload: {
-                    isLoading: true,
-                }
-            });
+            // dispatch({
+            //     type: CarActionTypes.LOADING,
+            //     payload: {
+            //         isLoading: true,
+            //     }
+            // });
             //       await delay(2000);
 
             var response = await axios.delete(deleteCar(id), {

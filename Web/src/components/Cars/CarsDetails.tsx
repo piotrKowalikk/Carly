@@ -34,9 +34,9 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     componentDidMount() {
     }
 
-    removeCar = (e) => {
-        console
-        //this.props.removeCar();
+    removeCar = async (e) => {
+        await this.props.removeCar(this.props.car.id);
+        this.props.history.push("/cars")
     }
 
     render() {
@@ -139,7 +139,8 @@ const mapStateToProps = ({ cars }: IApplicationState) => {
     }
 }
 const mapDispatchToProps = (dispatch) => ({
-    getCatReservations: (car: Car) => dispatch((car.id))
+    getCatReservations: (car: Car) => dispatch((car.id)),
+    removeCar: (id: string) => dispatch(removeCarAction(id))
 })
 
 export default connect(
