@@ -1,6 +1,6 @@
 import { CarActionTypes } from '../types/carTypes';
 
-export const cleanupAction = () => {
+export const cleanUpAction = () => {
     return dispatch => {
         dispatch({
             type: CarActionTypes.CLEANUP,

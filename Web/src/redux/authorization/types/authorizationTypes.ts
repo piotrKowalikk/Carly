@@ -1,9 +1,8 @@
 export interface IAuthorizeState {
     readonly isAuthorized: boolean;
-    readonly login: string;
-    readonly password: string;
     readonly message: string;
     readonly isLoading: boolean;
+    readonly token: string;
 }
 
 export enum AuthorizeActionTypes {

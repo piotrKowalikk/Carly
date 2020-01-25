@@ -8,7 +8,6 @@ import { cars } from '../../MockData/CarsMock'
 import { Container, Form, Button, Col,ButtonToolbar,Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
-import ReservationsTable from '../Reservations/ReservationsTable';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 

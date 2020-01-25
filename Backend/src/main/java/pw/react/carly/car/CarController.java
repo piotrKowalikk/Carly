@@ -19,6 +19,7 @@ import static pw.react.carly.car.CarSpecification.*;
 import static pw.react.carly.status.StatusSpecifications.colidesWithDateSpan;
 import static pw.react.carly.status.StatusSpecifications.isUnavailableOrBooked;
 
+@CrossOrigin(origins = "http://localhost:3005")
 @RestController
 @RequestMapping("/cars")
 public class CarController {

@@ -15,23 +15,19 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
-import FilterListIcon from '@material-ui/icons/FilterList';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { cars } from '../../MockData/CarsMock'
-import { Container, Button } from 'react-bootstrap';
+import { Container, Alert, Spinner } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { fetchCars } from '../../redux/cars/actions/fetchCars';
 import { IApplicationState } from '../../redux/rootReducer';
-import { cleanupAction } from '../../redux/cars/actions/cleanUpAction';
-import {AddBox, Edit, DriveEta} from '@material-ui/icons'
-
+import { cleanUpAction } from '../../redux/cars/actions/cleanUpAction';
+import { AddBox, DriveEta } from '@material-ui/icons';
+import { selectCarAction } from '../../redux/cars/actions/selectCarAction';
 
 function desc(a, b, orderBy) {
     var yearA: number = a[orderBy];
     var yearB: number = b[orderBy];
     if (yearA == 10 || yearB == 10) {
-        var p = 1;
     }
     if (yearB < yearA)
         return -1;
@@ -56,7 +52,7 @@ function getSorting(order, orderBy) {
 }
 
 function EnhancedTableHead(props) {
-    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { order, orderBy, onRequestSort } = props;
     const createSortHandler = property => event => {
         onRequestSort(event, property);
     };
@@ -64,6 +60,9 @@ function EnhancedTableHead(props) {
     return (
         <TableHead >
             <TableRow>
+                <TableCell key={'licenseNumber'} >
+                    License number
+                </TableCell>
                 <TableCell key={'carMake'} style={{ width: '180px' }} sortDirection={orderBy === 'carMake' ? order : false}>
                     <TableSortLabel active={orderBy === 'carMake'} direction={order} onClick={createSortHandler('year')}>
                         Car Make
@@ -74,26 +73,24 @@ function EnhancedTableHead(props) {
                         Car Model
                         </TableSortLabel>
                 </TableCell>
-                <TableCell key={'licenseNumber'} >
-                    License number
+
+                <TableCell key={'location'} >
+                    Location
                 </TableCell>
-                <TableCell key={'availability'} >
-                    Availability
-                </TableCell>
+                <TableCell></TableCell>
             </TableRow>
         </TableHead>
     );
 }
 
 const EnhancedTableToolbar = props => {
-    const { numSelected } = props;
     return (
         <Toolbar className={clsx({})} style={{ paddingLeft: 16, minHeight: 40 }}>
             <Typography style={{ flex: '1 1 100%' }} variant="h6" id="tableTitle">Cars</Typography>
             <Link to="/car-add">
                 <Tooltip title="Add a new car">
                     <IconButton aria-label="new car">
-                        <AddBox color='primary'/>
+                        <AddBox color='primary' />
                     </IconButton>
                 </Tooltip>
             </Link>
@@ -101,14 +98,16 @@ const EnhancedTableToolbar = props => {
     );
 };
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
 
 }));
 
 interface IEnhancedTableCarsProps {
     data: Car[];
-    fetchCars: Function;
-    cleanupAction: Function;
+    isLoading: boolean;
+    fetchCars: typeof fetchCars;
+    cleanupAction: typeof cleanUpAction;
+    selectCar: typeof selectCarAction;
     error: string;
 }
 
@@ -127,9 +126,9 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('year');
-    const [selected, setSelected] = React.useState([]);
+    const [selected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(true);
+    const [dense] = React.useState(true);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (event, property) => {
@@ -151,13 +150,23 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
     const isSelected = name => selected.indexOf(name) !== -1;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
 
+    if (props.isLoading) {
+        return (<Container style={{ textAlign: "center" }}>
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        </Container>)
+    }
+
     if (props.error)
         return (
-            <Container>
-                <label style={{ color: 'red' }}>{props.error}</label>
-            </Container>
+            <Alert variant="danger" >
+                <Alert.Heading>You got an error!</Alert.Heading>
+                <p>
+                    Probably connection with server is broken. {props.error}
+                </p>
+            </Alert>
         );
-
     return (
         <div>
 
@@ -185,7 +194,6 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((row: Car, index) => {
                                                 const isItemSelected = isSelected(row.id);
-                                                const labelId = `enhanced-table-checkbox-${index}`;
 
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
@@ -196,8 +204,8 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                                         <TableCell title='edit this car'>
                                                             <Link to="/car-details">
                                                                 <Tooltip title="Car details">
-                                                                    <IconButton aria-label="car deatils">
-                                                                        <DriveEta color='primary'/>
+                                                                    <IconButton aria-label="car deatils" onClick={() => props.selectCar(row)}>
+                                                                        <DriveEta color='primary' />
                                                                     </IconButton>
                                                                 </Tooltip>
                                                             </Link>
@@ -233,12 +241,15 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
 const mapStateToProps = ({ cars }: IApplicationState) => {
     return {
         data: cars.cars,
-        error: cars.errorMessage
+        error: cars.errorMessage,
+        isLoading : cars.isLoading
     }
 }
 const mapDispatchToProps = (dispatch) => ({
     fetchCars: () => dispatch(fetchCars()),
-    cleanupAction: () => dispatch(cleanupAction())
+    cleanupAction: () => dispatch(cleanUpAction()),
+    selectCar: (car: Car) => dispatch(selectCarAction(car))
+
 })
 
 export default connect(

@@ -5,16 +5,20 @@ import { ICarState } from "./cars/types/carTypes";
 import { carsReducer } from "./cars/carsReducer";
 import { IUserState } from "./users/types/userTypes";
 import { usersReducer } from "./users/usersReducer";
+import { IReservationState } from "./reservations/types/reservationTypes";
+import { reservationsReducer } from "./reservations/reservationReducer";
 
 
 export interface IApplicationState {
      authorize: IAuthorizeState;
      cars: ICarState;
-     users: IUserState
+     users: IUserState;
+     reservations: IReservationState;
 }
 
 export const rootReducer = combineReducers({
      authorize: authorizeReducer,
      cars: carsReducer,
-     users: usersReducer
+     users: usersReducer,
+     reservations: reservationsReducer
 });

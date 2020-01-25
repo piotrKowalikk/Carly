@@ -4,9 +4,7 @@ import { IAuthorizeState, AuthorizeActionTypes } from "./types/authorizationType
 
 export const initialState: IAuthorizeState = {
     isAuthorized: false,
-    //user data should be stored here
-    login: null,
-    password: null,
+    token: null,
     message: null,
     isLoading: false
 }
@@ -25,7 +23,7 @@ const authorizeReducer: Reducer<IAuthorizeState, any> = (state = initialState, a
             return Object.assign({}, state, { ...state, isLoading: true })
         }
         case AuthorizeActionTypes.AUTHORIZED: {
-            return Object.assign({}, state, { ...state, isLoading: false, isAuthorized: true })
+            return Object.assign({}, state, { ...state, isLoading: false, isAuthorized: true, token: action.payload.token })
         }
         case AuthorizeActionTypes.LOGOUT: {
             return Object.assign({}, state, { ...state, isLoading: false, isAuthorized: false })
