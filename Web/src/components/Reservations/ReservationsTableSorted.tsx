@@ -108,16 +108,6 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-// interface IReservationsDispatchProps {
-//     fetchReservations: typeof fetchAllReservations;
-//     cleanup: Function;
-// }
-
-// interface IReservationsStateProps {
-//     isLoading: boolean;
-//     data: Reservation[];
-//     error: string;
-// }
 
 interface IReservationsOwnProps {
     dense: boolean;
@@ -125,25 +115,11 @@ interface IReservationsOwnProps {
     data: Reservation[];
 }
 
-// not necessary to combine them into another type, but it cleans up the next line
-//type IReservationsProps = IReservationsDispatchProps & IReservationsStateProps & IReservationsOwnProps;
 type IReservationsProps = IReservationsOwnProps;
 
 
-// interface IEnhancedTableProps {
-//     data: Reservation[];
-//     fetchReservations: Function;
-//     cleanup: Function;
-//     error: string;
-//     dense: boolean;
-// }
 
 export function EnhancedTableReservation(props: IReservationsProps) {
-    // React.useEffect(() => {
-    //     return () => {
-    //         props.cleanup();
-    //     }
-    // }, []);
 
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
@@ -237,25 +213,3 @@ export function EnhancedTableReservation(props: IReservationsProps) {
         </div>
     );
 }
-
-// const mapStateToProps = ({ reservations }: IApplicationState, props: IReservationsOwnProps): IReservationsStateProps => {
-//     var rsl: IReservationsStateProps = {
-//         isLoading: reservations.isLoading,
-//         error: reservations.errorMessage,
-//         data: reservationsMock//reservations.reservations
-//     };
-//     return rsl;
-// }
-
-// const mapDispatchToProps = (dispatch, props): IReservationsDispatchProps => {
-//     var rsl: IReservationsDispatchProps = {
-//         cleanup: () => { },
-//         fetchReservations: () => dispatch(fetchAllReservations())
-//     };
-//     return rsl;
-// }
-
-// export default connect<IReservationsStateProps, IReservationsDispatchProps, IReservationsOwnProps>(
-//     mapStateToProps,
-//     mapDispatchToProps
-// )(EnhancedTableReservation);
