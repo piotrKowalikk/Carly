@@ -25,6 +25,7 @@ export class Car {
         var cars: Car[] = [];
         if (!data)
             return [];
+            try{
         data.forEach(x => {
             cars.push(new Car(
                 {
@@ -39,7 +40,12 @@ export class Car {
             )
             )
         });
+    }
+    catch(e){
 
+        console.log('parse car exception')
+        console.log(e)
+    }
         return cars;
     }
 }
