@@ -1,6 +1,6 @@
 import { ReservationActionTypes } from '../types/reservationTypes';
 
-export const cleanupAction = () => {
+export const cleanUpReservationsAction = () => {
     return dispatch => {
         dispatch({
             type: ReservationActionTypes.CLEANUP,

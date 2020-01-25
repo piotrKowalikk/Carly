@@ -8,9 +8,10 @@ import { cars } from '../../MockData/CarsMock'
 import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
-import EnhancedTableReservation from '../Reservations/ReservationsTableSorted';
+import { EnhancedTableReservation } from '../Reservations/ReservationsTableSorted';
 import { removeCarAction } from '../../redux/cars/actions/removeCarAction';
 import { IApplicationState } from '../../redux/rootReducer';
+import { getAllCarReservations } from '../../redux/.resources/apiURLs';
 
 interface ICarTableProps extends RouteComponentProps {
     removeCar: typeof removeCarAction;
@@ -59,9 +60,8 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
             return (<div></div>);
         return (
             <Container>
-
                 <Form style={styleForm} >
-
+                    <h3>Car details</h3>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridLicense">
                             <Form.Label>License</Form.Label>
@@ -89,12 +89,12 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridSeats">
                             <Form.Label>Number of seats</Form.Label>
-                            <Form.Control disabled value={car.seats} />
+                            <Form.Control disabled value={car.seats.toString()} />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridYear">
                             <Form.Label>Year</Form.Label>
-                            <Form.Control disabled value={car.year} />
+                            <Form.Control disabled value={car.year.toString()} />
                         </Form.Group>
                     </Form.Row>
 
@@ -112,9 +112,8 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                     <Button variant="info" style={styleButton} type="button" onClick={this.removeCar}>
                         Remove
                     </Button>
-
                 </Form>
-                <EnhancedTableReservation dense={false} />
+                {/* <EnhancedTableReservation title={"Car reservations"} dense={true} /> */}
             </Container>
         );
     }
@@ -126,7 +125,7 @@ const mapStateToProps = ({ cars }: IApplicationState) => {
     }
 }
 const mapDispatchToProps = (dispatch) => ({
-
+    getCatReservations: (car: Car) => dispatch((car.id))
 })
 
 export default connect(

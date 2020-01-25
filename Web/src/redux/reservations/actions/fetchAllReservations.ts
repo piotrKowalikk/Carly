@@ -3,7 +3,7 @@ import { ReservationActionTypes } from '../types/reservationTypes';
 import { getAllReservations } from '../../.resources/apiURLs';
 import { Reservation } from '../../../Models/Reservation';
 
-export const fetchReservations = () => {
+export const fetchAllReservations = () => {
     return async dispatch => {
         try {
             dispatch({

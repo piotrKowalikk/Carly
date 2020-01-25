@@ -8,7 +8,7 @@ import { cars } from '../../MockData/CarsMock'
 import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
-import EnhancedTableReservation from '../Reservations/ReservationsTableSorted';
+import { EnhancedTableReservation } from '../Reservations/ReservationsTableSorted';
 
 interface ICarsEditProps extends RouteComponentProps {
 
@@ -23,13 +23,13 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         super(props);
         this.state = {
             car: new Car({}),
-            seats:0,
+            seats: 0,
         }
     }
 
     SeatsChanged = (e) => {
-        this.setState({seats: e.target.value});
-       }
+        this.setState({ seats: e.target.value });
+    }
     componentDidMount() {
         console.log("jestem");
     }
@@ -56,7 +56,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
             <div
             >
                 <Container >
-                    <Form  style={styleForm} >
+                    <Form style={styleForm} >
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridModel">
                                 <Form.Label>Model</Form.Label>
@@ -78,7 +78,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
 
                             <Form.Group as={Col} controlId="formGridLicense">
                                 <Form.Label>License</Form.Label>
-                                <Form.Control  placeholder={car.licenseNumber}/>
+                                <Form.Control placeholder={car.licenseNumber} />
                             </Form.Group>
                         </Form.Row>
 
