@@ -21,6 +21,8 @@ import { Container, Button } from 'react-bootstrap';
 import { User } from '../../Models/User';
 import { reservationsMock } from '../../MockData/ReservationMock'
 import { Reservation } from '../../Models/Reservation';
+import { IApplicationState } from '../../redux/rootReducer';
+import { fetchAllReservations } from '../../redux/reservations/actions/fetchAllReservations';
 
 
 
@@ -59,26 +61,41 @@ const headCells = [
 ];
 
 function EnhancedTableHead(props) {
-    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } = props;
+    const { classes, onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort, showCarData } = props;
     const createSortHandler = property => event => {
         onRequestSort(event, property);
     };
 
     return (
         <TableHead >
-            <TableRow>
-                <TableCell key={'userId'} style={{ width: '180px' }} sortDirection={orderBy === 'userId' ? order : false}>
-                    <TableSortLabel active={orderBy === 'userId'} direction={order} onClick={createSortHandler('year')}>
+            <TableRow >
+                <TableCell sortDirection={orderBy === 'dateFrom' ? order : false}>
+                    <TableSortLabel active={orderBy === 'dateFrom'} direction={order} onClick={createSortHandler('dateFrom')}>
+                        Date
+                        </TableSortLabel>
+                </TableCell>
+                {showCarData &&
+                    <TableCell>
+                        <TableSortLabel >
+                            Car Data
+                        </TableSortLabel>
+                    </TableCell>
+                }
+                <TableCell sortDirection={orderBy === 'type' ? order : false}>
+                    <TableSortLabel active={orderBy === 'type'} direction={order} onClick={createSortHandler('type')}>
+                        Type
+                        </TableSortLabel>
+                </TableCell>
+                <TableCell sortDirection={orderBy === 'surname' ? order : false}>
+                    <TableSortLabel active={orderBy === 'surname'} direction={order} onClick={createSortHandler('surname')}>
                         User
                         </TableSortLabel>
                 </TableCell>
-                <TableCell key={'dateFrom'} sortDirection={orderBy === 'dateFrom' ? order : false}>
-                    <TableSortLabel active={orderBy === 'dateFrom'} direction={order} onClick={createSortHandler('dateFrom')}>
-                        Date From
-                        </TableSortLabel>
+                <TableCell>
+                    User Email
                 </TableCell>
-                <TableCell key={'dateTo'} >
-                    Date To
+                <TableCell>
+                    Comments
                 </TableCell>
             </TableRow>
         </TableHead>
@@ -86,10 +103,10 @@ function EnhancedTableHead(props) {
 }
 
 const EnhancedTableToolbar = props => {
-    const { numSelected } = props;
+    const { numSelected, title } = props;
     return (
         <Toolbar className={clsx(props)} style={{ paddingLeft: 16, minHeight: 40 }}>
-            <Typography style={{ flex: '1 1 100%' }} variant="h6" id="tableTitle">Reservations</Typography>
+            <Typography style={{ flex: '1 1 100%' }} variant="h6" id="tableTitle">{title}</Typography>
         </Toolbar>
     );
 };
@@ -97,25 +114,27 @@ const EnhancedTableToolbar = props => {
 const useStyles = makeStyles(theme => ({
 
 }));
-export function EnhancedTableWrapperReservation() {
-    const [mockData, setMockData] = React.useState(reservationsMock);
-    return (
-        <EnhancedTableReservation data={mockData} setData={e =>
-            setMockData(e)} />
-    );
-}
-interface IEnhancedTableProps {
+
+
+interface IReservationsOwnProps {
+    dense: boolean;
+    showCarData: boolean;
+    title: string;
     data: Reservation[];
-    setData: Function;
 }
 
-function EnhancedTableReservation(props: IEnhancedTableProps) {
+type IReservationsProps = IReservationsOwnProps;
+
+
+
+export function EnhancedTableReservation(props: IReservationsProps) {
+
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
     const [orderBy, setOrderBy] = React.useState('year');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(true);
+    const [dense, setDense] = React.useState(props.dense);
     const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
     const handleRequestSort = (event, property) => {
@@ -136,18 +155,18 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
 
     const isSelected = name => selected.indexOf(name) !== -1;
     const removeFromSource = (id) => {
-        var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
-        props.setData(props.data);
+        // var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
+        // props.setData(props.data);
     };
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
 
     return (
         <div>
-            <Container className="mt-2" style={{ paddingLeft: 1, paddingRight: 1 }}>
+            <Container className="mt-3" style={{ paddingLeft: 1, paddingRight: 1 }}>
                 {props.data.length != 0 &&
                     <div>
                         <Paper className="mb-3 m-0">
-                            <EnhancedTableToolbar numSelected={selected.length} />
+                            <EnhancedTableToolbar numSelected={selected.length} title={props.title} />
                             <TableContainer >
                                 <Table
                                     aria-labelledby="tableTitle"
@@ -161,6 +180,7 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
                                         orderBy={orderBy}
                                         onRequestSort={handleRequestSort}
                                         rowCount={props.data.length}
+                                        showCarData={props.showCarData}
                                     />
                                     <TableBody>
                                         {stableSort(props.data, getSorting(order, orderBy))
@@ -168,12 +188,16 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
                                             .map((row, index) => {
                                                 const isItemSelected = isSelected(row.user);
                                                 const labelId = `enhanced-table-checkbox-${index}`;
-
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
-                                                        <TableCell >{row.userId}</TableCell>
-                                                        <TableCell >{row.dateFrom}</TableCell>
-                                                        <TableCell >{row.dateTo}</TableCell>
+                                                        <TableCell >{row.dateFrom.getDate() + '-' + row.dateTo.toLocaleDateString('en-GB')}</TableCell>
+                                                        {props.showCarData &&
+                                                            <TableCell >{row.carData ?? ''}</TableCell>
+                                                        }
+                                                        <TableCell >{row.type ?? ''}</TableCell>
+                                                        <TableCell >{row.surname && row.name ? row.surname + ' ' + row.name : ''}</TableCell>
+                                                        <TableCell >{row.email ?? ''}</TableCell>
+                                                        <TableCell >{row.comment ?? ''}</TableCell>
                                                     </TableRow>
                                                 );
                                             })}
@@ -201,15 +225,3 @@ function EnhancedTableReservation(props: IEnhancedTableProps) {
         </div>
     );
 }
-
-const mapStateToProps = (state) => {
-
-}
-
-const mapDispatchToProps = (dispatch) => ({
-})
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(EnhancedTableReservation);

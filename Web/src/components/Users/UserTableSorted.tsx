@@ -17,11 +17,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { connect } from 'react-redux';
 import { usersMock } from '../../MockData/UsersMock'
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Alert, Spinner } from 'react-bootstrap';
 import { User } from '../../Models/User';
 import { IApplicationState } from '../../redux/rootReducer';
 import { fetchUsers } from '../../redux/users/actions/fetchUsers';
-import {DeleteOutline,AddBox, Edit} from '@material-ui/icons'
+import { DeleteOutline, AddBox, Edit } from '@material-ui/icons'
+import { cleanUpUsersAction } from '../../redux/users/actions/cleanUpUsersAction';
+import { removeUserAction } from '../../redux/users/actions/removeUserAction';
 
 
 function desc(a, b, orderBy) {
@@ -105,14 +107,24 @@ interface IEnhancedTableUsersProps {
     data: User[];
     error: string;
     isLoading: boolean;
-    fetchData: Function;
+    fetchData: typeof fetchUsers;
+    cleanUpUsersAction: typeof cleanUpUsersAction;
+    removeUser: Function;
 }
 
 function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
 
-    if (!props.error && props.data.length == 0){
+    if (!props.error && props.data == null) {
         props.fetchData();
+        return (<div>No users available.</div>);
     }
+
+    React.useEffect(() => {
+        return () => {
+            props.cleanUpUsersAction();
+        }
+    }, []);
+
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');//TODO
     const [orderBy, setOrderBy] = React.useState('year');//TODO
@@ -140,87 +152,93 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
     const isSelected = name => selected.indexOf(name) !== -1;
 
     const removeFromSource = (id) => {
-        var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
-        //TODO: action remove
-        //   props.setData(props.data);
-
+        //        var v = props.data.splice(props.data.findIndex(x => id == x.id), 1);
+        props.removeUser(id);
     };
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
 
+
+    if (props.isLoading) {
+        return (<Container style={{ textAlign: "center" }}>
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        </Container>)
+    }
+
     if (props.error) {
         return (
-            <Container className="mt-4" >
-                <p style={{ color: 'red' }}>{props.error}</p>
-            </Container>
+            <Alert variant="danger" >
+                <Alert.Heading>You got an error!</Alert.Heading>
+                <p>
+                    Probably connection with server is broken. {props.error}
+                </p>
+            </Alert>
         );
     }
     return (
         <Container className="mt-4">
-            {props.data.length != 0 &&
-                <div>
-                    <Paper className="mb-3">
-                        <EnhancedTableToolbar numSelected={selected.length} />
-                        <TableContainer>
-                            <Table
-                                aria-labelledby="tableTitle"
-                                size={dense ? 'small' : 'medium'}
-                                aria-label="enhanced table"
-                            >
-                                <EnhancedTableHead
-                                    classes={classes}
-                                    numSelected={selected.length}
-                                    order={order}
-                                    orderBy={orderBy}
-                                    onRequestSort={handleRequestSort}
-                                    rowCount={props.data.length}
-                                />
-                                <TableBody>
-                                    {stableSort(props.data, getSorting(order, orderBy))
-                                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                        .map((row, index) => {
-                                            const isItemSelected = isSelected(row.name);
-                                            const labelId = `enhanced-table-checkbox-${index}`;
+            <Paper className="mb-3">
+                <EnhancedTableToolbar numSelected={selected.length} />
+                <TableContainer>
+                    <Table
+                        aria-labelledby="tableTitle"
+                        size={dense ? 'small' : 'medium'}
+                        aria-label="enhanced table"
+                    >
+                        <EnhancedTableHead
+                            classes={classes}
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onRequestSort={handleRequestSort}
+                            rowCount={props.data.length}
+                        />
+                        <TableBody>
+                            {stableSort(props.data, getSorting(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.name);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                                            return (
-                                                <TableRow key={row.title} hover selected={isItemSelected}>
-                                                    {/* <TableCell >{row.name}</TableCell>
+                                    return (
+                                        <TableRow key={row.title} hover selected={isItemSelected}>
+                                            {/* <TableCell >{row.name}</TableCell>
                                                         <TableCell >{row.lastName}</TableCell> */}
-                                                    <TableCell >{row.email}</TableCell>
-                                                    <TableCell>
-                                                    <IconButton aria-label="delete user" onClick={(e) => {
-                                                                removeFromSource(row.id)
-                                                            }}>
-                                                        <DeleteOutline color='error' ></DeleteOutline>
-                                                    </IconButton>
-                                                       {/* <Button className="btn btn-danger mr-1"
+                                            <TableCell >{row.email}</TableCell>
+                                            <TableCell>
+                                                <IconButton aria-label="delete user" onClick={(e) => {
+                                                    removeFromSource(row.id)
+                                                }}>
+                                                    <DeleteOutline color='error' ></DeleteOutline>
+                                                </IconButton>
+                                                {/* <Button className="btn btn-danger mr-1"
                                                             onClick={(e) => {
                                                                 removeFromSource(row.id)
                                                             }}>Delete</Button>
                                                         */}
-                                                    </TableCell>
-                                                </TableRow>
-                                            );
-                                        })}
-                                    {emptyRows > 0 && (
-                                        <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
-                                            <TableCell colSpan={6} />
+                                            </TableCell>
                                         </TableRow>
-                                    )}
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        <TablePagination
-                            rowsPerPageOptions={[5, 10, 25]}
-                            component="div"
-                            count={props.data.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onChangePage={handleChangePage}
-                            onChangeRowsPerPage={handleChangeRowsPerPage}
-                        />
-                    </Paper>
-                </div>
-            }
+                                    );
+                                })}
+                            {emptyRows > 0 && (
+                                <TableRow style={{ height: (dense ? 33 : 53) * emptyRows }}>
+                                    <TableCell colSpan={6} />
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={props.data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+            </Paper>
         </Container>
     );
 }
@@ -231,25 +249,12 @@ const mapStateToProps = ({ users }: IApplicationState) => {
         error: users.errorMessage,
         data: users.users
     }
-    // var deepCopy: WebDevice = JSON.parse(JSON.stringify(state.webDevice));
-    // deepCopy.vulnerabilities = deepCopy.vulnerabilities.filter(x => {
-    //     if (state.filterYear != null && state.filterNumber != null)
-    //         return x.year && x.year == state.filterYear && x.number && x.number == state.filterNumber;
-
-    //     if (state.filterYear != null)
-    //         return x.year && x.year == state.filterYear;
-
-    //     if (state.filterNumber != null)
-    //         return x.number && x.number == state.filterNumber;
-    //     return true;
-    // });
-    // return {
-    //     webDevice: deepCopy,
-    // };
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchData: ()=>dispatch(fetchUsers())
+    fetchData: () => dispatch(fetchUsers()),
+    cleanUpUsersAction: () => dispatch(cleanUpUsersAction()),
+    removeUser: (id: string) => removeUserAction(dispatch, id)
 })
 
 export default connect(

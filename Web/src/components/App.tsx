@@ -12,7 +12,7 @@ import LogIn from './Authentication/LogIn';
 import EnhancedTableUsers from './Users/UserTableSorted';
 import EnhancedTableCars from './Cars/CarsTable';
 import CarsDetails from './Cars/CarsDetails';
-import { EnhancedTableWrapperReservation } from './Reservations/ReservationsTableSorted';
+import AllReservations from './Reservations/AllReservations';
 import MakeUnavailable from './Cars/MakeUnavailable';
 import LogOut from './Authentication/LogOut';
 import CarsEdit from './Cars/CarsEdit';
@@ -35,7 +35,7 @@ class App extends React.Component<{}, undefined> {
         <Route path="/car-add" component={CarsAdd} />
         <Route path="/make-unavailable" component={MakeUnavailable} />
         <Route path="/logOut" component={LogOut} />
-        <Route path="/reservations" component={EnhancedTableWrapperReservation} />
+        <Route path="/reservations" component={AllReservations} />
       </Provider>
     );
   }

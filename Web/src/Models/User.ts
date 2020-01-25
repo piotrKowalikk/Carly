@@ -17,15 +17,22 @@ export class User {
 
     static parseData(data: any) {
         var cars: User[] = [];
-        data.forEach(x => {
-            cars.push(new User(
-                {
-                    id: x.id,
-                    email: x.email
-                }
-            ));
-        });
-
+        if (!data)
+            return [];
+        try {
+            data.forEach(x => {
+                cars.push(new User(
+                    {
+                        id: x.id,
+                        email: x.email
+                    }
+                ));
+            });
+        }
+        catch (e) {
+            console.log('parse user excecption')
+            console.log(e)
+        }
         return cars;
     }
 }
