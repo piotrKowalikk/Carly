@@ -1,10 +1,12 @@
 import { Car } from "../../../Models/Car";
+import { Reservation } from "../../../Models/Reservation";
 
 export interface ICarState {
     cars: Car[];
     selectedCar: Car;
     isLoading: boolean;
     errorMessage: string;
+    selectedCarReservations: Reservation[];
 }
 
 export enum CarActionTypes {

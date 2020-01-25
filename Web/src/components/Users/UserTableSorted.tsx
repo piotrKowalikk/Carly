@@ -17,11 +17,11 @@ import Tooltip from '@material-ui/core/Tooltip';
 import FilterListIcon from '@material-ui/icons/FilterList';
 import { connect } from 'react-redux';
 import { usersMock } from '../../MockData/UsersMock'
-import { Container, Button } from 'react-bootstrap';
+import { Container, Button, Alert, Spinner } from 'react-bootstrap';
 import { User } from '../../Models/User';
 import { IApplicationState } from '../../redux/rootReducer';
 import { fetchUsers } from '../../redux/users/actions/fetchUsers';
-import {DeleteOutline,AddBox, Edit} from '@material-ui/icons'
+import { DeleteOutline, AddBox, Edit } from '@material-ui/icons'
 
 
 function desc(a, b, orderBy) {
@@ -110,7 +110,7 @@ interface IEnhancedTableUsersProps {
 
 function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
 
-    if (!props.error && props.data.length == 0){
+    if (!props.error && props.data.length == 0) {
         props.fetchData();
     }
     const classes = useStyles({});
@@ -147,11 +147,23 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
     };
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
 
+
+    if (props.isLoading) {
+        return (<Container style={{ textAlign: "center" }}>
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        </Container>)
+    }
+
     if (props.error) {
         return (
-            <Container className="mt-4" >
-                <p style={{ color: 'red' }}>{props.error}</p>
-            </Container>
+            <Alert variant="danger" >
+                <Alert.Heading>You got an error!</Alert.Heading>
+                <p>
+                    Probably connection with server is broken. {props.error}
+                </p>
+            </Alert>
         );
     }
     return (
@@ -187,12 +199,12 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
                                                         <TableCell >{row.lastName}</TableCell> */}
                                                     <TableCell >{row.email}</TableCell>
                                                     <TableCell>
-                                                    <IconButton aria-label="delete user" onClick={(e) => {
-                                                                removeFromSource(row.id)
-                                                            }}>
-                                                        <DeleteOutline color='error' ></DeleteOutline>
-                                                    </IconButton>
-                                                       {/* <Button className="btn btn-danger mr-1"
+                                                        <IconButton aria-label="delete user" onClick={(e) => {
+                                                            removeFromSource(row.id)
+                                                        }}>
+                                                            <DeleteOutline color='error' ></DeleteOutline>
+                                                        </IconButton>
+                                                        {/* <Button className="btn btn-danger mr-1"
                                                             onClick={(e) => {
                                                                 removeFromSource(row.id)
                                                             }}>Delete</Button>
@@ -249,7 +261,7 @@ const mapStateToProps = ({ users }: IApplicationState) => {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchData: ()=>dispatch(fetchUsers())
+    fetchData: () => dispatch(fetchUsers())
 })
 
 export default connect(

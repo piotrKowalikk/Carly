@@ -5,7 +5,7 @@ import { compose } from 'redux';
 import Grid from '@material-ui/core/Grid';
 import { withRouter, RouteComponentProps, Link } from 'react-router-dom';
 import { cars } from '../../MockData/CarsMock'
-import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstrap';
+import { Container, Form, Button, Col, ButtonToolbar, Row, Alert } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
 import { EnhancedTableReservation } from '../Reservations/ReservationsTableSorted';
@@ -16,6 +16,7 @@ import { getAllCarReservations } from '../../redux/.resources/apiURLs';
 interface ICarTableProps extends RouteComponentProps {
     removeCar: typeof removeCarAction;
     car: Car;
+    reservations: Reservation[];
 }
 
 interface ICarTableState {
@@ -57,7 +58,14 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
             border: ' 1px solid #ccc',
         }
         if (!car)
-            return (<div></div>);
+            return (
+                <Alert variant="danger" >
+                    <Alert.Heading>You got an error!</Alert.Heading>
+                    <p>
+                        Probably connection with server is broken.
+                    </p>
+                </Alert>
+            );
         return (
             <Container>
                 <Form style={styleForm} >
@@ -113,7 +121,12 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                         Remove
                     </Button>
                 </Form>
-                {/* <EnhancedTableReservation title={"Car reservations"} dense={true} /> */}
+                <EnhancedTableReservation
+                    title={"Car reservations"}
+                    dense={true}
+                    data={this.props.reservations}
+                    showCarData={false}
+                />
             </Container>
         );
     }
@@ -122,6 +135,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
 const mapStateToProps = ({ cars }: IApplicationState) => {
     return {
         car: cars.selectedCar,
+        reservations: cars.selectedCarReservations
     }
 }
 const mapDispatchToProps = (dispatch) => ({

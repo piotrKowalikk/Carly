@@ -16,7 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from 'react-redux';
-import { Container } from 'react-bootstrap';
+import { Container, Alert, Spinner } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { fetchCars } from '../../redux/cars/actions/fetchCars';
 import { IApplicationState } from '../../redux/rootReducer';
@@ -104,6 +104,7 @@ const useStyles = makeStyles(() => ({
 
 interface IEnhancedTableCarsProps {
     data: Car[];
+    isLoading: boolean;
     fetchCars: typeof fetchCars;
     cleanupAction: typeof cleanUpAction;
     selectCar: typeof selectCarAction;
@@ -149,13 +150,23 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
     const isSelected = name => selected.indexOf(name) !== -1;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, props.data.length - page * rowsPerPage);
 
+    if (props.isLoading) {
+        return (<Container style={{ textAlign: "center" }}>
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        </Container>)
+    }
+
     if (props.error)
         return (
-            <Container>
-                <label style={{ color: 'red' }}>{props.error}</label>
-            </Container>
+            <Alert variant="danger" >
+                <Alert.Heading>You got an error!</Alert.Heading>
+                <p>
+                    Probably connection with server is broken. {props.error}
+                </p>
+            </Alert>
         );
-
     return (
         <div>
 
@@ -193,7 +204,7 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                                         <TableCell title='edit this car'>
                                                             <Link to="/car-details">
                                                                 <Tooltip title="Car details">
-                                                                    <IconButton aria-label="car deatils" onClick={()=>props.selectCar(row)}>
+                                                                    <IconButton aria-label="car deatils" onClick={() => props.selectCar(row)}>
                                                                         <DriveEta color='primary' />
                                                                     </IconButton>
                                                                 </Tooltip>
@@ -230,7 +241,8 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
 const mapStateToProps = ({ cars }: IApplicationState) => {
     return {
         data: cars.cars,
-        error: cars.errorMessage
+        error: cars.errorMessage,
+        isLoading : cars.isLoading
     }
 }
 const mapDispatchToProps = (dispatch) => ({

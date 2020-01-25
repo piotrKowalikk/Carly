@@ -4,7 +4,7 @@ import { Reservation } from '../../Models/Reservation';
 import { IApplicationState } from '../../redux/rootReducer';
 import { connect } from 'react-redux';
 import { EnhancedTableReservation } from './ReservationsTableSorted';
-import { Container, Form, Spinner } from 'react-bootstrap';
+import { Container, Form, Spinner, Alert } from 'react-bootstrap';
 import { cleanUpReservationsAction } from '../../redux/reservations/actions/cleanUpReservationsAction';
 
 interface IReservationsDispatchProps {
@@ -32,9 +32,9 @@ class AllReservations extends React.Component<any, IReservationsProps>{
     componentWillUnmount() {
         this.props.cleanup();
     }
-   async componentDidMount() {
+    async componentDidMount() {
         if (this.props.data.length == 0 && !this.props.error) {
-           await this.props.fetchReservations();
+            await this.props.fetchReservations();
         }
     }
 
@@ -52,13 +52,14 @@ class AllReservations extends React.Component<any, IReservationsProps>{
 
     render() {
         if (this.props.error) {
-            return (<Container >
-                <Form style={this.style}>
-                    <Form.Group style={{ textAlign: "center" }}>
-                        <Form.Label >You have successfully logged out.</Form.Label>
-                    </Form.Group>
-                </Form>
-            </Container>);
+            return (
+                <Alert variant="danger" >
+                    <Alert.Heading>You got an error!</Alert.Heading>
+                    <p>
+                        Probably connection with server is broken. {this.props.error}
+                    </p>
+                </Alert>
+            );
         }
 
         if (this.props.isLoading) {
