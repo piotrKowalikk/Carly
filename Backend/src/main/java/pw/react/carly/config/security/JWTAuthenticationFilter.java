@@ -2,6 +2,7 @@ package pw.react.carly.config.security;
 
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
@@ -55,9 +57,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(null
                         //new Date(System.currentTimeMillis() + EXPIRATION_TIME
-
                 )
                 .sign(HMAC512(SECRET.getBytes()));
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode object = mapper.createObjectNode();
+        object.put("Authorization",TOKEN_PREFIX + token);
+        PrintWriter wr = res.getWriter();
+        res.setContentType("application/json");
+        wr.print(object);
+        wr.flush();
+
         res.addHeader(HEADER_STRING, TOKEN_PREFIX + token);
     }
 }
