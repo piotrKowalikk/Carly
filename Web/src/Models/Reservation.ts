@@ -43,7 +43,7 @@ export class Reservation {
         if (!data)
             return [];
         try {
-            data.forEach(x => {
+            data.content.forEach(x => {
                 reservations.push(new Reservation(
                     {
                         id: x.id,

@@ -8,9 +8,11 @@ import { submitUserCredentials } from '../../redux/authorization/actions/submitU
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { IApplicationState } from '../../redux/rootReducer';
 import { IAuthorizeState } from '../../redux/authorization/types/authorizationTypes';
+import { cleanUpAutorizationAction } from '../../redux/authorization/actions/cleanUpAutorizationAction';
 
 interface ILogInProps extends RouteComponentProps {
-    submitUserCredentials: Function;
+    submitUserCredentials: typeof submitUserCredentials;
+    cleanUpAction: typeof cleanUpAutorizationAction;
     isLoading: boolean;
 }
 
@@ -19,6 +21,8 @@ interface ILogInState {
     emailError: string
     password: string;
     passwordError: string;
+    error: string;
+    loading: boolean;
 }
 
 class LogIn extends React.Component<ILogInProps, ILogInState>{
@@ -30,12 +34,17 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             emailError: '',
             email: '',
             password: '',
-            passwordError: ''
+            passwordError: '',
+            error: null,
+            loading: false
         }
+    }
+    componentWillUnmount() {
+        this.props.cleanUpAction();
     }
 
     ValidateEmail = (mail) => {
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*$/.test(mail)) {
             return (true)
         }
         return (false)
@@ -59,19 +68,21 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
     passwordChanged = (e) => {
         if (e.target.value.length < 3) {
             this.setState({
-        //        passwordError: 'Password too short.',
+                //        passwordError: 'Password too short.',
                 password: e.target.value
             });
             return;
         } else {
             this.setState({
-          //      passwordError: '',
+                //      passwordError: '',
                 password: e.target.value
             });
         }
     }
 
-    onSubmit = (e) => {
+    onSubmit = async (e) => {
+        e.preventDefault();
+
         var anyError: boolean = false;
         if (!this.ValidateEmail(this.state.email)) {
             this.setState({
@@ -89,10 +100,18 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             e.preventDefault();
             return;
         }
-        this.props.submitUserCredentials(this.state.email, this.state.password);
+        this.setState({
+            loading: true
+        })
+        var response = await this.props.submitUserCredentials(this.state.email, this.state.password);
         console.log('zapytajmy backend')
-        // this.props.history.push('/cars');
-        e.preventDefault();
+        if (response)
+            this.props.history.push('/cars');
+        else
+            this.setState({
+                loading: false,
+                error: "Bad email or pasasword"
+            })
     }
 
     render() {
@@ -128,38 +147,39 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" onChange={this.passwordChanged} />
                         <Form.Text style={{ color: 'red' }} >{this.state.passwordError}</Form.Text>
+                        {this.state.error &&
+
+                            <Form.Text style={{ color: 'red' }} >{this.state.error}</Form.Text>
+                        }
                     </Form.Group>
                     <div>
-                        <Button ref={this.submitButton} disabled={this.props.isLoading } className="btn-primary" type="submit">Submit</Button>
-                        {this.props.isLoading &&
-                            <div style={{ marginLeft: (-1)*(this.submitButton.current ? this.submitButton.current.offsetWidth / 2 +6 : 0) }} className="spinner-border spinner-border-sm" role="status">
-                                <span  className="sr-only">Loading...</span>
+                        <Button ref={this.submitButton} disabled={this.props.isLoading} className="btn-primary" type="submit">Submit</Button>
+                        {this.state.loading &&
+                            <div style={{ marginLeft: (-1) * (this.submitButton.current ? this.submitButton.current.offsetWidth / 2 + 6 : 0) }} className="spinner-border spinner-border-sm" role="status">
+                                <span className="sr-only">Loading...</span>
                             </div>
                         }
                     </div>
                 </Form>
-
             </Container>
         );
     }
 }
 
 const mapStateToProps = ({ authorize }: IApplicationState) => {
-    var authorize: IAuthorizeState = authorize;
-    return {
-        isLoading: authorize.isLoading
-    }
 }
 
 const mapDispatchToProps = (dispatch) => {
     var props = {
-        submitUserCredentials: (login, password) => dispatch(submitUserCredentials(login, password))
+        submitUserCredentials: (login, password) => dispatch(submitUserCredentials(login, password)),
+        cleanUpAction: () => dispatch(cleanUpAutorizationAction())
+
     };
     return (
         props
     );
 }
 export default connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
 )(withRouter(LogIn));

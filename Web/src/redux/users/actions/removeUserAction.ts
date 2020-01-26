@@ -3,6 +3,7 @@ import { UserActionTypes } from '../types/userTypes';
 import { deleteAdmin } from '../../.resources/apiURLs'
 import { User } from '../../../Models/User';
 import { useDispatch } from 'react-redux';
+import { store } from '../../store';
 
 export const removeUserAction = async (dispatch: any, id: string) => {
     try {
@@ -11,7 +12,8 @@ export const removeUserAction = async (dispatch: any, id: string) => {
                 crossDomain: true,
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS'
+                'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+                'Authorization': store.getState().authorize.token
             },
         });
         var success = successHandle(response.data, id);

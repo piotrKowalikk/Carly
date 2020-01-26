@@ -21,12 +21,12 @@ export class Car {
         this.year = data.year ?? null;
         this.location = data.location ?? null;
     }
-    static parseData(data: any[]): Car[] {
+    static parseData(data: any): Car[] {
         var cars: Car[] = [];
         if (!data)
             return [];
         try {
-            data.forEach(x => {
+            data.content.forEach(x => {
                 cars.push(new Car(
                     {
                         id: x.id,

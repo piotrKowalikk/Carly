@@ -2,6 +2,7 @@ import axios from 'axios'
 import { UserActionTypes } from '../types/userTypes';
 import { getAdmins } from '../../.resources/apiURLs';
 import { User } from '../../../Models/User';
+import { store } from '../../store';
 
 export const fetchUsers = () => {
     return async dispatch => {
@@ -19,6 +20,7 @@ export const fetchUsers = () => {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',
+                    'Authorization': store.getState().authorize.token
                 },
             });
             dispatch(successHandle(response.data));

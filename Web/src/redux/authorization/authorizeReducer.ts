@@ -26,7 +26,11 @@ const authorizeReducer: Reducer<IAuthorizeState, any> = (state = initialState, a
             return Object.assign({}, state, { ...state, isLoading: false, isAuthorized: true, token: action.payload.token })
         }
         case AuthorizeActionTypes.LOGOUT: {
-            return Object.assign({}, state, { ...state, isLoading: false, isAuthorized: false })
+            return Object.assign({}, state, { ...state, isLoading: false, isAuthorized: false, token: null })
+        }
+        case AuthorizeActionTypes.CLEANUP: {
+            return Object.assign({}, state, { initialState })
+
         }
         default:
             return state;

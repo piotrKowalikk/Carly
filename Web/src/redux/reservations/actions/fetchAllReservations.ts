@@ -2,6 +2,7 @@ import axios from 'axios'
 import { ReservationActionTypes } from '../types/reservationTypes';
 import { getAllReservations } from '../../.resources/apiURLs';
 import { Reservation } from '../../../Models/Reservation';
+import { store } from '../../store';
 
 export const fetchAllReservations = () => {
     return async dispatch => {
@@ -19,6 +20,7 @@ export const fetchAllReservations = () => {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',
+                    'Authorization': store.getState().authorize.token
                 },
             });
             dispatch(successHandle(response.data));

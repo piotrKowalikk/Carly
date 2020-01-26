@@ -2,6 +2,7 @@ import axios from 'axios'
 import { CarActionTypes } from '../types/carTypes';
 import { getAdmins, getCars } from '../../.resources/apiURLs'
 import { Car } from '../../../Models/Car';
+import { store } from '../../store';
 
 export const fetchCars = () => {
     return async dispatch => {
@@ -14,11 +15,13 @@ export const fetchCars = () => {
             });
             //       await delay(2000);
 
+            console.log(store.getState().authorize.token)
             var response = await axios.get(getCars(), {
                 headers: {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',
+                    'Authorization': store.getState().authorize.token
                 },
             });
             dispatch(successHandle(response.data));

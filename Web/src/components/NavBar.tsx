@@ -19,21 +19,21 @@ const NavBar = (props: INavBarProps) => {
         <Navbar className="bg-dark justify-content-between">
             <Form inline>
                 <Link className='btn shadow-none' style={{ color: 'white' }} to="/">Home</Link>
-                {/* {props.isAuthorized && */}
-                <div>
-                    <Link className='btn shadow-none' style={{ color: 'white' }} to="/users">Users</Link>
-                    <Link className='btn shadow-none' style={{ color: 'white' }} to="/cars">Cars</Link>
-                    <Link className='btn shadow-none' style={{ color: 'white' }} to="/reservations">Reservations</Link>
-                </div>
-
+                {props.isAuthorized &&
+                    <div>
+                        <Link className='btn shadow-none' style={{ color: 'white' }} to="/users">Users</Link>
+                        <Link className='btn shadow-none' style={{ color: 'white' }} to="/cars">Cars</Link>
+                        <Link className='btn shadow-none' style={{ color: 'white' }} to="/reservations">Reservations</Link>
+                    </div>
+                }
             </Form>
             <Form inline>
-                {/* {props.isAuthorized && */}
-                <Link className='btn shadow-none' style={{ color: 'white' }} to="/logOut">Log Out</Link>
-
-                {/* {!props.isAuthorized && */}
+                {props.isAuthorized &&
+                    <Link className='btn shadow-none' style={{ color: 'white' }} to="/logOut">Log Out</Link>
+                }
+                {!props.isAuthorized &&
                 <Link className='btn shadow-none' style={{ color: 'white' }} to="/logIn">Log In</Link>
-
+                }
             </Form>
         </Navbar>
     );

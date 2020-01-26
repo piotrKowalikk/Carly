@@ -3,6 +3,7 @@ import { CarActionTypes } from '../types/carTypes';
 import { getAdmins, getCars, getAllCarReservations } from '../../.resources/apiURLs'
 import { Car } from '../../../Models/Car';
 import { Reservation } from '../../../Models/Reservation';
+import { store } from '../../store';
 
 export const selectCarAction = (car: Car) => {
 
@@ -21,6 +22,7 @@ export const selectCarAction = (car: Car) => {
                     crossDomain: true,
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json',
+                    'Authorization': store.getState().authorize.token
                 },
             });
             dispatch(successHandle(response.data, car));

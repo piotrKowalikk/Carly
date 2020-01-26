@@ -3,6 +3,7 @@ import { CarActionTypes } from '../types/carTypes';
 import { deleteCar } from '../../.resources/apiURLs'
 import { Car } from '../../../Models/Car';
 import { useDispatch } from 'react-redux';
+import { store } from '../../store';
 
 export const removeCarAction = async (dispatch: any, id: string) => {
     try {
@@ -11,7 +12,8 @@ export const removeCarAction = async (dispatch: any, id: string) => {
                 crossDomain: true,
                 'Access-Control-Allow-Origin': '*',
                 'Content-Type': 'application/json',
-                'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS'
+                'Access-Control-Allow-Methods': 'DELETE, POST, GET, OPTIONS',
+                'Authorization': store.getState().authorize.token
             },
         });
         var success = successHandle(response.data, id);

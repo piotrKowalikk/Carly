@@ -1,76 +1,51 @@
 import axios from 'axios'
 import { AuthorizeActionTypes } from '../types/authorizationTypes';
 import { logIn } from '../../.resources/apiURLs';
+import { store } from '../../store'
 
 export const submitUserCredentials = (login: string, password: string) => {
     return async dispatch => {
         try {
-            //lefted as example of requesting dat
-            //login and password should be sent to backend and not saved in the store. if data about user is available then it should be saved.
-            dispatch({
+            store.dispatch({
                 type: AuthorizeActionTypes.LOADING,
                 payload: {
                     isLoading: true,
                 }
             });
             const user = {
-                email: "ada@klimczak",
-                password: "ada"
+                email: login,//"ada@klimczak",
+                password: password//"ada"
             }
-            // dispatch(successHandle(null));
             var headers = new Headers();
             headers.append("Content-Type", "application/json");
-            headers.append("access-control-expose-headers", "Authorization");
-            headers.append("Access-Control-Allow-Origin", "*");
-            headers.append("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE");
-            headers.append("Access-Control-Allow-Headers", "Content-Type, x-auth-token, Authorization");
-            headers.append("Access-Control-Expose-Headers", "x-auth-token, Authorization");
+
             const requestOptions: any = {
                 method: 'POST',
                 headers: headers,
                 body: JSON.stringify(user)
             };
             var response = await fetch(logIn(), requestOptions);
-            // .then(response => {
+            var responseToJson = await response.json();
 
-            //     if (response.status == 200) {
-            //         console.log(response.headers.get('x-auth-token'))
-            //         console.log(response.headers.get("authorization"))
-            //         console.log(response.headers.get("Authorization"))
-            //         response.headers.forEach(x => console.log(x)); // accessing the entries
-            //     }
-            // })
-            // .catch(error => {
-            //     console.log(error);
-            // });
-            console.log(response)
-            // dispatch(successHandle(response));
+            console.log(responseToJson)
+            if (response.status != 200)
+                throw new Error('Not authorized');
+            store.dispatch(successHandle(responseToJson));
+            return true;
         }
         catch (error) {
-            dispatch(errorHandle());
+            return false;
         }
     }
 }
-
 //enums would be better
 const successHandle = (data) => {
-    var token = data.headers.get("Authorization")
-    console.log(data.headers)
+    var token = data.Authorization;
     return {
         type: AuthorizeActionTypes.AUTHORIZED,
         payload: {
             errorMessage: null,
             token: token
-        }
-    }
-}
-
-const errorHandle = () => {
-    //handle message from server
-    return {
-        type: AuthorizeActionTypes.BAD_PASSWORD,
-        payload: {
-            errorMessage: 'Not valid input.'
         }
     }
 }

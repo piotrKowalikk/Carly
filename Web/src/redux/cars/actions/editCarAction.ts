@@ -2,6 +2,7 @@ import axios from 'axios'
 import { CarActionTypes } from '../types/carTypes';
 import { postCar } from '../../.resources/apiURLs'
 import { Car } from '../../../Models/Car';
+import { store } from '../../store';
 
 export const editCarAction = (car: Car) => {
     return async dispatch => {
@@ -37,6 +38,7 @@ export const editCarAction = (car: Car) => {
                         crossDomain: true,
                         'Access-Control-Allow-Origin': '*',
                         'Content-Type': 'application/json',
+                        'Authorization': store.getState().authorize.token
                     },
                 });
             dispatch(successHandle(response.data));
