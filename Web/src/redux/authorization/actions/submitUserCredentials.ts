@@ -30,20 +30,20 @@ export const submitUserCredentials = (login: string, password: string) => {
                 headers: headers,
                 body: JSON.stringify(user)
             };
-            fetch("http://carly.us-east-1.elasticbeanstalk.com/login", requestOptions)
-                .then(response => {
+            var response = await fetch(logIn(), requestOptions);
+            // .then(response => {
 
-                    if (response.status == 200) {
-                        console.log(response.headers.get('x-auth-token'))
-                        console.log(response.headers.get("authorization"))
-                        console.log(response.headers.get("Authorization"))
-                        response.headers.forEach(x => console.log(x)); // accessing the entries
-                    }
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-
+            //     if (response.status == 200) {
+            //         console.log(response.headers.get('x-auth-token'))
+            //         console.log(response.headers.get("authorization"))
+            //         console.log(response.headers.get("Authorization"))
+            //         response.headers.forEach(x => console.log(x)); // accessing the entries
+            //     }
+            // })
+            // .catch(error => {
+            //     console.log(error);
+            // });
+            console.log(response)
             // dispatch(successHandle(response));
         }
         catch (error) {
