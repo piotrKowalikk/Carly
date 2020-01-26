@@ -69,6 +69,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
             border: ' 1px solid #ccc',
         }
         if (!car)
+        //dorobic tu delay bo czasami za szybko wywala
             return (
                 <Alert variant="danger" >
                     <Alert.Heading>You got an error!</Alert.Heading>
@@ -80,7 +81,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
         return (
             <Container>
                 <Form style={styleForm} >
-                    <h3>Car details</h3>
+                    <h3>Car details of {car.carMake} {car.carModel}</h3>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridLicense">
                             <Form.Label>License</Form.Label>
@@ -92,18 +93,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                             <Form.Control disabled value={car.location} />
                         </Form.Group>
                     </Form.Row>
-                    <Form.Row>
-                        <Form.Group as={Col} controlId="formGridModel">
-                            <Form.Label>Model</Form.Label>
-                            <Form.Control disabled value={car.carModel} />
-                        </Form.Group>
-
-                        <Form.Group as={Col} controlId="formGridCarMake">
-                            <Form.Label>Car Make</Form.Label>
-                            <Form.Control disabled value={car.carMake} />
-                        </Form.Group>
-
-                    </Form.Row>
+                    
 
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridSeats">

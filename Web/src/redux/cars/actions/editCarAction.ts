@@ -25,13 +25,6 @@ export const editCarAction = (car: Car) => {
                     year: car.year,
                     licence: car.licenseNumber,
                     location: car.location
-                    // "id": 1003,
-                    // "model": "SuperModel3",
-                    // "make": "Marka3",
-                    // "seats": 5,
-                    // "year": 2016,
-                    // "licence": "WK2645",
-                    // "location": "Lublin, Al.Jerezolimskie 36"
                 },
                 {
                     headers: {

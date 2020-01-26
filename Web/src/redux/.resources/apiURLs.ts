@@ -1,8 +1,8 @@
 import { ReservationStatus } from '../../Enums/ReservationStatuses'
 
 export const mainURL = (): string => {
-  return 'http://localhost:8080';
-    //return 'http://carly.us-east-1.elasticbeanstalk.com';
+  //return 'http://localhost:8080';
+    return 'http://carly.us-east-1.elasticbeanstalk.com';
 }
 
 export const logIn = () => {

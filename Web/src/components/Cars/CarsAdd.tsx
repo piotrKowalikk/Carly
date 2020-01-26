@@ -10,57 +10,105 @@ import { Car } from '../../Models/Car';
 import { AddBox, Edit, Cancel } from '@material-ui/icons'
 import { IconButton } from 'material-ui';
 import { createCarAction } from '../../redux/cars/actions/createCarAction';
+import { number } from 'prop-types';
 
 interface ICarsAddProps extends RouteComponentProps {
     createCar: typeof createCarAction
 }
 
 interface ICarsAddState {
-    car: Car;
-    seats: Number;
-    year: Number;
+    carMake: string;
+    carModel: string;
+    licenseNumber: string;
+    seats: number;
+    year: number;
+    location: string;
+    yearError: string;
 }
 class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     constructor(props) {
         super(props);
         this.state = {
-            car: new Car({}),
+            carMake: '',
+            carModel: '',
+            licenseNumber: '',
             seats: 0,
             year: 0,
+            location: '',
+            yearError: '',
         }
     }
-    //TODO:LICENSE, MARK, MODEL
 
     SeatsChanged = (e) => {
         this.setState({ seats: e.target.value });
     }
 
     YearChanged = (e) => {
-        this.setState({ year: e.target.value });
+        if (!this.ValidateYear(e.target.value)) {
+            this.setState({
+                yearError: 'Year cannot be of the future date or before the cars were made',
+            });
+            return;
+        }
+        else
+            this.setState({ year: e.target.value,yearError:'' });
+    }
+
+    ValidateYear = (year) => {
+        const currentyear = new Date().getFullYear();
+        if (year > currentyear || year < 1886) {
+            return (false)
+        }
+        return (true)
+    }
+
+    CarMakeChanged = (e) => {
+        this.setState({ carMake: e.target.value });
+    }
+
+    LicenseChanged = (e) => {
+        this.setState({ licenseNumber: e.target.value });
+    }
+
+    ModelChanged = (e) => {
+        this.setState({ carModel: e.target.value });
+    }
+
+    LocationChanged = (e) => {
+        this.setState({ location: e.target.value });
     }
 
     componentDidMount() {
-        console.log("jestem");
+        
     }
 
-    createCar = async () => {
-        var car: Car = new Car();
-        car.carMake = 'Audi';
-        car.carModel = 'A6';
-        car.licenseNumber = 'WX-12313';
-        car.location = 'Warsaw';
-        car.seats = 5;
-        car.year = 2019;
-        //validation
+    createCar = async (e) => {
+       e.preventDefault();
 
+        if(this.state.yearError)
+            return;
+
+        var car: Car = new Car();
+        car.carMake = this.state.carMake;
+        car.carModel = this.state.carModel;
+        car.licenseNumber = this.state.licenseNumber;
+        car.location = this.state.location;
+        car.seats = this.state.seats;
+        car.year = this.state.year;
+        
         //expected
-        //await this.props.createCar(this.state.car)
         await this.props.createCar(car);
+        //this.props.createCar(car);
         this.props.history.push('/cars');
     }
 
     render() {
-        const { car } = this.state;
+        const { carMake,
+                carModel,
+                licenseNumber,
+                seats,
+                year,
+                location} = this.state;
         const style: React.CSSProperties = {
             position: 'fixed',
             top: '50%',
@@ -84,12 +132,12 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridModel">
                             <Form.Label>Model</Form.Label>
-                            <Form.Control placeholder={car.carModel} />
+                            <Form.Control type="text" onChange={this.ModelChanged} />
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridCarMake">
                             <Form.Label>Car Make</Form.Label>
-                            <Form.Control placeholder={car.carMake} />
+                            <Form.Control type="text" onChange={this.CarMakeChanged} />
                         </Form.Group>
                     </Form.Row>
 
@@ -101,7 +149,7 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
 
                         <Form.Group as={Col} controlId="formGridLicense">
                             <Form.Label>License</Form.Label>
-                            <Form.Control placeholder={car.licenseNumber} />
+                            <Form.Control onChange={this.LicenseChanged} />
                         </Form.Group>
                     </Form.Row>
 
@@ -109,17 +157,18 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                         <Form.Group as={Col} controlId="formGridYear">
                             <Form.Label>Year</Form.Label>
                             <Form.Control type="number" onChange={this.YearChanged} />
+                            <Form.Text style={{ color: 'red' }} >{this.state.yearError}</Form.Text>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridLocation">
                             <Form.Label>Location</Form.Label>
-                            <Form.Control placeholder={car.location} />
+                            <Form.Control type="text" onChange={this.LocationChanged} />
                         </Form.Group>
                     </Form.Row>
 
                     <Button variant="primary" type="submit" onClick={this.createCar}>
                         Save
-                        </Button>
+                    </Button>
 
                     <Link to="/cars">
                         <Button variant="danger" style={styleButton} type="button" >

@@ -12,29 +12,46 @@ interface ICarsEditProps extends RouteComponentProps {
 }
 
 interface ICarsEditState {
-    seats: Number;
     car: Car;
+    licenseNumber: string;
+    seats: number;
+    location: string;
 }
 class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
     constructor(props) {
         super(props);
         this.state = {
             car: new Car(this.props.car),
-            seats: 0
+            seats: this.props.car.seats,
+            location: this.props.car.location,
+            licenseNumber: this.props.car.licenseNumber,
         }
     }
 
-    //only seats can change
+    //only seats, license and location can change
     SeatsChanged = (e) => {
         this.setState({ seats: e.target.value });
     }
-    componentDidMount() {
-        console.log("jestem");
+
+    LocationChanged = (e) => {
+        this.setState({ location: e.target.value });
     }
 
-    editCar = () => {
+    LicenseChanged = (e) => {
+        this.setState({ licenseNumber: e.target.value });
+    }
+
+    componentDidMount() {
+        console.log(this.state);
+    }
+
+    editCar = (e) => {
+        e.preventDefault();
         var exampleCarEdit: Car = this.props.car;
-        exampleCarEdit.carMake = "Toyota";
+        exampleCarEdit.location = this.state.location;
+        exampleCarEdit.seats = this.state.seats;
+        exampleCarEdit.licenseNumber = this.state.licenseNumber;
+        console.log(exampleCarEdit);
         //this.props.carEdit(this.state.car);
         this.props.carEdit(exampleCarEdit);
         this.props.history.push('/cars');
@@ -58,39 +75,35 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         const styleButton: React.CSSProperties = {
             marginLeft: '.5em', /*set to a negative number 1/2 of your width*/
         }
-
+        const styleText: React.CSSProperties = {
+            fontSize: '14px', /*set to a negative number 1/2 of your width*/
+        }
         return (
             <div
             >
                 <Container >
                     <Form style={styleForm} >
                         <Form.Row>
-                            <Form.Group as={Col} controlId="formGridModel">
-                                <Form.Label>Model</Form.Label>
-                                <Form.Text placeholder={car.carModel} />
-                            </Form.Group>
-
-                            <Form.Group as={Col} controlId="formGridCarMake">
-                                <Form.Label>Car Make</Form.Label>
-                                <Form.Text placeholder={car.carMake} />
-                            </Form.Group>
+                            <Form.Group controlId="formGridModel">
+                                <Form.Label><h4>{car.carMake}  {car.carModel}</h4></Form.Label>
+                             </Form.Group>
                         </Form.Row>
 
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridSeats">
                                 <Form.Label>Number of seats</Form.Label>
-                                <Form.Control type="number" onChange={this.SeatsChanged} />
+                                <Form.Control type="number" defaultValue={car.seats} onChange={this.SeatsChanged}  />
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridLicense">
                                 <Form.Label>License</Form.Label>
-                                <Form.Control placeholder={car.licenseNumber} />
+                                <Form.Control defaultValue={car.licenseNumber} onChange={this.LicenseChanged} />
                             </Form.Group>
                         </Form.Row>
 
                         <Form.Group controlId="formGridLocation">
                             <Form.Label>Location</Form.Label>
-                            <Form.Control placeholder="{car.location}" />
+                            <Form.Control defaultValue={car.location} onChange={this.LocationChanged} />
                         </Form.Group>
 
 
