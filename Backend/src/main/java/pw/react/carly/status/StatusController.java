@@ -2,6 +2,7 @@ package pw.react.carly.status;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -36,6 +37,7 @@ public class StatusController {
             @RequestParam(name="to",required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date to,
             @RequestParam(name="type",required = false) StatusType type,
             @RequestParam(name="carID",required = false) Long carID,
+            @RequestParam(required = false, name="getall", defaultValue = "false") Boolean getAll,
             Pageable pageable
             ){
         Specification<Status> spec = Specification.where(null);
@@ -47,6 +49,8 @@ public class StatusController {
             spec = spec.and(isType(type));
         if(carID != null)
             spec = spec.and(byCarId(carID));
+        if(getAll)
+            pageable = PageRequest.of(0,Integer.MAX_VALUE);
 
         return (statusRepository.findAll(spec,pageable));
     }

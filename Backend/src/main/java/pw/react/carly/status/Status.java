@@ -2,7 +2,6 @@ package pw.react.carly.status;
 
 import pw.react.carly.bookingUserInfo.BookingUserInfo;
 import pw.react.carly.car.Car;
-import pw.react.carly.reservation.ReservationInfo;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,7 +17,7 @@ public class Status {
     @NotNull
     @ManyToOne//(fetch=FetchType.LAZY,optional = false)
     private Car car;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private BookingUserInfo bookingUserInfo;
     private String comment;
     private Date createdAt;
@@ -33,13 +32,20 @@ public class Status {
     @Enumerated(EnumType.STRING)
     private StatusType type;
 
-    public static ReservationInfo convertToDTO(Status status){
-        return null;
-    }
+
 
     public Status() {
     }
 
+    public Status(@NotNull Car car, BookingUserInfo bookingUserInfo, String comment, Date createdAt, @NotNull Date dateFrom, @NotNull Date dateTo, @NotNull StatusType type) {
+        this.car = car;
+        this.bookingUserInfo = bookingUserInfo;
+        this.comment = comment;
+        this.createdAt = createdAt;
+        this.dateFrom = dateFrom;
+        this.dateTo = dateTo;
+        this.type = type;
+    }
 
     public Car getCar() {
         return car;
