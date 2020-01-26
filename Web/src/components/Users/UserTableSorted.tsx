@@ -113,7 +113,7 @@ interface IEnhancedTableUsersProps {
 }
 
 function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
-
+    setTimeout(null, 200)
     if (!props.error && props.data == null) {
         props.fetchData();
         return (<div>No users available.</div>);

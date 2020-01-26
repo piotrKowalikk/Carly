@@ -68,6 +68,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
             marginTop: '1em', /*set to a negative number 1/2 of your height*/
             border: ' 1px solid #ccc',
         }
+        setTimeout(null, 100)
         if (!car)
         //dorobic tu delay bo czasami za szybko wywala
             return (

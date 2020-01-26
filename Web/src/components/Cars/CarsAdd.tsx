@@ -24,6 +24,10 @@ interface ICarsAddState {
     year: number;
     location: string;
     yearError: string;
+    carMakeError: string;
+    carModelError: string;
+    licenseNumberError: string;
+    locationError: string;
 }
 class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     constructor(props) {
@@ -36,6 +40,10 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
             year: 0,
             location: '',
             yearError: '',
+            carMakeError: '',
+            carModelError: '',
+            licenseNumberError: '',
+            locationError: '',
         }
     }
 
@@ -46,12 +54,12 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     YearChanged = (e) => {
         if (!this.ValidateYear(e.target.value)) {
             this.setState({
-                yearError: 'Year cannot be of the future date or before the cars were made',
+                yearError: 'Year cannot be of the future date or before the cars were made'
             });
             return;
         }
         else
-            this.setState({ year: e.target.value,yearError:'' });
+            this.setState({ year: e.target.value, yearError:'' });
     }
 
     ValidateYear = (year) => {
@@ -61,21 +69,38 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
         }
         return (true)
     }
-
+    
     CarMakeChanged = (e) => {
-        this.setState({ carMake: e.target.value });
+       
+        if(!e.target.value)
+            this.setState({carMakeError:'Required'})
+        else
+            this.setState({ carMake: e.target.value, carMakeError:'' });
     }
 
     LicenseChanged = (e) => {
-        this.setState({ licenseNumber: e.target.value });
+        
+        if(!e.target.value)
+            this.setState({licenseNumberError:'Required'})
+        else
+            this.setState({ licenseNumber: e.target.value,licenseNumberError:''  });
     }
 
     ModelChanged = (e) => {
-        this.setState({ carModel: e.target.value });
+       
+        if(!e.target.value)
+            this.setState({carModelError:'Required' })
+        else 
+            this.setState({ carModel: e.target.value,carModelError:''  });
     }
 
     LocationChanged = (e) => {
-        this.setState({ location: e.target.value });
+       
+        if(!e.target.value)
+            this.setState({locationError:'Required'})
+        else
+            this.setState({ location: e.target.value,locationError:''});
+
     }
 
     componentDidMount() {
@@ -85,9 +110,9 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     createCar = async (e) => {
        e.preventDefault();
 
-        if(this.state.yearError)
+        if(this.state.yearError || !this.state.carMake || !this.state.carModel || !this.state.licenseNumber || !this.state.location)
             return;
-
+        
         var car: Car = new Car();
         car.carMake = this.state.carMake;
         car.carModel = this.state.carModel;
@@ -133,11 +158,14 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                         <Form.Group as={Col} controlId="formGridModel">
                             <Form.Label>Model</Form.Label>
                             <Form.Control type="text" onChange={this.ModelChanged} />
+                            <Form.Text style={{ color: 'red' }} >{this.state.carModelError}</Form.Text>
+                     
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridCarMake">
                             <Form.Label>Car Make</Form.Label>
                             <Form.Control type="text" onChange={this.CarMakeChanged} />
+                            <Form.Text style={{ color: 'red' }} >{this.state.carMakeError}</Form.Text>
                         </Form.Group>
                     </Form.Row>
 
@@ -150,6 +178,7 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                         <Form.Group as={Col} controlId="formGridLicense">
                             <Form.Label>License</Form.Label>
                             <Form.Control onChange={this.LicenseChanged} />
+                            <Form.Text style={{ color: 'red' }} >{this.state.licenseNumberError}</Form.Text>
                         </Form.Group>
                     </Form.Row>
 
@@ -163,6 +192,8 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                         <Form.Group as={Col} controlId="formGridLocation">
                             <Form.Label>Location</Form.Label>
                             <Form.Control type="text" onChange={this.LocationChanged} />
+                            <Form.Text style={{ color: 'red' }} >{this.state.locationError}</Form.Text>
+                     
                         </Form.Group>
                     </Form.Row>
 

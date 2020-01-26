@@ -54,6 +54,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         console.log(exampleCarEdit);
         //this.props.carEdit(this.state.car);
         this.props.carEdit(exampleCarEdit);
+        
         this.props.history.push('/cars');
 
     }

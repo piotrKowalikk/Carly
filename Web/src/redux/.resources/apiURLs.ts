@@ -17,7 +17,7 @@ export const getAllReservations = (): string => {
 }
 
 export const getCars = (): string => {
-    return mainURL() + `/cars`;
+    return mainURL() + `/cars?getall=true`;
 }
 
 export const postCar = (): string => {

@@ -34,6 +34,7 @@ export const editCarAction = (car: Car) => {
                         'Authorization': store.getState().authorize.token
                     },
                 });
+                
             dispatch(successHandle(response.data));
         }
         catch (error) {
