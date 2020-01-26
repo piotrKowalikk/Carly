@@ -25,7 +25,7 @@ class CarsList extends Component<any,any> {
       this.setState({ isFetching: true });
       const headers = new Headers();
       headers.append("Authorization", this.props.token);
-      fetch('http://carly.us-east-1.elasticbeanstalk.com/cars', { headers: headers })
+      fetch('http://carly.us-east-1.elasticbeanstalk.com/cars?getall=true', { headers: headers })
          .then(response => {
             if (response.status === 200) {
                response.json().then(data => {
