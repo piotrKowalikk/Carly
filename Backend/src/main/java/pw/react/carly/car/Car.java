@@ -20,6 +20,16 @@ public class Car {
 
     }
 
+    public Car(String model, String make, int seats, int year, String licence, String location, BigDecimal price) {
+        this.model = model;
+        this.make = make;
+        this.seats = seats;
+        this.year = year;
+        this.licence = licence;
+        this.location = location;
+        this.price = price;
+    }
+
     public BigDecimal getPrice() {
         return price;
     }

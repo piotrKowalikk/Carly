@@ -3,6 +3,7 @@ package pw.react.carly.car;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -43,7 +44,9 @@ public class CarController {
             @RequestParam(required = false,name="seats") Integer seats,
             @RequestParam(required = false,name="year") Integer year,
             @RequestParam(required = false,name="make") String make,
+            //pomijany jesli nie okreslimy dat
             @RequestParam(required = false,name="available", defaultValue = "true") Boolean available,
+            @RequestParam(required = false, name="getall", defaultValue = "false") Boolean getAll,
             Pageable pageable
     ){
 
@@ -60,6 +63,8 @@ public class CarController {
             Specification<Car> availabilitySpec = available ? isNotDeniedByStatuses(statuses) : isDeniedByStatuses(statuses);
             spec = spec.and(availabilitySpec);
         }
+        if(getAll)
+            pageable= PageRequest.of(0, Integer.MAX_VALUE);
         return carRepository.findAll(spec,pageable);
     }
 

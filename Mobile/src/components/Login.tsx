@@ -63,10 +63,12 @@ class Login extends Component<any, any> {
         fetch("http://carly.us-east-1.elasticbeanstalk.com/login", requestOptions)
             .then(response => {
                 if (response.status == 200) {
-                    this.props.saveToken(response.headers.get("authorization"));
-                    this.setState({ errorMessage: null });
-                    this.storeToken(user);
-                    this.props.navigation.navigate('AppNavigation');
+                    response.json().then(data => {
+                        this.props.saveToken(data.Authorization);
+                        this.setState({ errorMessage: null });
+                        this.storeToken(user);
+                        this.props.navigation.navigate('AppNavigation');
+                    })
                 }
                 else if (response.status == 403) {
                     this.setState({ errorMessage: "Incorect email or password." })
