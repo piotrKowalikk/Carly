@@ -1,13 +1,22 @@
 package pw.react.carly.reservation;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class ReservationData {
+    @NotNull
     private long carId;
+    @NotNull
     private Date fromDate;
+    @NotNull
     private Date toDate;
+    @NotNull
     private String name;
+    @NotNull
     private String surname;
+    @NotNull
+    @Email
     private String email;
 
     public long getCarId() {
