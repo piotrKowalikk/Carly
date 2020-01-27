@@ -65,10 +65,12 @@ public class StatusServiceTests {
         reservationData.setCarId(car.getId());
         Calendar cal  = Calendar.getInstance();
         cal.add(Calendar.DATE,(1));
-        System.out.println(cal.getTime());
-        Date badDate = cal.getTime();
+        Date fromDate = cal.getTime();
+        cal.add(Calendar.DATE,(1));
+        Date toDate = cal.getTime();
 
-        reservationData.setFromDate(badDate);
+        reservationData.setFromDate(fromDate);
+        reservationData.setToDate(toDate);
         when(carService.getCar(car.getId())).thenReturn(car);
         when(carService.checkIfAvailable(car,reservationData.getFromDate(), reservationData.getToDate())).thenReturn(false);
 
