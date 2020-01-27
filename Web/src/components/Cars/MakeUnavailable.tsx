@@ -8,11 +8,12 @@ import { cars } from '../../MockData/CarsMock'
 import { Container, Form, Button, Col,ButtonToolbar,Row } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { Reservation } from '../../Models/Reservation';
+import { createReservationAction } from '../../redux/reservations/actions/createReservationAction';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 interface IReservationTableProps extends RouteComponentProps {
-
+    createReservation: typeof createReservationAction;
 }
 
 interface IReservationTableState {
@@ -20,15 +21,19 @@ interface IReservationTableState {
     dateFrom: Date;
     dateTo: Date;
     comment: string;
+    dateFromError: string;
+    dateToError: string;
 }
 class MakeUnavailable extends React.Component<IReservationTableProps, IReservationTableState>{
     constructor(props) {
         super(props);
         this.state = {
-            car: new Car({}),
+            car: new Car(),
             dateFrom: new Date(),
             dateTo: new Date(),
             comment: '',
+            dateFromError: '',
+            dateToError: '',
         }
     }
 
@@ -37,23 +42,42 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
         e.preventDefault();
     }
 
-    handleChange = date => {
-        this.setState({
-          dateFrom: date
-        });
+    handleSubmit = async (e) => {
+
+        if(this.state.dateTo < this.state.dateFrom)
+             return;
+        e.preventDefault();
+        var reservation: Reservation = new Reservation({});
+        reservation.carData = this.state.car.carMake.toString();
+        reservation.comment = this.state.comment;
+        reservation.dateFrom = this.state.dateFrom;
+        reservation.dateTo = this.state.dateTo;
+
+        await this.props.createReservation(reservation);
+        
+    }
+
+    DateFromChanged = date => {
+       if(date>this.state.dateTo)
+            this.setState({dateFromError:'Cannot be after date to'})
+       else
+            this.setState({dateFrom: date,dateFromError:''});
+        console.log('date.target.value')
     };
-    handleChangeTo = date => {
-        this.setState({
-          dateTo: date
-        });
+
+    DateToChanged = date => {
+        if(date<this.state.dateFrom)
+            this.setState({dateToError:'Cannot be before date from'})
+        else
+            this.setState({dateTo: date,dateToError:''});
     };
+
     componentDidMount() {
         
     }
 
     render() {
         const { car,dateFrom,dateTo,comment} = this.state;
-       
         const styleForm: React.CSSProperties = {
             position: 'fixed',
             top: '50%',
@@ -71,34 +95,39 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
       
         return (
        
-            <Form style={styleForm} title="aaaa"> 
+            <Form style={styleForm}> 
                 <Form.Group controlId="formGridTitle">
-                    <Form.Label>{car.carMake}</Form.Label>
+                    <Form.Label><h5>Choose dates for {car.carMake} to be unavailable</h5></Form.Label>
                 </Form.Group>
                 <Form.Row>
                     <Form.Group as={Col} controlId="formGridDateFrom">
                         <Form.Label>Date from  </Form.Label>
-                        
                     </Form.Group>
+
                     <Form.Group as={Col}>
-                    <DatePicker 
-                            selected={dateFrom}
-                            onChange={this.handleChange}
-                        />
+                        <DatePicker 
+                                minDate={new Date()}
+                                selected={this.state.dateFrom}
+                                onChange={this.DateFromChanged}
+                            />
+                         <Form.Text style={{ color: 'red' }} >{this.state.dateFromError}</Form.Text>
                     </Form.Group>
                 </Form.Row>
                 
                 <Form.Row>
+
                     <Form.Group as={Col} controlId="formGridDateTo">
                         <Form.Label>Date To</Form.Label>
+                    </Form.Group>
 
-                    </Form.Group>
                     <Form.Group as={Col}>
-                    <DatePicker style={styleButton}
-                                selected={dateTo}
-                                onChange={this.handleChangeTo}
-                                />
+                        <DatePicker style={styleButton}
+                                    selected={this.state.dateTo}
+                                    onChange={this.DateToChanged}
+                                    />
+                        <Form.Text style={{ color: 'red' }} >{this.state.dateToError}</Form.Text>   
                     </Form.Group>
+                        
                 </Form.Row>
 
                 <Form.Group controlId="formGridComment">
@@ -107,7 +136,7 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
                 </Form.Group>
 
                     
-                    <Button  variant="primary"  type="submit" >
+                    <Button  variant="primary"  type="submit" onClick={this.handleSubmit}>
                         Save
                     </Button>
 
@@ -132,4 +161,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(withRouter(MakeUnavailable))
-

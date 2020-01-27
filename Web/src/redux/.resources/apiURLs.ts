@@ -12,8 +12,13 @@ export const logIn = () => {
 export const getAllCarReservations = (carId: string): string => {
     return mainURL() + `/statuses?carID=${carId}`;
 }
+
 export const getAllReservations = (): string => {
     return mainURL() + `/statuses?getall=true`;
+}
+
+export const postReservation = (): string => {
+    return mainURL() + `/statuses`;
 }
 
 export const getCars = (): string => {
@@ -21,7 +26,6 @@ export const getCars = (): string => {
 }
 
 export const postCar = (): string => {
-    //TODO:
     return mainURL() + `/cars`;
 }
 

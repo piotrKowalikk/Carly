@@ -60,9 +60,10 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         exampleCarEdit.location = this.state.location;
         exampleCarEdit.seats = this.state.seats;
         exampleCarEdit.licenseNumber = this.state.licenseNumber;
+        exampleCarEdit.price = this.state.price;
         console.log(exampleCarEdit);
         //this.props.carEdit(this.state.car);
-       // this.props.selectCar(exampleCarEdit);
+        this.props.selectCar(exampleCarEdit);
         this.props.carEdit(exampleCarEdit);
         this.props.history.push('/cars');
 
@@ -144,7 +145,8 @@ const mapStateToProps = ({ cars }: IApplicationState) => {
     };
 }
 const mapDispatchToProps = (dispatch) => ({
-    carEdit: (car: Car) => dispatch(editCarAction(car))
+    carEdit: (car: Car) => dispatch(editCarAction(car)),
+    selectCar: (car: Car) => dispatch(selectCarAction(car))
 })
 
 export default connect(

@@ -15,17 +15,6 @@ export class Reservation {
     carData: string;
 
 
-
-    //     bookingUserInfo: {id: 1002, name: "Adrian", surname: "Jaszczomp", email: "booking3@mail.com"}
-    // id: 1002
-    // name: "Adrian"
-    // surname: "Jaszczomp"
-    // email: "booking3@mail.com"
-    // comment: "Anulowana rezerwacja"
-    // dateFrom: "2020-01-22T23:00:00.000+0000"
-    // dateTo: "2020-01-24T23:00:00.000+0000"
-    // type: "BOOKINGCANCELED"
-
     constructor(data: any) {
         this.id = data.id ?? null;
         this.name = data.name ?? null;

@@ -68,13 +68,11 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
     passwordChanged = (e) => {
         if (e.target.value.length < 3) {
             this.setState({
-                //        passwordError: 'Password too short.',
                 password: e.target.value
             });
             return;
         } else {
             this.setState({
-                //      passwordError: '',
                 password: e.target.value
             });
         }
@@ -104,7 +102,7 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             loading: true
         })
         var response = await this.props.submitUserCredentials(this.state.email, this.state.password);
-        console.log('zapytajmy backend')
+        
         if (response)
             this.props.history.push('/cars');
         else

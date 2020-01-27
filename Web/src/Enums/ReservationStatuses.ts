@@ -1,3 +1,5 @@
 export enum ReservationStatus {
-    BOOKED = 'BOOKED'
+    BOOKED = 'BOOKED',
+    BOOKINGCANCELED = 'BOOKINGCANCELED', 
+    UNAVAILABLE = 'UNAVAILABLE'
 }

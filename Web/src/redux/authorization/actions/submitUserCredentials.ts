@@ -27,7 +27,6 @@ export const submitUserCredentials = (login: string, password: string) => {
             var response = await fetch(logIn(), requestOptions);
             var responseToJson = await response.json();
 
-            console.log(responseToJson)
             if (response.status != 200)
                 throw new Error('Not authorized');
             store.dispatch(successHandle(responseToJson));

@@ -17,41 +17,31 @@ interface ICarTableProps extends RouteComponentProps {
     removeCar: Function;
     car: Car;
     reservations: Reservation[];
+    isLoading: boolean;
 }
 
 interface ICarTableState {
-    isLoading: boolean;
+
 }
 class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: false
         }
     }
-
+    componentDidMount(){
+    }
     removeCar = async (e) => {
-        this.setState({
-            isLoading: true
-        })
+        
         var a = await this.props.removeCar(this.props.car.id);
         if (a == true) {
             this.props.history.push("/cars");
         }
-        this.setState({
-            isLoading: false
-        })
+        
     }
 
     render() {
-        if (this.state.isLoading) {
-            return (<Container style={{ textAlign: "center" }}>
-                <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
-                </Spinner>
-            </Container>)
-
-        }
+        
         const car = this.props.car;
         const styleForm: React.CSSProperties = {
             width: 'auto',
@@ -68,9 +58,15 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
             marginTop: '1em', /*set to a negative number 1/2 of your height*/
             border: ' 1px solid #ccc',
         }
-        
+        if (this.props.car == null || this.props.isLoading) {
+                return (<Container style={{ textAlign: "center" }}>
+                    <Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </Spinner>
+                </Container>)
+        }
+       
         if (!car)
-        //dorobic tu delay bo czasami za szybko wywala
             return (
                 <Alert variant="danger" >
                     <Alert.Heading>You got an error!</Alert.Heading>

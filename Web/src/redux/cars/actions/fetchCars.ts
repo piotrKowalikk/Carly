@@ -15,7 +15,6 @@ export const fetchCars = () => {
             });
             //       await delay(2000);
 
-            console.log(store.getState().authorize.token)
             var response = await axios.get(getCars(), {
                 headers: {
                     crossDomain: true,

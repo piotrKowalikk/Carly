@@ -9,5 +9,5 @@ export interface IReservationState {
 export enum ReservationActionTypes {
     LOADING = "LOADING",
     GET_RESERVATIONS = "GET_RESERVATIONS",
-    CLEANUP = "CLEANUP"
+    CLEANUP = "CLEANUP",
 }

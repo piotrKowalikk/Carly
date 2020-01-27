@@ -113,10 +113,14 @@ interface IEnhancedTableUsersProps {
 }
 
 function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
-    setTimeout(null, 200)
+    
     if (!props.error && props.data == null) {
-        props.fetchData();
-        return (<div>No users available.</div>);
+        props.fetchData();  
+            return (<Container style={{ textAlign: "center" }}>
+                <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                </Spinner>
+            </Container>)
     }
 
     React.useEffect(() => {

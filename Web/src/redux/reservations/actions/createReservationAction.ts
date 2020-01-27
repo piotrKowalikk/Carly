@@ -1,21 +1,22 @@
 import axios from 'axios'
-import { CarActionTypes } from '../types/carTypes';
-import { postCar } from '../../.resources/apiURLs'
+import { ReservationActionTypes } from '../types/reservationTypes';
+import { postReservation } from '../../.resources/apiURLs'
 import { Car } from '../../../Models/Car';
+import { Reservation } from '../../../Models/Reservation';
 import { store } from '../../store';
 
-export const createCarAction = (car: Car) => {
+export const createReservationAction = (reservation: Reservation) => {
     return async dispatch => {
         try {
-
-            var response = await axios.post(postCar(),
+            var response = await axios.post(postReservation(),
                 {
-                    model: car.carModel,
-                    make: car.carMake,
-                    seats: car.seats,
-                    year: car.year,
-                    licence: car.licenseNumber,
-                    location: car.location
+                    car : reservation.carData,
+                    bookingUserInfo : reservation.name,
+                    comment: reservation.comment,
+                    createdAt : Date.now,
+                    dateFrom : reservation.dateFrom,
+                    dateTo : reservation.dateTo,
+                    type : reservation.type,
                 },
                 {
                     headers: {
@@ -39,9 +40,9 @@ function delay(ms: number) {
 
 const successHandle = (data) => {
     return {
-        type: CarActionTypes.GET_CARS,
+        type: ReservationActionTypes.GET_RESERVATIONS,
         payload: {
-            cars: Car.parseData(data),
+            reservation: Reservation.parseData(data),
             errorMessage: null
         }
     }
@@ -49,9 +50,9 @@ const successHandle = (data) => {
 
 const errorHandle = () => {
     return {
-        type: CarActionTypes.GET_CARS,
+        type: ReservationActionTypes.GET_RESERVATIONS,
         payload: {
-            cars: [],
+            reservation: [],
             errorMessage: 'Not valid input.'
         }
     }
