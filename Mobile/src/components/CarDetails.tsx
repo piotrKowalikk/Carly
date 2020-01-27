@@ -25,7 +25,9 @@ class CarDetails extends Component<any, any> {
             { name: 'Year', value: car.year.toString() },
             { name: 'Number of seats', value: car.seats.toString() },
             { name: 'Licence plate', value: car.licence },
-            { name: 'Location', value: car.location }
+            { name: 'Location', value: car.location },
+            { name: 'Price', value: car.price },
+            { name: 'Active', value: car.active ? "Yes" : "No" }
          ]
       }
    }

@@ -25,7 +25,7 @@ class CarsList extends Component<any,any> {
       this.setState({ isFetching: true });
       const headers = new Headers();
       headers.append("Authorization", this.props.token);
-      fetch('http://carly.us-east-1.elasticbeanstalk.com/cars?getall=true', { headers: headers })
+      fetch('http://carly.us-east-1.elasticbeanstalk.com/cars?getall=true&onlyActive=false', { headers: headers })
          .then(response => {
             if (response.status === 200) {
                response.json().then(data => {
@@ -41,7 +41,7 @@ class CarsList extends Component<any,any> {
 
    renderItem = ({item}) => (
       <ListItem
-         leftIcon={{ type: 'material-community', color: '#0E4D92', name: item.seats < 4 ? 'car-sports' : item.seats > 5 ? 'car-estate' : 'car-side' }}
+         leftIcon={{ type: 'material-community', color: item.active ? '#0E4D92' : "#B22222", name: item.seats < 4 ? 'car-sports' : item.seats > 5 ? 'car-estate' : 'car-side' }}
          title={item.make + ' ' + item.model}
          subtitle={item.location}
          titleStyle={{ fontSize: 16 }}
