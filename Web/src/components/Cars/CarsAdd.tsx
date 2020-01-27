@@ -23,11 +23,14 @@ interface ICarsAddState {
     seats: number;
     year: number;
     location: string;
+    price: number;
     yearError: string;
     carMakeError: string;
     carModelError: string;
     licenseNumberError: string;
     locationError: string;
+    seatsError:string;
+    priceError:string;
 }
 class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     constructor(props) {
@@ -38,17 +41,32 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
             licenseNumber: '',
             seats: 0,
             year: 0,
+            price:0,
             location: '',
             yearError: '',
             carMakeError: '',
             carModelError: '',
             licenseNumberError: '',
             locationError: '',
+            seatsError:'',
+            priceError:'',
         }
     }
 
     SeatsChanged = (e) => {
-        this.setState({ seats: e.target.value });
+        if(!e.target.value)
+            this.setState({seatsError:'Required'})
+        else
+         this.setState({ seats: e.target.value, seatsError:'' });
+    }
+
+    PriceChanged = (e) => {
+        if(!e.target.value )
+            this.setState({priceError:'Required'})
+        else if(e.target.value <= 0)
+            this.setState({priceError:'Cannot be less than zero'})
+        else
+         this.setState({ price: e.target.value, priceError:'' });
     }
 
     YearChanged = (e) => {
@@ -110,7 +128,7 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     createCar = async (e) => {
        e.preventDefault();
 
-        if(this.state.yearError || !this.state.carMake || !this.state.carModel || !this.state.licenseNumber || !this.state.location)
+        if(this.state.yearError || !this.state.carMake || !this.state.carModel || !this.state.licenseNumber || !this.state.location || !this.state.price || this.state.price < 0)
             return;
         
         var car: Car = new Car();
@@ -187,6 +205,12 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                             <Form.Label>Year</Form.Label>
                             <Form.Control type="number" onChange={this.YearChanged} />
                             <Form.Text style={{ color: 'red' }} >{this.state.yearError}</Form.Text>
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="priceYear">
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control type="number" onChange={this.PriceChanged} />
+                            <Form.Text style={{ color: 'red' }} >{this.state.priceError}</Form.Text>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridLocation">

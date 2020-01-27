@@ -13,7 +13,7 @@ export const getAllCarReservations = (carId: string): string => {
     return mainURL() + `/statuses?carID=${carId}`;
 }
 export const getAllReservations = (): string => {
-    return mainURL() + `/statuses`;
+    return mainURL() + `/statuses?getall=true`;
 }
 
 export const getCars = (): string => {

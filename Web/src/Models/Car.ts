@@ -9,6 +9,7 @@ export class Car {
     seats: number;
     year: number;
     location: string;
+    price: number;
 
     constructor(data: any = {}) {
         if (!data)
@@ -16,10 +17,11 @@ export class Car {
         this.id = data.id ?? null;
         this.carMake = data.carMake ?? null;
         this.carModel = data.carModel ?? null;
-        this.licenseNumber = data.licenseNumber ?? null;//TYPO
+        this.licenseNumber = data.licenseNumber ?? null;
         this.seats = data.seats ?? null;
         this.year = data.year ?? null;
         this.location = data.location ?? null;
+        this.price = data.price ?? null;
     }
     static parseData(data: any): Car[] {
         var cars: Car[] = [];
@@ -36,6 +38,7 @@ export class Car {
                         year: x.year,
                         licenseNumber: x.licence,
                         location: x.location,
+                        price: x.price
                     }
                 )
                 )

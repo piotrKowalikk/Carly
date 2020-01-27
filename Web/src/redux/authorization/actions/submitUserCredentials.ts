@@ -13,8 +13,8 @@ export const submitUserCredentials = (login: string, password: string) => {
                 }
             });
             const user = {
-                email: login,//"ada@klimczak",
-                password: password//"ada"
+                email: login,
+                password: password
             }
             var headers = new Headers();
             headers.append("Content-Type", "application/json");

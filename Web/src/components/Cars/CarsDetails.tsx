@@ -68,7 +68,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
             marginTop: '1em', /*set to a negative number 1/2 of your height*/
             border: ' 1px solid #ccc',
         }
-        setTimeout(null, 100)
+        
         if (!car)
         //dorobic tu delay bo czasami za szybko wywala
             return (
@@ -82,20 +82,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
         return (
             <Container>
                 <Form style={styleForm} >
-                    <h3>Car details of {car.carMake} {car.carModel}</h3>
-                    <Form.Row>
-                        <Form.Group as={Col} controlId="formGridLicense">
-                            <Form.Label>License</Form.Label>
-                            <Form.Control disabled value={car.licenseNumber} />
-                        </Form.Group>
-
-                        <Form.Group as={Col} controlId="formGridLocation">
-                            <Form.Label>Location</Form.Label>
-                            <Form.Control disabled value={car.location} />
-                        </Form.Group>
-                    </Form.Row>
-                    
-
+                    <h3>Details of {car.carMake} {car.carModel}</h3>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridSeats">
                             <Form.Label>Number of seats</Form.Label>
@@ -105,6 +92,24 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                         <Form.Group as={Col} controlId="formGridYear">
                             <Form.Label>Year</Form.Label>
                             <Form.Control disabled value={car.year.toString()} />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridLicense">
+                            <Form.Label>Price</Form.Label>
+                            <Form.Control disabled defaultValue={car.price} />
+                        </Form.Group>
+                    </Form.Row>
+                    
+
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="formGridLicense">
+                            <Form.Label>License</Form.Label>
+                            <Form.Control disabled value={car.licenseNumber} />
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridLocation">
+                            <Form.Label>Location</Form.Label>
+                            <Form.Control disabled value={car.location} />
                         </Form.Group>
                     </Form.Row>
 

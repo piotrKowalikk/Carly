@@ -5,10 +5,13 @@ import { Container, Form, Button, Col, ButtonToolbar, Row } from 'react-bootstra
 import { Car } from '../../Models/Car';
 import { IApplicationState } from '../../redux/rootReducer';
 import { editCarAction } from '../../redux/cars/actions/editCarAction';
+import { selectCarAction } from '../../redux/cars/actions/selectCarAction';
+
 
 interface ICarsEditProps extends RouteComponentProps {
     car: Car;
     carEdit: typeof editCarAction;
+    selectCar: typeof selectCarAction;
 }
 
 interface ICarsEditState {
@@ -16,6 +19,7 @@ interface ICarsEditState {
     licenseNumber: string;
     seats: number;
     location: string;
+    price: number;
 }
 class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
     constructor(props) {
@@ -25,6 +29,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
             seats: this.props.car.seats,
             location: this.props.car.location,
             licenseNumber: this.props.car.licenseNumber,
+            price: this.props.car.price,
         }
     }
 
@@ -41,6 +46,10 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         this.setState({ licenseNumber: e.target.value });
     }
 
+    PriceChanged = (e) => {
+        this.setState({ price: e.target.value });
+    }
+
     componentDidMount() {
         console.log(this.state);
     }
@@ -53,8 +62,8 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         exampleCarEdit.licenseNumber = this.state.licenseNumber;
         console.log(exampleCarEdit);
         //this.props.carEdit(this.state.car);
+       // this.props.selectCar(exampleCarEdit);
         this.props.carEdit(exampleCarEdit);
-        
         this.props.history.push('/cars');
 
     }
@@ -102,12 +111,17 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
                             </Form.Group>
                         </Form.Row>
 
-                        <Form.Group controlId="formGridLocation">
-                            <Form.Label>Location</Form.Label>
-                            <Form.Control defaultValue={car.location} onChange={this.LocationChanged} />
-                        </Form.Group>
+                        <Form.Row>
+                            <Form.Group as={Col} controlId="formGridLocation">
+                                <Form.Label>Location</Form.Label>
+                                <Form.Control defaultValue={car.location} onChange={this.LocationChanged} />
+                            </Form.Group>
 
-
+                            <Form.Group as={Col} controlId="formGridLicense">
+                                <Form.Label>Price</Form.Label>
+                                <Form.Control type="number" defaultValue={car.price} onChange={this.PriceChanged}/>
+                            </Form.Group>
+                        </Form.Row>
                         <Button variant="primary" type="submit" onClick={this.editCar} >
                             Save
                         </Button>
