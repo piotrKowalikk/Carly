@@ -20,20 +20,20 @@ VALUES (1004,'email4@email','plain-text-password');
 
 -- Add inital cars
 INSERT INTO public.cars(
-    id, make, licence, location, model, seats, year)
-VALUES (1001,'Marka1',  'WK2645', 'Warszawa, Al.Jerezolimskie 34','SuperModel' , 4, 2017);
+    id, make, licence, location, model, seats, year,is_active,price)
+VALUES (1001,'Marka1',  'WK2645', 'Warszawa, Al.Jerezolimskie 34','SuperModel' , 4, 2017,'t',100);
 
 INSERT INTO public.cars(
-    id,make, licence, location, model, seats, year)
-VALUES ( 1002,'Marka2',  'WK2645', 'Warszawa, Al.Jerezolimskie 35','SuperModel2' , 5, 2014);
+    id,make, licence, location, model, seats, year,is_active,price)
+VALUES ( 1002,'Marka2',  'WK2645', 'Warszawa, Al.Jerezolimskie 35','SuperModel2' , 5, 2014,TRUE,100);
 
 INSERT INTO public.cars(
-    id, make, licence, location, model, seats, year)
-VALUES (1003,'Marka3',  'WK2645', 'Lublin, Al.Jerezolimskie 36','SuperModel3' , 5, 2016);
+    id, make, licence, location, model, seats, year,is_active,price)
+VALUES (1003,'Marka3',  'WK2645', 'Lublin, Al.Jerezolimskie 36','SuperModel3' , 5, 2016,TRUE,100);
 
 INSERT INTO public.cars(
-    id, make, licence, location, model, seats, year)
-VALUES ( 1004,'Marka4',  'WK2645', 'Radom, Al.Jerezolimskie 37','SuperModel4' , 2, 2015);
+    id, make, licence, location, model, seats, year,is_active,price)
+VALUES ( 1004,'Marka4',  'WK2645', 'Radom, Al.Jerezolimskie 37','SuperModel4' , 2, 2015,TRUE,100);
 
 
 -- Add initial BookingUserInfos
