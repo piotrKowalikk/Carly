@@ -1,12 +1,9 @@
 package pw.react.carly.car;
 
 
-import pw.react.carly.bookingUserInfo.BookingUserInfo;
-import pw.react.carly.car.Car;
-
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
-import java.util.Date;
+import java.math.BigDecimal;
 
 @StaticMetamodel(Car.class)
 public class Car_ {
@@ -17,6 +14,7 @@ public class Car_ {
     public static volatile SingularAttribute<Car,Integer> year;
     public static volatile SingularAttribute<Car, String> licence;
     public static volatile SingularAttribute<Car,String> location;
-
+    public static volatile SingularAttribute<Car,Boolean> isActive;
+    public static volatile SingularAttribute<Car, BigDecimal> price;
 
 }

@@ -9,16 +9,12 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pw.react.carly.status.Status;
 import pw.react.carly.status.StatusRepository;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.List;
 
 import static pw.react.carly.car.CarSpecification.*;
-import static pw.react.carly.status.StatusSpecifications.colidesWithDateSpan;
-import static pw.react.carly.status.StatusSpecifications.isUnavailableOrBooked;
 
 
 @RestController
@@ -47,6 +43,7 @@ public class CarController {
             //pomijany jesli nie okreslimy dat
             @RequestParam(required = false,name="available", defaultValue = "true") Boolean available,
             @RequestParam(required = false, name="getall", defaultValue = "false") Boolean getAll,
+            @RequestParam(required = false, name="markAvailability", defaultValue = "false") Boolean markAvailability,
             Pageable pageable
     ){
 
@@ -58,13 +55,14 @@ public class CarController {
         if(make!= null)
             spec = spec.and(byMake(make));
         if(from != null && to != null){
-            List<Status> statuses = statusRepository.findAll(
-                            isUnavailableOrBooked().and(colidesWithDateSpan(from,to)));
-            Specification<Car> availabilitySpec = available ? isNotDeniedByStatuses(statuses) : isDeniedByStatuses(statuses);
+            Specification<Car> availabilitySpec = carService.getAvailabilitySpec(from,to,available);
             spec = spec.and(availabilitySpec);
         }
+        //zwroc tylko aktywne(nie usuniete) auta
+        spec = spec.and(isActive(true));
         if(getAll)
-            pageable= PageRequest.of(0, Integer.MAX_VALUE);
+            pageable= PageRequest.of(0, Integer.MAX_VALUE, pageable.getSort());
+
         return carRepository.findAll(spec,pageable);
     }
 

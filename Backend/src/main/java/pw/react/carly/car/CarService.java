@@ -2,6 +2,7 @@ package pw.react.carly.car;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import pw.react.carly.status.Status;
@@ -11,6 +12,8 @@ import pw.react.carly.status.StatusService;
 import java.util.Date;
 import java.util.List;
 
+import static pw.react.carly.car.CarSpecification.isDeniedByStatuses;
+import static pw.react.carly.car.CarSpecification.isNotDeniedByStatuses;
 import static pw.react.carly.status.StatusSpecifications.*;
 
 
@@ -37,10 +40,17 @@ public class CarService {
 
     public Car deleteCar(Car car){
         if(carRepository.existsById(car.getId())) {
-            carRepository.delete(car);
+            car.setActive(false);
+            carRepository.save(car);
             return car;
         }
         throw new ResourceNotFoundException("Car not found");
+    }
+
+    public Specification<Car> getAvailabilitySpec(Date from,Date to,boolean available){
+        List<Status> statuses = statusRepository.findAll(
+                isUnavailableOrBooked().and(colidesWithDateSpan(from,to)));
+        return available ? isNotDeniedByStatuses(statuses) : isDeniedByStatuses(statuses);
     }
 
     public boolean checkIfAvailable(Car car, Date from, Date to){
