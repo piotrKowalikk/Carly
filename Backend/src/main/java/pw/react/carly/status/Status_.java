@@ -2,8 +2,6 @@ package pw.react.carly.status;
 
 import pw.react.carly.bookingUserInfo.BookingUserInfo;
 import pw.react.carly.car.Car;
-import pw.react.carly.status.Status;
-import pw.react.carly.status.StatusType;
 
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
@@ -18,6 +16,7 @@ public class Status_ {
     public static volatile SingularAttribute<Status, Date> dateTo;
     public static volatile SingularAttribute<Status, StatusType> type;
     public static volatile SingularAttribute<Status,String> comment;
+    public static volatile SingularAttribute<Status,Date> createdAt;
 
 
 }

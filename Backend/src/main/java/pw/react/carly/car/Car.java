@@ -1,6 +1,10 @@
 package pw.react.carly.car;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity(name = "Cars")
@@ -9,15 +13,30 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String model;
+    @NotNull
     private String make;
+    @NotNull
     private int seats;
+    @NotNull
     private int year;
+    @NotNull
     private String licence;
+    @NotNull
     private String location;
+    @NotNull
+    @DecimalMin(value = "0.0", inclusive = true)
     private BigDecimal price;
-    public Car() {
+    @JsonIgnore
+    private boolean isActive;
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     public Car(String model, String make, int seats, int year, String licence, String location, BigDecimal price) {
@@ -28,6 +47,11 @@ public class Car {
         this.licence = licence;
         this.location = location;
         this.price = price;
+        this.isActive = true;
+    }
+
+    public Car(){
+        this.isActive = true;
     }
 
     public BigDecimal getPrice() {

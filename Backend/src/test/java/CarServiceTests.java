@@ -4,11 +4,13 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import pw.react.carly.CarlyApplication;
 import pw.react.carly.bookingUserInfo.BookingUserInfo;
 import pw.react.carly.car.Car;
 import pw.react.carly.car.CarRepository;
+import pw.react.carly.car.CarService;
 import pw.react.carly.status.Status;
 import pw.react.carly.status.StatusRepository;
 import pw.react.carly.status.StatusType;
@@ -25,10 +27,13 @@ import static pw.react.carly.car.CarSpecification.isNotDeniedByStatuses;
 
 @RunWith(SpringRunner.class)
 @Transactional
+@ActiveProfiles("test")
 @SpringBootTest(classes = CarlyApplication.class, properties = {"spring.datasource.initialization-mode=never"})
-public class CarServiceUnitTests {
+public class CarServiceTests {
 
 
+    @Autowired
+    private CarService carService;
     @Autowired
     private CarRepository carRepository;
     @Autowired
@@ -64,10 +69,57 @@ public class CarServiceUnitTests {
             statusRepository.save(status);
         }
     }
+//    @Test
+//    public void getAvailabilitySpec_givenDates_returnAvailableCars(){
+//        List<Status> statuses = new ArrayList<Status>();
+//        List<Car> cars = (List<Car>) carRepository.findAll();
+//        BookingUserInfo bookingUserInfo = new BookingUserInfo("test","test","email@email.com");
+//        int statusAmount = 10;
+//        statusRepository.deleteAll();
+//        //init status data
+//        for(int j = 0 ; j < 10 ; j++){
+//            Calendar cal =Calendar.getInstance();
+//
+//            cal.add(Calendar.DATE,j);
+//            Date from = cal.getTime();
+//            cal.add(Calendar.DATE,j+1);
+//            Date to = cal.getTime();
+//
+//            StatusType type;
+//            type = j % 2 ==0 ? StatusType.BOOKED : StatusType.UNAVAILABLE;
+//            Status status = new Status(cars.get(j % (cars.size()/2)), bookingUserInfo, null, null,from , to,type);
+//            statuses.add(status);
+//        }
+//        Calendar cal =Calendar.getInstance();
+//        Date from = cal.getTime();
+//        cal.add(Calendar.DATE,6);
+//        Date to = cal.getTime();
+//
+//        Specification<Car> spec = carService.getAvailabilitySpec(from,to,true);
+//        Iterable<Car> availableCars = carRepository.findAll(spec);
+//        for(Car availableCar : availableCars){
+//            for(Status status : statuses) {
+//                assertEquals( false,status.getCar().equals(availableCar));
+//            }
+//            //prepare not available cars list
+//            cars.remove(availableCar);
+//        }
+//        List<Car> deniedCars = cars;
+//        boolean wasFound;
+//
+//        for(Car car : deniedCars){
+//            wasFound = false;
+//            for(Status status : statuses) {
+//                if(status.getCar().equals(car))
+//                    wasFound = true;
+//            }
+//            assertEquals(true,wasFound);
+//        }
+//    }
 
 
     @Test
-    public void isNotDeniedByStatusesSpec_givenListOfStatuses_returnsAvailableCars() throws Exception {
+    public void isNotDeniedByStatusesSpec_givenListOfStatuses_returnsAvailableCars(){
         List<Status> statuses = new ArrayList<Status>();
         List<Car> cars = (List<Car>) carRepository.findAll();
         BookingUserInfo bookingUserInfo = new BookingUserInfo("test","test","email@email.com");

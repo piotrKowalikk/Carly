@@ -35,6 +35,13 @@ public class CarSpecification {
     public static Specification<Car> isDeniedByStatuses(List<Status> statuses){
         return Specification.not(isNotDeniedByStatuses(statuses));
     }
+    public static Specification<Car> isActive(boolean isActive){
+        return (root,query,criteriaBuilder) -> {
+            return criteriaBuilder.equal(root.get(Car_.isActive),isActive);
+        };
+    }
+
+
 
 
 

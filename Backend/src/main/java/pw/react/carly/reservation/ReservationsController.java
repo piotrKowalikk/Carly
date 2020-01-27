@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pw.react.carly.status.StatusService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -18,14 +19,18 @@ public class ReservationsController {
         this.statusService = statusService;
 
     }
-
     @GetMapping("/{id}")
-    public ResponseEntity GetReservation(@PathVariable("id") Long id){
+    public ResponseEntity getReservation(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(statusService.getReservation(id));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity cancelReservation(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(statusService.cancelReservation(id));
+    }
+
     @PostMapping
-    public ResponseEntity PostReservation(@RequestBody @NotNull ReservationData reservationData){
+    public ResponseEntity postReservation(@RequestBody @NotNull @Valid ReservationData reservationData){
         return ResponseEntity.ok().body(statusService.saveReservation(reservationData).getId());
     }
 }

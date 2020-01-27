@@ -50,7 +50,7 @@ public class StatusController {
         if(carID != null)
             spec = spec.and(byCarId(carID));
         if(getAll)
-            pageable = PageRequest.of(0,Integer.MAX_VALUE);
+            pageable = PageRequest.of(0,Integer.MAX_VALUE,pageable.getSort());
 
         return (statusRepository.findAll(spec,pageable));
     }
@@ -69,8 +69,7 @@ public class StatusController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Status> addStatus(@RequestBody @Valid Status status) {
-            status.setCreatedAt(new Date());
-            return ResponseEntity.ok().body(statusRepository.save(status));
+    public ResponseEntity<Status> addStatus(@RequestBody @Valid StatusDTO statusDTO) {
+            return ResponseEntity.ok().body(statusService.saveStatus(statusDTO));
     }
 }
