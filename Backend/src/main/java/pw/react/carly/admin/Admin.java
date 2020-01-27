@@ -15,6 +15,7 @@ public class Admin {
     @NotNull
     @Email
     private String email;
+    @NotNull
     @Column
     private String password;
 

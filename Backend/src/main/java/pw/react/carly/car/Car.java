@@ -1,6 +1,10 @@
 package pw.react.carly.car;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity(name = "Cars")
@@ -9,11 +13,17 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotNull
     private String model;
+    @NotNull
     private String make;
+    @NotNull
     private int seats;
+    @NotNull
     private int year;
+    @NotNull
     private String licence;
+    @NotNull
     private String location;
     private BigDecimal price;
     public Car() {
