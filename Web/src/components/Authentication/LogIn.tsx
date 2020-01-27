@@ -108,7 +108,7 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
         else
             this.setState({
                 loading: false,
-                error: "Bad email or pasasword"
+                error: "Bad email or password"
             })
     }
 
