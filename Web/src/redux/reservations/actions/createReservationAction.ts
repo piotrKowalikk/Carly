@@ -10,13 +10,10 @@ export const createReservationAction = (reservation: Reservation) => {
         try {
             var response = await axios.post(postReservation(),
                 {
-                    car : reservation.carData,
-                    bookingUserInfo : reservation.name,
+                    carId: reservation.carData,
                     comment: reservation.comment,
-                    createdAt : Date.now,
-                    dateFrom : reservation.dateFrom,
-                    dateTo : reservation.dateTo,
-                    type : reservation.type,
+                    dateFrom: reservation.dateFrom,
+                    dateTo: reservation.dateTo
                 },
                 {
                     headers: {

@@ -25,6 +25,9 @@ export class Reservation {
         this.dateTo = data.dateTo ?? null;
         this.type = data.type ?? null;
         this.carData = data.carData ?? null;
+        if (this.type && this.type.toString() == 'UNAVAILABLE') {
+            this.name = "Admin";
+        }
     }
 
     static parseData(data: any) {

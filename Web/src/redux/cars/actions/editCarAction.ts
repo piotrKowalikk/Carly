@@ -7,21 +7,13 @@ import { store } from '../../store';
 export const editCarAction = (car: Car) => {
     return async dispatch => {
         try {
-
-            // dispatch({
-            //     type: CarActionTypes.LOADING,
-            //     payload: {
-            //         isLoading: true,
-            //     }
-            // });
-            //       await delay(2000);
-
             var response = await axios.put(postCar(),
                 {
                     id: car.id,
                     model: car.carModel,
                     make: car.carMake,
                     seats: car.seats,
+                    price: car.price,
                     year: car.year,
                     licence: car.licenseNumber,
                     location: car.location
@@ -34,7 +26,7 @@ export const editCarAction = (car: Car) => {
                         'Authorization': store.getState().authorize.token
                     },
                 });
-                
+
             dispatch(successHandle(response.data));
         }
         catch (error) {

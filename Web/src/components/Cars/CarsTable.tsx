@@ -2,7 +2,7 @@ import * as React from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
-import { Link } from 'react-router-dom';
+import { Link, withRouter, RouteComponentProps } from 'react-router-dom';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
@@ -16,7 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import Tooltip from '@material-ui/core/Tooltip';
 import { connect } from 'react-redux';
-import { Container, Alert, Spinner } from 'react-bootstrap';
+import { Container, Alert, Spinner, Button } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { fetchCars } from '../../redux/cars/actions/fetchCars';
 import { IApplicationState } from '../../redux/rootReducer';
@@ -102,7 +102,7 @@ const useStyles = makeStyles(() => ({
 
 }));
 
-interface IEnhancedTableCarsProps {
+interface IEnhancedTableCarsProps extends RouteComponentProps {
     data: Car[];
     isLoading: boolean;
     fetchCars: typeof fetchCars;
@@ -202,13 +202,11 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                                         <TableCell >{row.carModel}</TableCell>
                                                         <TableCell >{row.location}</TableCell>
                                                         <TableCell title='edit this car'>
-                                                            <Link to="/car-details">
-                                                                <Tooltip title="Car details">
-                                                                    <IconButton aria-label="car deatils" onClick={() => props.selectCar(row)}>
-                                                                        <DriveEta color='primary' />
-                                                                    </IconButton>
-                                                                </Tooltip>
-                                                            </Link>
+                                                            <Tooltip title="Car details">
+                                                                <IconButton aria-label="car deatils " onClick={async () => { await props.selectCar(row); props.history.push('/car-details'); }} >
+                                                                    <DriveEta color='primary' />
+                                                                </IconButton>
+                                                            </Tooltip>
                                                         </TableCell>
                                                     </TableRow>
                                                 );
@@ -234,7 +232,7 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                     </div>
                 }
             </Container>
-        </div>
+        </div >
     );
 }
 
@@ -242,7 +240,7 @@ const mapStateToProps = ({ cars }: IApplicationState) => {
     return {
         data: cars.cars,
         error: cars.errorMessage,
-        isLoading : cars.isLoading
+        isLoading: cars.isLoading
     }
 }
 const mapDispatchToProps = (dispatch) => ({
@@ -255,4 +253,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(EnhancedTableCars);
+)(withRouter(EnhancedTableCars));
