@@ -69,53 +69,6 @@ public class CarServiceTests {
             statusRepository.save(status);
         }
     }
-//    @Test
-//    public void getAvailabilitySpec_givenDates_returnAvailableCars(){
-//        List<Status> statuses = new ArrayList<Status>();
-//        List<Car> cars = (List<Car>) carRepository.findAll();
-//        BookingUserInfo bookingUserInfo = new BookingUserInfo("test","test","email@email.com");
-//        int statusAmount = 10;
-//        statusRepository.deleteAll();
-//        //init status data
-//        for(int j = 0 ; j < 10 ; j++){
-//            Calendar cal =Calendar.getInstance();
-//
-//            cal.add(Calendar.DATE,j);
-//            Date from = cal.getTime();
-//            cal.add(Calendar.DATE,j+1);
-//            Date to = cal.getTime();
-//
-//            StatusType type;
-//            type = j % 2 ==0 ? StatusType.BOOKED : StatusType.UNAVAILABLE;
-//            Status status = new Status(cars.get(j % (cars.size()/2)), bookingUserInfo, null, null,from , to,type);
-//            statuses.add(status);
-//        }
-//        Calendar cal =Calendar.getInstance();
-//        Date from = cal.getTime();
-//        cal.add(Calendar.DATE,6);
-//        Date to = cal.getTime();
-//
-//        Specification<Car> spec = carService.getAvailabilitySpec(from,to,true);
-//        Iterable<Car> availableCars = carRepository.findAll(spec);
-//        for(Car availableCar : availableCars){
-//            for(Status status : statuses) {
-//                assertEquals( false,status.getCar().equals(availableCar));
-//            }
-//            //prepare not available cars list
-//            cars.remove(availableCar);
-//        }
-//        List<Car> deniedCars = cars;
-//        boolean wasFound;
-//
-//        for(Car car : deniedCars){
-//            wasFound = false;
-//            for(Status status : statuses) {
-//                if(status.getCar().equals(car))
-//                    wasFound = true;
-//            }
-//            assertEquals(true,wasFound);
-//        }
-//    }
 
 
     @Test

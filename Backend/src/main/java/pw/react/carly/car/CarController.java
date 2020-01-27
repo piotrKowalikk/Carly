@@ -43,7 +43,7 @@ public class CarController {
             //pomijany jesli nie okreslimy dat
             @RequestParam(required = false,name="available", defaultValue = "true") Boolean available,
             @RequestParam(required = false, name="getall", defaultValue = "false") Boolean getAll,
-            @RequestParam(required = false, name="markAvailability", defaultValue = "false") Boolean markAvailability,
+            @RequestParam(required = false,name="onlyActive", defaultValue = "true") Boolean onlyActive,
             Pageable pageable
     ){
 
@@ -58,8 +58,8 @@ public class CarController {
             Specification<Car> availabilitySpec = carService.getAvailabilitySpec(from,to,available);
             spec = spec.and(availabilitySpec);
         }
-        //zwroc tylko aktywne(nie usuniete) auta
-        spec = spec.and(isActive(true));
+        if(onlyActive)
+            spec = spec.and(isActive(true));
         if(getAll)
             pageable= PageRequest.of(0, Integer.MAX_VALUE, pageable.getSort());
 
