@@ -46,8 +46,9 @@ public class BookingUserInfoService {
         }
         else {
             boolean infoAlreadyInDb = false;
+
             for (BookingUserInfo info : infosFound) {
-                //TODO zamienic na mapper DTO -> domain  bo to jest brzydzkie af
+                //CHECK IF MATCHES
                 if (info.getEmail().equals(email) && info.getName().equals(name) && info.getSurname().equals(surname)) {
                     entity = info;
                     infoAlreadyInDb = true;

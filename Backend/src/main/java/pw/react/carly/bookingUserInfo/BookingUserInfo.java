@@ -2,6 +2,7 @@ package pw.react.carly.bookingUserInfo;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -10,11 +11,12 @@ public class BookingUserInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	@NotNull
+	@NotBlank
 	private String name;
-	@NotNull
+	@NotBlank
 	private String surname;
 	@Email
+	@NotNull
 	private String email;
 
     public BookingUserInfo() {

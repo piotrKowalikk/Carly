@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -13,17 +14,17 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotNull
+    @NotBlank
     private String model;
-    @NotNull
+    @NotBlank
     private String make;
     @NotNull
     private int seats;
     @NotNull
     private int year;
-    @NotNull
+    @NotBlank
     private String licence;
-    @NotNull
+    @NotBlank
     private String location;
     @NotNull
     @DecimalMin(value = "0.0", inclusive = true)
