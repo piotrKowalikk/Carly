@@ -15,7 +15,8 @@ export const createCarAction = (car: Car) => {
                     seats: car.seats,
                     year: car.year,
                     licence: car.licenseNumber,
-                    location: car.location
+                    location: car.location,
+                    price: car.price,
                 },
                 {
                     headers: {

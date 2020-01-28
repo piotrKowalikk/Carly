@@ -138,6 +138,7 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
         car.location = this.state.location;
         car.seats = this.state.seats;
         car.year = this.state.year;
+        car.price = this.state.price;
         
         //expected
         await this.props.createCar(car);

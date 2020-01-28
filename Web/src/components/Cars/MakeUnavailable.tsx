@@ -52,7 +52,6 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
         reservation.comment = this.state.comment;
         reservation.dateFrom = this.state.dateFrom;
         reservation.dateTo = this.state.dateTo;
-
         await this.props.createReservation(reservation);
 
     }
