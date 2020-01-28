@@ -28,8 +28,13 @@ public class CarSpecification {
 
     public static Specification<Car> isNotDeniedByStatuses(List<Status> statuses){
         return (root,query,criteriaBuilder) -> {
-            List<Long>  unavailableCarsIds  = statuses.stream().map((el) -> el.getCar().getId()).collect(Collectors.toList());
-            return criteriaBuilder.in(root.get("id")).value(unavailableCarsIds).not();
+            if(statuses == null || statuses.isEmpty()){
+                //always true predicate
+                return criteriaBuilder.conjunction();
+            }else{
+                List<Long>  unavailableCarsIds  = statuses.stream().map((el) -> el.getCar().getId()).collect(Collectors.toList());
+                return criteriaBuilder.in(root.get("id")).value(unavailableCarsIds).not();
+            }
         };
     }
     public static Specification<Car> isDeniedByStatuses(List<Status> statuses){
