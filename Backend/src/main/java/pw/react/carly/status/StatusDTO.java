@@ -17,11 +17,11 @@ public class StatusDTO {
     @NotNull
     private Date dateTo;
 
-    @NotNull
+
     @Enumerated(EnumType.STRING)
     private StatusType type;
 
-    public StatusDTO(@NotNull Long carId, Long bookingUserInfoId, String comment, @NotNull Date dateFrom, @NotNull Date dateTo, @NotNull StatusType type) {
+    public StatusDTO(@NotNull Long carId, Long bookingUserInfoId, String comment, @NotNull Date dateFrom, @NotNull Date dateTo, StatusType type) {
         this.carId = carId;
         this.bookingUserInfoId = bookingUserInfoId;
         this.comment = comment;
