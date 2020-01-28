@@ -12,8 +12,8 @@ export const createReservationAction = (reservation: Reservation) => {
                 {
                     carId: reservation.carData,
                     comment: reservation.comment,
-                    dateFrom: reservation.dateFrom,
-                    dateTo: reservation.dateTo
+                    dateFrom: reservation.dateFrom.toISOString(),
+                    dateTo: reservation.dateTo.toISOString()
                 },
                 {
                     headers: {

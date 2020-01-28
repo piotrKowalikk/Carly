@@ -1,5 +1,6 @@
 package pw.react.carly.status;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import pw.react.carly.bookingUserInfo.BookingUserInfo;
 import pw.react.carly.car.Car;
 
@@ -23,9 +24,11 @@ public class Status {
     private Date createdAt;
 
     @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date dateFrom;
 
     @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private Date dateTo;
 
     @NotNull
