@@ -17,6 +17,7 @@ import pw.react.carly.car.CarService;
 import pw.react.carly.reservation.ReservationData;
 import pw.react.carly.reservation.ReservationInfo;
 
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -45,9 +46,7 @@ public class StatusService {
     public Status saveReservation(ReservationData reservationData){
         long carId = reservationData.getCarId();
         Car car = carService.getCar(carId);
-
-
-        if(reservationData.getFromDate().before(new Date()) || reservationData.getFromDate().after(reservationData.getToDate()))
+        if(!checkIfCorrectDate(reservationData.getFromDate(),reservationData.getToDate()))
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Wrong date");
 
@@ -73,8 +72,17 @@ public class StatusService {
         throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "Status not found.");
     }
+    private boolean checkIfCorrectDate(Date from,Date to){
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.MINUTE, (-5));
+        Date currentDateToCompare = cal.getTime();
+        if(from.before(currentDateToCompare) || from.after(to))
+                    return false;
+        return true;
+    }
+
     public Status saveStatus(StatusDTO statusDTO){
-        if(statusDTO.getDateFrom().before(new Date()) || statusDTO.getDateFrom().after(statusDTO.getDateTo()))
+        if(!checkIfCorrectDate(statusDTO.getDateFrom(),statusDTO.getDateTo()))
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Wrong date");
 
