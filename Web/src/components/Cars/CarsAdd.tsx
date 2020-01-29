@@ -174,17 +174,16 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                 <Form style={style}>
 
                     <Form.Row>
+                        <Form.Group as={Col} controlId="formGridCarMake">
+                            <Form.Label>Car Make</Form.Label>
+                            <Form.Control type="text" onChange={this.CarMakeChanged} />
+                            <Form.Text style={{ color: 'red' }} >{this.state.carMakeError}</Form.Text>
+                        </Form.Group>
                         <Form.Group as={Col} controlId="formGridModel">
                             <Form.Label>Model</Form.Label>
                             <Form.Control type="text" onChange={this.ModelChanged} />
                             <Form.Text style={{ color: 'red' }} >{this.state.carModelError}</Form.Text>
                      
-                        </Form.Group>
-
-                        <Form.Group as={Col} controlId="formGridCarMake">
-                            <Form.Label>Car Make</Form.Label>
-                            <Form.Control type="text" onChange={this.CarMakeChanged} />
-                            <Form.Text style={{ color: 'red' }} >{this.state.carMakeError}</Form.Text>
                         </Form.Group>
                     </Form.Row>
 
