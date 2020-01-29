@@ -21,7 +21,8 @@ class Reservations extends Component<any,any> {
         this.state = {
             car: car,
             isFetching: true,
-            reservations: []
+            reservations: [],
+            fetchedProperly: true
         }
     }
 
@@ -37,14 +38,16 @@ class Reservations extends Component<any,any> {
             .then(response => {
                 if (response.status === 200) {
                     response.json().then(data => {
-                        this.setState({ reservations: data.content, isFetching: false });
+                        this.setState({ reservations: data.content, isFetching: false, fetchedProperly: true });
                     })
                 }
                 else {
-                    console.error(response.status);
+                    this.setState({ fetchedProperly: false, isFetching: false });
                 }
             })
-            .catch((error) => console.error(error));
+            .catch(() => {
+                this.setState({ fetchedProperly: false, isFetching: false });
+            });
     }
 
     renderItem = ({item}) => (
@@ -77,7 +80,7 @@ class Reservations extends Component<any,any> {
     }
 
     render() {
-        const { reservations, isFetching } = this.state;
+        const { reservations, isFetching, fetchedProperly } = this.state;
 
         return (
             <View style={styles.container}>
@@ -88,6 +91,20 @@ class Reservations extends Component<any,any> {
                     renderItem={this.renderItem}
                     onRefresh={this.fetchData}
                     refreshing={isFetching}
+                    ListHeaderComponent={fetchedProperly ? (reservations.length > 0 ? null :
+                        <ListItem
+                          leftIcon={{ type: 'material-icons', color: "#B22222", name: 'error-outline' }}
+                          title={"No reservations for this car!"}
+                          titleStyle={{ fontSize: 16, color: "#B22222" }}
+                          bottomDivider
+                        />)
+                        :
+                        <ListItem
+                            leftIcon={{ type: 'material-icons', color: "#B22222", name: 'error-outline' }}
+                            title={"Unable to fetch data from the server!"}
+                            titleStyle={{ fontSize: 16, color: "#B22222" }}
+                            bottomDivider
+                        />}
                 />
                 }
             </View>

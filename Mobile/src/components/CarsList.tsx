@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList, Text } from 'react-native';
 import { ListItem } from 'react-native-elements';
 
 class CarsList extends Component<any,any> {
@@ -13,7 +13,8 @@ class CarsList extends Component<any,any> {
 
       this.state = {
          isFetching: true,
-         cars: []
+         cars: [],
+         fetchedProperly: true
       }
    }
 
@@ -29,14 +30,16 @@ class CarsList extends Component<any,any> {
          .then(response => {
             if (response.status === 200) {
                response.json().then(data => {
-                  this.setState({ cars: data.content,  isFetching: false });
+                  this.setState({ cars: data.content, isFetching: false, fetchedProperly: true });
                })
             }
             else {
-               console.error(response.status);
+               this.setState({ fetchedProperly: false, isFetching: false });
             }
          })
-         .catch((error) => console.error(error));
+         .catch(() => {
+            this.setState({ fetchedProperly: false, isFetching: false });
+         });
    }
 
    renderItem = ({item}) => (
@@ -53,7 +56,7 @@ class CarsList extends Component<any,any> {
    );
 
    render() {
-      const { cars, isFetching } = this.state;
+      const { cars, isFetching, fetchedProperly } = this.state;
 
       return (
          <View style={styles.container}>
@@ -64,6 +67,13 @@ class CarsList extends Component<any,any> {
                   renderItem={this.renderItem}
                   onRefresh={this.fetchData}
                   refreshing={isFetching}
+                  ListHeaderComponent={fetchedProperly ? null :
+                     <ListItem
+                        leftIcon={{ type: 'material-icons', color: "#B22222", name: 'error-outline' }}
+                        title={"Unable to fetch data from the server!"}
+                        titleStyle={{ fontSize: 16, color: "#B22222" }}
+                        bottomDivider
+                     />}
                />
             }
          </View>
