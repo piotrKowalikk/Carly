@@ -51,31 +51,16 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
     }
 
     emailChanged = (e) => {
-        if (!this.ValidateEmail(e.target.value)) {
-            this.setState({
-                emailError: 'Incorrect email address.',
-                email: e.target.value
-            });
-            return;
-        } else {
-            this.setState({
-                emailError: '',
-                email: e.target.value
-            });
-        }
+        this.setState({
+            emailError: '',
+            email: e.target.value
+        });
     }
 
     passwordChanged = (e) => {
-        if (e.target.value.length < 3) {
-            this.setState({
-                password: e.target.value
-            });
-            return;
-        } else {
-            this.setState({
-                password: e.target.value
-            });
-        }
+        this.setState({
+            password: e.target.value
+        });
     }
 
     onSubmit = async (e) => {
@@ -102,7 +87,7 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             loading: true
         })
         var response = await this.props.submitUserCredentials(this.state.email, this.state.password);
-        
+
         if (response)
             this.props.history.push('/cars');
         else

@@ -18,7 +18,7 @@ const NavBar = (props: INavBarProps) => {
     return (
         <Navbar className="bg-dark justify-content-between">
             <Form inline>
-                <Link className='btn shadow-none' style={{ color: 'white' }} to="/">Home</Link>
+                {/* <Link className='btn shadow-none' style={{ color: 'white' }} to="/">Home</Link> */}
                 {props.isAuthorized &&
                     <div>
                         <Link className='btn shadow-none' style={{ color: 'white' }} to="/users">Users</Link>

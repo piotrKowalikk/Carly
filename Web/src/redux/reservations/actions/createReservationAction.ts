@@ -8,13 +8,16 @@ import { store } from '../../store';
 export const createReservationAction = (reservation: Reservation) => {
     return async dispatch => {
         try {
+            var data = {
+                carId: reservation.carData,
+                comment: reservation.comment,
+                dateFrom: reservation.dateFrom.toISOString(),
+                dateTo: reservation.dateTo.toISOString(),
+                type: 'UNAVAILABLE'
+            };
             var response = await axios.post(postReservation(),
-                {
-                    carId: reservation.carData,
-                    comment: reservation.comment,
-                    dateFrom: reservation.dateFrom.toISOString(),
-                    dateTo: reservation.dateTo.toISOString()
-                },
+                data
+                ,
                 {
                     headers: {
                         crossDomain: true,
@@ -23,7 +26,7 @@ export const createReservationAction = (reservation: Reservation) => {
                         'Authorization': store.getState().authorize.token
                     },
                 });
-            dispatch(successHandle(response.data));
+          //  dispatch(successHandle(response.data));
         }
         catch (error) {
             dispatch(errorHandle());
@@ -33,16 +36,6 @@ export const createReservationAction = (reservation: Reservation) => {
 
 function delay(ms: number) {
     return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-const successHandle = (data) => {
-    return {
-        type: ReservationActionTypes.GET_RESERVATIONS,
-        payload: {
-            reservation: Reservation.parseData(data),
-            errorMessage: null
-        }
-    }
 }
 
 const errorHandle = () => {

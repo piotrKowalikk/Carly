@@ -12,9 +12,11 @@ import { createReservationAction } from '../../redux/reservations/actions/create
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { IApplicationState } from '../../redux/rootReducer';
+import { selectCarAction } from '../../redux/cars/actions/selectCarAction';
 
 interface IReservationTableProps extends RouteComponentProps {
     createReservation: typeof createReservationAction;
+    selectCar: typeof selectCarAction;
     car: Car;
 }
 
@@ -53,6 +55,8 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
         reservation.dateFrom = this.state.dateFrom;
         reservation.dateTo = this.state.dateTo;
         await this.props.createReservation(reservation);
+        await this.props.selectCar(this.props.car);
+        this.props.history.push('/car-details');
 
     }
 
@@ -153,7 +157,8 @@ const mapStateToProps = ({ cars }: IApplicationState) => ({
     car: cars.selectedCar
 })
 const mapDispatchToProps = (dispatch) => ({
-    createReservation: (reservation) => dispatch(createReservationAction(reservation))
+    createReservation: (reservation) => dispatch(createReservationAction(reservation)),
+    selectCar: (car) => dispatch(selectCarAction(car))
 })
 
 export default connect(
