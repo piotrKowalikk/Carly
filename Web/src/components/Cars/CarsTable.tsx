@@ -20,7 +20,7 @@ import { Container, Alert, Spinner, Button } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { fetchCars } from '../../redux/cars/actions/fetchCars';
 import { IApplicationState } from '../../redux/rootReducer';
-import { cleanUpAction } from '../../redux/cars/actions/cleanUpAction';
+import { cleanUpCarsAction } from '../../redux/cars/actions/cleanUpCarsAction';
 import { AddBox, DriveEta } from '@material-ui/icons';
 import { selectCarAction } from '../../redux/cars/actions/selectCarAction';
 
@@ -106,7 +106,7 @@ interface IEnhancedTableCarsProps extends RouteComponentProps {
     data: Car[];
     isLoading: boolean;
     fetchCars: typeof fetchCars;
-    cleanupAction: typeof cleanUpAction;
+    cleanupAction: typeof cleanUpCarsAction;
     selectCar: typeof selectCarAction;
     error: string;
 }
@@ -245,7 +245,7 @@ const mapStateToProps = ({ cars }: IApplicationState) => {
 }
 const mapDispatchToProps = (dispatch) => ({
     fetchCars: () => dispatch(fetchCars()),
-    cleanupAction: () => dispatch(cleanUpAction()),
+    cleanupAction: () => dispatch(cleanUpCarsAction()),
     selectCar: (car: Car) => dispatch(selectCarAction(car))
 
 })

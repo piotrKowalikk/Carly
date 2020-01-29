@@ -20,7 +20,10 @@ const carsReducer: Reducer<ICarState, any> = (state = initialState, action) => {
         case CarActionTypes.LOADING: {
             return Object.assign({}, state, { ...state, isLoading: true })
         }
-        case CarActionTypes.CLEANUP: {
+        case CarActionTypes.CLEANUP_CARS: {
+            return Object.assign({}, state, { cars: [], errorMessage: null })
+        }
+        case CarActionTypes.CLEANUP_DETAILS: {
             return Object.assign({}, state, { cars: [], selectedCarReservations: [], errorMessage: null })
         }
         case CarActionTypes.DELETE_CAR: {
