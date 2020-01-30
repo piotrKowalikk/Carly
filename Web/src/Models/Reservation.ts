@@ -35,7 +35,7 @@ export class Reservation {
             data.content.forEach(x => {
                 if(x.type=='UNAVAILABLE')
                 {
-                    console.log('Dupa')
+                    // console.log('Dupa')
                 }
                 reservations.push(new Reservation(
                     {

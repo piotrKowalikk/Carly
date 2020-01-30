@@ -195,7 +195,7 @@ export function EnhancedTableReservation(props: IReservationsProps) {
                                                             <TableCell >{row.carData ?? ''}</TableCell>
                                                         }
                                                         <TableCell >{row.type ?? ''}</TableCell>
-                                                        <TableCell >{row.surname && row.name ? row.surname + ' ' + row.name : ''}</TableCell>
+                                                        <TableCell >{row.surname != null && row.name != null ? row.surname + ' ' + row.name : ''}</TableCell>
                                                         <TableCell >{row.email ?? ''}</TableCell>
                                                         <TableCell >{row.comment ?? ''}</TableCell>
                                                     </TableRow>

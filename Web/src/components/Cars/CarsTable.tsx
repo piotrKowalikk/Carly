@@ -64,7 +64,7 @@ function EnhancedTableHead(props) {
                     License number
                 </TableCell>
                 <TableCell key={'carMake'} style={{ width: '180px' }} sortDirection={orderBy === 'carMake' ? order : false}>
-                    <TableSortLabel active={orderBy === 'carMake'} direction={order} onClick={createSortHandler('year')}>
+                    <TableSortLabel active={orderBy === 'carMake'} direction={order} onClick={createSortHandler('carMake')}>
                         Car Make
                         </TableSortLabel>
                 </TableCell>
@@ -75,7 +75,9 @@ function EnhancedTableHead(props) {
                 </TableCell>
 
                 <TableCell key={'location'} >
-                    Location
+                    <TableSortLabel active={orderBy === 'location'} direction={order} onClick={createSortHandler('location')}>
+                        Location
+                        </TableSortLabel>
                 </TableCell>
                 <TableCell></TableCell>
             </TableRow>
@@ -194,7 +196,7 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((row: Car, index) => {
                                                 const isItemSelected = isSelected(row.id);
-
+                                                
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
                                                         <TableCell >{row.licenseNumber}</TableCell>

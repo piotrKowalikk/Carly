@@ -51,7 +51,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
     }
 
     componentDidMount() {
-        console.log(this.state);
+        // console.log(this.state);
     }
 
     editCar = (e) => {
@@ -61,7 +61,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         exampleCarEdit.seats = this.state.seats;
         exampleCarEdit.licenseNumber = this.state.licenseNumber;
         exampleCarEdit.price = this.state.price;
-        console.log(exampleCarEdit);
+        // console.log(exampleCarEdit);
         //this.props.carEdit(this.state.car);
         this.props.selectCar(exampleCarEdit);
         this.props.carEdit(exampleCarEdit);
