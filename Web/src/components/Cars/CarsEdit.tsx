@@ -10,6 +10,7 @@ import { selectCarAction } from '../../redux/cars/actions/selectCarAction';
 
 interface ICarsEditProps extends RouteComponentProps {
     car: Car;
+    isAuthorized: boolean;
     carEdit: typeof editCarAction;
     selectCar: typeof selectCarAction;
 }
@@ -70,6 +71,9 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
     }
 
     render() {
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/logIn');
+        }
         const car = this.state.car;
         const styleForm: React.CSSProperties = {
             position: 'fixed',
@@ -97,13 +101,13 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
                         <Form.Row>
                             <Form.Group controlId="formGridModel">
                                 <Form.Label><h4>{car.carMake}  {car.carModel}</h4></Form.Label>
-                             </Form.Group>
+                            </Form.Group>
                         </Form.Row>
 
                         <Form.Row>
                             <Form.Group as={Col} controlId="formGridSeats">
                                 <Form.Label>Number of seats</Form.Label>
-                                <Form.Control type="number" defaultValue={car.seats} onChange={this.SeatsChanged}  />
+                                <Form.Control type="number" defaultValue={car.seats} onChange={this.SeatsChanged} />
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridLicense">
@@ -120,7 +124,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
 
                             <Form.Group as={Col} controlId="formGridLicense">
                                 <Form.Label>Price</Form.Label>
-                                <Form.Control type="number" defaultValue={car.price} onChange={this.PriceChanged}/>
+                                <Form.Control type="number" defaultValue={car.price} onChange={this.PriceChanged} />
                             </Form.Group>
                         </Form.Row>
                         <Button variant="primary" type="submit" onClick={this.editCar} >
@@ -139,8 +143,9 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
     }
 }
 
-const mapStateToProps = ({ cars }: IApplicationState) => {
+const mapStateToProps = ({ cars, authorize }: IApplicationState) => {
     return {
+        isAuthorized: authorize.isAuthorized,
         car: cars.selectedCar
     };
 }

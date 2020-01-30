@@ -106,6 +106,7 @@ const useStyles = makeStyles(() => ({
 
 interface IEnhancedTableCarsProps extends RouteComponentProps {
     data: Car[];
+    isAuthorized: boolean;
     isLoading: boolean;
     fetchCars: typeof fetchCars;
     cleanupAction: typeof cleanUpCarsAction;
@@ -114,6 +115,10 @@ interface IEnhancedTableCarsProps extends RouteComponentProps {
 }
 
 const EnhancedTableCars = (props: IEnhancedTableCarsProps) => {
+    if (!props.isAuthorized) {
+        props.history.push('/logIn');
+        return (<div></div>);
+    }
 
     React.useEffect(() => {
         async function wrapper() {
@@ -238,8 +243,9 @@ const EnhancedTableCars = (props: IEnhancedTableCarsProps) => {
     );
 }
 
-const mapStateToProps = ({ cars }: IApplicationState) => {
+const mapStateToProps = ({ cars, authorize }: IApplicationState) => {
     return {
+        isAuthorized: authorize.isAuthorized,
         data: cars.cars,
         error: cars.errorMessage,
         isLoading: cars.isLoading

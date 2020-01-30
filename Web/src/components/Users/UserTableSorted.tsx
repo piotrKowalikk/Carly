@@ -24,6 +24,7 @@ import { fetchUsers } from '../../redux/users/actions/fetchUsers';
 import { DeleteOutline, AddBox, Edit } from '@material-ui/icons'
 import { cleanUpUsersAction } from '../../redux/users/actions/cleanUpUsersAction';
 import { removeUserAction } from '../../redux/users/actions/removeUserAction';
+import { RouteComponentProps } from 'react-router-dom';
 
 
 function desc(a, b, orderBy) {
@@ -103,7 +104,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-interface IEnhancedTableUsersProps {
+interface IEnhancedTableUsersProps extends RouteComponentProps {
+    isAuthorized: boolean;
     data: User[];
     error: string;
     isLoading: boolean;
@@ -113,14 +115,19 @@ interface IEnhancedTableUsersProps {
 }
 
 function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
-    
+
+    if (!props.isAuthorized) {
+        props.history.push('/logIn');
+        return (<div></div>);
+    }
+
     if (!props.error && props.data == null) {
-        props.fetchData();  
-            return (<Container style={{ textAlign: "center" }}>
-                <Spinner animation="border" role="status">
-                    <span className="sr-only">Loading...</span>
-                </Spinner>
-            </Container>)
+        props.fetchData();
+        return (<Container style={{ textAlign: "center" }}>
+            <Spinner animation="border" role="status">
+                <span className="sr-only">Loading...</span>
+            </Spinner>
+        </Container>)
     }
 
     React.useEffect(() => {
@@ -206,7 +213,7 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
                                     const labelId = `enhanced-table-checkbox-${index}`;
 
                                     return (
-                                        <TableRow key={row.title} hover selected={isItemSelected}>
+                                        <TableRow key={row.email} hover selected={isItemSelected}>
                                             {/* <TableCell >{row.name}</TableCell>
                                                         <TableCell >{row.lastName}</TableCell> */}
                                             <TableCell >{row.email}</TableCell>
@@ -247,11 +254,12 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
     );
 }
 
-const mapStateToProps = ({ users }: IApplicationState) => {
+const mapStateToProps = ({ users, authorize }: IApplicationState) => {
     return {
         isLoading: users.isLoading,
         error: users.errorMessage,
-        data: users.users
+        data: users.users,
+        isAuthorized: authorize.isAuthorized
     }
 }
 

@@ -18,6 +18,7 @@ interface IReservationTableProps extends RouteComponentProps {
     createReservation: typeof createReservationAction;
     selectCar: typeof selectCarAction;
     car: Car;
+    isAuthorized: boolean;
 }
 
 interface IReservationTableState {
@@ -80,6 +81,9 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
     }
 
     render() {
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/logIn');
+        }
         const { dateFrom, dateTo, comment } = this.state;
         const car = this.props.car;
         const styleForm: React.CSSProperties = {
@@ -153,8 +157,10 @@ class MakeUnavailable extends React.Component<IReservationTableProps, IReservati
     }
 }
 
-const mapStateToProps = ({ cars }: IApplicationState) => ({
-    car: cars.selectedCar
+const mapStateToProps = ({ cars, authorize }: IApplicationState) => ({
+    car: cars.selectedCar,
+    isAuthorized: authorize.isAuthorized
+
 })
 const mapDispatchToProps = (dispatch) => ({
     createReservation: (reservation) => dispatch(createReservationAction(reservation)),

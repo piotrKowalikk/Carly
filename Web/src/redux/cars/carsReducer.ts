@@ -15,7 +15,7 @@ const carsReducer: Reducer<ICarState, any> = (state = initialState, action) => {
     switch (action.type) {
         case CarActionTypes.GET_CARS: {
             const { errorMessage, cars } = action.payload;
-            return Object.assign({}, state, { ...state, cars, errorMessage, isLoading: false })
+            return Object.assign({}, state, { ...state, selectedCar: null, cars, selectedCarReservations: [], errorMessage, isLoading: false })
         }
         case CarActionTypes.LOADING: {
             return Object.assign({}, state, { ...state, isLoading: true })

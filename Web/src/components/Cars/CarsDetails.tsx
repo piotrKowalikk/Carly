@@ -15,6 +15,7 @@ import { getAllCarReservations } from '../../redux/.resources/apiURLs';
 import { cleanUpDetailsAction } from '../../redux/cars/actions/cleanUpDetails';
 
 interface ICarTableProps extends RouteComponentProps {
+    isAuthorized: boolean;
     removeCar: Function;
     car: Car;
     reservations: Reservation[];
@@ -47,6 +48,9 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     }
 
     render() {
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/logIn');
+        }
 
         const car = this.props.car;
         const styleForm: React.CSSProperties = {
@@ -141,8 +145,9 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     }
 }
 
-const mapStateToProps = ({ cars }: IApplicationState) => {
+const mapStateToProps = ({ cars, authorize }: IApplicationState) => {
     return {
+        isAuthorized: authorize.isAuthorized,
         car: cars.selectedCar,
         reservations: cars.selectedCarReservations
     }
