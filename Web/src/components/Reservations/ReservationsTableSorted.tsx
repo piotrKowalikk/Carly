@@ -190,7 +190,7 @@ export function EnhancedTableReservation(props: IReservationsProps) {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
-                                                        <TableCell >{row.dateFrom.getDate() + '-' + row.dateTo.toLocaleDateString('en-GB')}</TableCell>
+                                                        <TableCell >{row.dateFrom.getDate() + "/" + (row.dateFrom.getMonth() > 9 ? row.dateFrom.getMonth() + 1 : '0' + (row.dateFrom.getMonth() + 1)) + ' - ' + row.dateTo.toLocaleDateString('en-GB')}</TableCell>
                                                         {props.showCarData &&
                                                             <TableCell >{row.carData ?? ''}</TableCell>
                                                         }
