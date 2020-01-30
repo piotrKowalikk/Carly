@@ -113,13 +113,13 @@ interface IEnhancedTableCarsProps extends RouteComponentProps {
     error: string;
 }
 
-function EnhancedTableCars(props: IEnhancedTableCarsProps) {
-
-    if (props.data.length == 0 && !props.error) {
-        props.fetchCars();
-    }
+const EnhancedTableCars = (props: IEnhancedTableCarsProps) => {
 
     React.useEffect(() => {
+        async function wrapper() {
+            await props.fetchCars();
+        }
+        wrapper();
         return () => {
             props.cleanupAction();
         }
@@ -196,7 +196,7 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
                                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                             .map((row: Car, index) => {
                                                 const isItemSelected = isSelected(row.id);
-                                                
+
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
                                                         <TableCell >{row.licenseNumber}</TableCell>
