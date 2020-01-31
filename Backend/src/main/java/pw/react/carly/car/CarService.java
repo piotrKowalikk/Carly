@@ -22,11 +22,10 @@ public class CarService {
 
     private StatusRepository statusRepository;
     private CarRepository carRepository;
-    private StatusService statusService;
+
     @Autowired
     public CarService(StatusRepository statusRepository, CarRepository carRepository,StatusService statusService) {
         this.statusRepository = statusRepository;
-        this.statusService = statusService;
         this.carRepository = carRepository;
     }
 

@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 
@@ -40,23 +39,23 @@ public class AdminController {
         return ResponseEntity.ok().body(admins);
     }
 
-    @PostMapping("/sign-up")
-    public void signUp(@RequestBody Admin user) {
-        user.setPassword(encoder.encode(user.getPassword()));
-        adminRepository.save(user);
-    }
+//    @PostMapping("/sign-up")
+//    public void signUp(@RequestBody Admin user) {
+//        user.setPassword(encoder.encode(user.getPassword()));
+//        adminRepository.save(user);
+//    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteAdmin(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(adminService.deleteAdmin(adminService.getAdmin((id))));
-    }
-    @PatchMapping("")
-    public ResponseEntity<Admin> updateAdmin(@RequestBody @Valid Admin Admin){
-        return ResponseEntity.ok().body(adminService.updateAdmin(Admin));
-    }
-    @PutMapping(path = "")
-    public ResponseEntity<Admin> updateWholeAdmin(@RequestBody @Valid Admin updatedAdmin) {
-        return ResponseEntity.ok().body(adminRepository.save(updatedAdmin));
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity deleteAdmin(@PathVariable("id") Long id){
+//        return ResponseEntity.ok().body(adminService.deleteAdmin(adminService.getAdmin((id))));
+//    }
+//    @PatchMapping("")
+//    public ResponseEntity<Admin> updateAdmin(@RequestBody @Valid Admin Admin){
+//        return ResponseEntity.ok().body(adminService.updateAdmin(Admin));
+//    }
+//    @PutMapping(path = "")
+//    public ResponseEntity<Admin> updateWholeAdmin(@RequestBody @Valid Admin updatedAdmin) {
+//        return ResponseEntity.ok().body(adminRepository.save(updatedAdmin));
+//    }
 
 }
