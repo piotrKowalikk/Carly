@@ -1,7 +1,5 @@
 package pw.react.carly.admin;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -19,7 +17,6 @@ public class Admin {
     private String email;
     @NotNull
     @Column
-    @JsonIgnore
     private String password;
 
     public long getId() {
