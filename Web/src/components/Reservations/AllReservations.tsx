@@ -6,13 +6,16 @@ import { connect } from 'react-redux';
 import { EnhancedTableReservation } from './ReservationsTableSorted';
 import { Container, Form, Spinner, Alert } from 'react-bootstrap';
 import { cleanUpReservationsAction } from '../../redux/reservations/actions/cleanUpReservationsAction';
+import { RouteComponentProps } from 'react-router-dom';
 
 interface IReservationsDispatchProps {
     fetchReservations: typeof fetchAllReservations;
     cleanup: Function;
+
 }
 
 interface IReservationsStateProps {
+    isAuthorized: boolean;
     isLoading: boolean;
     data: Reservation[];
     error: string;
@@ -21,9 +24,9 @@ interface IReservationsStateProps {
 interface IReservationsOwnProps {
 }
 
-type IReservationsProps = IReservationsDispatchProps & IReservationsStateProps & IReservationsOwnProps;
+type IReservationsProps = IReservationsDispatchProps & IReservationsStateProps & IReservationsOwnProps & RouteComponentProps;
 
-class AllReservations extends React.Component<any, IReservationsProps>{
+class AllReservations extends React.Component<IReservationsProps, any>{
 
     constructor(props) {
         super(props)
@@ -33,7 +36,7 @@ class AllReservations extends React.Component<any, IReservationsProps>{
         this.props.cleanup();
     }
     async componentDidMount() {
-        if (this.props.data.length == 0 && !this.props.error) {
+        if (this.props.isAuthorized && this.props.data.length == 0 && !this.props.error) {
             await this.props.fetchReservations();
         }
     }
@@ -51,6 +54,10 @@ class AllReservations extends React.Component<any, IReservationsProps>{
     };
 
     render() {
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/logIn');
+        }
+
         if (this.props.error) {
             return (
                 <Alert variant="danger" >
@@ -80,11 +87,12 @@ class AllReservations extends React.Component<any, IReservationsProps>{
 }
 
 
-const mapStateToProps = ({ reservations }: IApplicationState, props: IReservationsOwnProps): IReservationsStateProps => {
+const mapStateToProps = ({ reservations, authorize }: IApplicationState, props: IReservationsOwnProps): IReservationsStateProps => {
     var rsl: IReservationsStateProps = {
         isLoading: reservations.isLoading,
         error: reservations.errorMessage,
-        data: reservations.reservations
+        data: reservations.reservations,
+        isAuthorized: authorize.isAuthorized
     };
     return rsl;
 }

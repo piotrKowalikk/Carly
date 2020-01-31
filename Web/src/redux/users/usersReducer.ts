@@ -21,8 +21,8 @@ const usersReducer: Reducer<IUserState, any> = (state = initialState, action) =>
             return Object.assign({}, state, { ...initialState })
         }
         case UserActionTypes.DELETE: {
-            // var users: User[] = state.users.filter(x => x.id != action.payload.deletedUserId)
-            return Object.assign({}, state, { initialState })
+            var users: User[] = state.users.filter(x => x.id != action.payload.deletedUserId)
+            return Object.assign({}, state, { users })
         }
         default:
             return state;

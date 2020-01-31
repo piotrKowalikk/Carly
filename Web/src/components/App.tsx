@@ -14,6 +14,7 @@ import LogOut from './Authentication/LogOut';
 import CarsEdit from './Cars/CarsEdit';
 import CarsAdd from './Cars/CarsAdd';
 import { store } from '../redux/store';
+import Home from './Home';
 
 class App extends React.Component<{}, undefined> {
 
@@ -21,7 +22,7 @@ class App extends React.Component<{}, undefined> {
     return (
       <Provider store={store}>
         <NavBar />
-        <Route exact path="/">Home here</Route>
+        <Route exact path="/" component={Home} />
         <Route path="/logIn" component={LogIn} />
         <Route path="/users" component={EnhancedTableUsers} />
         <Route path="/cars" component={EnhancedTableCars} />

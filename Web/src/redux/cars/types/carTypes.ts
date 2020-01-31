@@ -15,5 +15,7 @@ export enum CarActionTypes {
     GET_CARS = "GET_CARS",
     CLEANUP = "CLEANUP",
     DELETE_CAR = "DELETE_CAR",
-    EDIT_CAR = "EDIT_CAR"
+    EDIT_CAR = "EDIT_CAR",
+    CLEANUP_DETAILS = "CLEANUP_DETAILS",
+    CLEANUP_CARS = "CLEANUP_CARS"
 }

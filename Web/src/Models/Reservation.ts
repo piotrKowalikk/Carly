@@ -25,9 +25,6 @@ export class Reservation {
         this.dateTo = data.dateTo ?? null;
         this.type = data.type ?? null;
         this.carData = data.carData ?? null;
-        if (this.type && this.type.toString() == 'UNAVAILABLE') {
-            this.name = "Admin";
-        }
     }
 
     static parseData(data: any) {
@@ -36,11 +33,15 @@ export class Reservation {
             return [];
         try {
             data.content.forEach(x => {
+                if(x.type=='UNAVAILABLE')
+                {
+                    // console.log('Dupa')
+                }
                 reservations.push(new Reservation(
                     {
                         id: x.id,
-                        name: x.bookingUserInfo ? x.bookingUserInfo.name : null,
-                        surname: x.bookingUserInfo ? x.bookingUserInfo.surname : null,
+                        name: x.bookingUserInfo ? x.bookingUserInfo.name : '',
+                        surname: x.bookingUserInfo ? x.bookingUserInfo.surname : 'Admin',
                         email: x.bookingUserInfo ? x.bookingUserInfo.email : null,
                         comment: x.comment,
                         dateFrom: new Date(x.dateFrom),

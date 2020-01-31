@@ -20,7 +20,7 @@ import { Container, Alert, Spinner, Button } from 'react-bootstrap';
 import { Car } from '../../Models/Car';
 import { fetchCars } from '../../redux/cars/actions/fetchCars';
 import { IApplicationState } from '../../redux/rootReducer';
-import { cleanUpAction } from '../../redux/cars/actions/cleanUpAction';
+import { cleanUpCarsAction } from '../../redux/cars/actions/cleanUpCarsAction';
 import { AddBox, DriveEta } from '@material-ui/icons';
 import { selectCarAction } from '../../redux/cars/actions/selectCarAction';
 
@@ -64,7 +64,7 @@ function EnhancedTableHead(props) {
                     License number
                 </TableCell>
                 <TableCell key={'carMake'} style={{ width: '180px' }} sortDirection={orderBy === 'carMake' ? order : false}>
-                    <TableSortLabel active={orderBy === 'carMake'} direction={order} onClick={createSortHandler('year')}>
+                    <TableSortLabel active={orderBy === 'carMake'} direction={order} onClick={createSortHandler('carMake')}>
                         Car Make
                         </TableSortLabel>
                 </TableCell>
@@ -75,7 +75,9 @@ function EnhancedTableHead(props) {
                 </TableCell>
 
                 <TableCell key={'location'} >
-                    Location
+                    <TableSortLabel active={orderBy === 'location'} direction={order} onClick={createSortHandler('location')}>
+                        Location
+                        </TableSortLabel>
                 </TableCell>
                 <TableCell></TableCell>
             </TableRow>
@@ -104,20 +106,25 @@ const useStyles = makeStyles(() => ({
 
 interface IEnhancedTableCarsProps extends RouteComponentProps {
     data: Car[];
+    isAuthorized: boolean;
     isLoading: boolean;
     fetchCars: typeof fetchCars;
-    cleanupAction: typeof cleanUpAction;
+    cleanupAction: typeof cleanUpCarsAction;
     selectCar: typeof selectCarAction;
     error: string;
 }
 
-function EnhancedTableCars(props: IEnhancedTableCarsProps) {
-
-    if (props.data.length == 0 && !props.error) {
-        props.fetchCars();
+const EnhancedTableCars = (props: IEnhancedTableCarsProps) => {
+    if (!props.isAuthorized) {
+        props.history.push('/logIn');
+        return (<div></div>);
     }
 
     React.useEffect(() => {
+        async function wrapper() {
+            await props.fetchCars();
+        }
+        wrapper();
         return () => {
             props.cleanupAction();
         }
@@ -236,8 +243,9 @@ function EnhancedTableCars(props: IEnhancedTableCarsProps) {
     );
 }
 
-const mapStateToProps = ({ cars }: IApplicationState) => {
+const mapStateToProps = ({ cars, authorize }: IApplicationState) => {
     return {
+        isAuthorized: authorize.isAuthorized,
         data: cars.cars,
         error: cars.errorMessage,
         isLoading: cars.isLoading
@@ -245,7 +253,7 @@ const mapStateToProps = ({ cars }: IApplicationState) => {
 }
 const mapDispatchToProps = (dispatch) => ({
     fetchCars: () => dispatch(fetchCars()),
-    cleanupAction: () => dispatch(cleanUpAction()),
+    cleanupAction: () => dispatch(cleanUpCarsAction()),
     selectCar: (car: Car) => dispatch(selectCarAction(car))
 
 })

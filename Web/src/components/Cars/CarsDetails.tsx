@@ -12,11 +12,14 @@ import { EnhancedTableReservation } from '../Reservations/ReservationsTableSorte
 import { removeCarAction } from '../../redux/cars/actions/removeCarAction';
 import { IApplicationState } from '../../redux/rootReducer';
 import { getAllCarReservations } from '../../redux/.resources/apiURLs';
+import { cleanUpDetailsAction } from '../../redux/cars/actions/cleanUpDetails';
 
 interface ICarTableProps extends RouteComponentProps {
+    isAuthorized: boolean;
     removeCar: Function;
     car: Car;
     reservations: Reservation[];
+    cleanUpDetails: typeof cleanUpDetailsAction;
     isLoading: boolean;
 }
 
@@ -29,19 +32,26 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
         this.state = {
         }
     }
-    componentDidMount(){
+
+    componentWillUnmount() {
+        this.props.cleanUpDetails();
+    }
+    componentDidMount() {
     }
     removeCar = async (e) => {
-        
+
         var a = await this.props.removeCar(this.props.car.id);
         if (a == true) {
             this.props.history.push("/cars");
         }
-        
+
     }
 
     render() {
-        
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/logIn');
+        }
+
         const car = this.props.car;
         const styleForm: React.CSSProperties = {
             width: 'auto',
@@ -59,13 +69,13 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
             border: ' 1px solid #ccc',
         }
         if (this.props.car == null || this.props.isLoading) {
-                return (<Container style={{ textAlign: "center" }}>
-                    <Spinner animation="border" role="status">
-                        <span className="sr-only">Loading...</span>
-                    </Spinner>
-                </Container>)
+            return (<Container style={{ textAlign: "center" }}>
+                <Spinner animation="border" role="status">
+                    <span className="sr-only">Loading...</span>
+                </Spinner>
+            </Container>)
         }
-       
+
         if (!car)
             return (
                 <Alert variant="danger" >
@@ -95,7 +105,7 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
                             <Form.Control disabled defaultValue={car.price} />
                         </Form.Group>
                     </Form.Row>
-                    
+
 
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridLicense">
@@ -135,8 +145,9 @@ class CarsDetails extends React.Component<ICarTableProps, ICarTableState>{
     }
 }
 
-const mapStateToProps = ({ cars }: IApplicationState) => {
+const mapStateToProps = ({ cars, authorize }: IApplicationState) => {
     return {
+        isAuthorized: authorize.isAuthorized,
         car: cars.selectedCar,
         reservations: cars.selectedCarReservations
     }
@@ -145,7 +156,8 @@ const mapDispatchToProps = (dispatch) => ({
     getCatReservations: (car: Car) => dispatch((car.id)),
     removeCar: async (id: string) => {
         return await removeCarAction(dispatch, id);
-    }
+    },
+    cleanUpDetails: () => dispatch(cleanUpDetailsAction())
 })
 
 export default connect(

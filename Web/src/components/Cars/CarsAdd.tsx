@@ -11,9 +11,11 @@ import { AddBox, Edit, Cancel } from '@material-ui/icons'
 import { IconButton } from 'material-ui';
 import { createCarAction } from '../../redux/cars/actions/createCarAction';
 import { number } from 'prop-types';
+import { IApplicationState } from '../../redux/rootReducer';
 
 interface ICarsAddProps extends RouteComponentProps {
-    createCar: typeof createCarAction
+    createCar: typeof createCarAction;
+    isAuthorized: boolean;
 }
 
 interface ICarsAddState {
@@ -29,8 +31,8 @@ interface ICarsAddState {
     carModelError: string;
     licenseNumberError: string;
     locationError: string;
-    seatsError:string;
-    priceError:string;
+    seatsError: string;
+    priceError: string;
 }
 class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     constructor(props) {
@@ -41,32 +43,32 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
             licenseNumber: '',
             seats: 0,
             year: 0,
-            price:0,
+            price: 0,
             location: '',
             yearError: '',
             carMakeError: '',
             carModelError: '',
             licenseNumberError: '',
             locationError: '',
-            seatsError:'',
-            priceError:'',
+            seatsError: '',
+            priceError: '',
         }
     }
 
     SeatsChanged = (e) => {
-        if(!e.target.value)
-            this.setState({seatsError:'Required'})
+        if (!e.target.value)
+            this.setState({ seatsError: 'Required' })
         else
-         this.setState({ seats: e.target.value, seatsError:'' });
+            this.setState({ seats: e.target.value, seatsError: '' });
     }
 
     PriceChanged = (e) => {
-        if(!e.target.value )
-            this.setState({priceError:'Required'})
-        else if(e.target.value <= 0)
-            this.setState({priceError:'Cannot be less than zero'})
+        if (!e.target.value)
+            this.setState({ priceError: 'Required' })
+        else if (e.target.value <= 0)
+            this.setState({ priceError: 'Cannot be less than zero' })
         else
-         this.setState({ price: e.target.value, priceError:'' });
+            this.setState({ price: e.target.value, priceError: '' });
     }
 
     YearChanged = (e) => {
@@ -77,7 +79,7 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
             return;
         }
         else
-            this.setState({ year: e.target.value, yearError:'' });
+            this.setState({ year: e.target.value, yearError: '' });
     }
 
     ValidateYear = (year) => {
@@ -87,50 +89,51 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
         }
         return (true)
     }
-    
+
     CarMakeChanged = (e) => {
-       
-        if(!e.target.value)
-            this.setState({carMakeError:'Required'})
+
+        if (!e.target.value)
+            this.setState({ carMakeError: 'Required' })
         else
-            this.setState({ carMake: e.target.value, carMakeError:'' });
+            this.setState({ carMake: e.target.value, carMakeError: '' });
     }
 
     LicenseChanged = (e) => {
-        
-        if(!e.target.value)
-            this.setState({licenseNumberError:'Required'})
+
+        if (!e.target.value)
+            this.setState({ licenseNumberError: 'Required' })
         else
-            this.setState({ licenseNumber: e.target.value,licenseNumberError:''  });
+            this.setState({ licenseNumber: e.target.value, licenseNumberError: '' });
     }
 
     ModelChanged = (e) => {
-       
-        if(!e.target.value)
-            this.setState({carModelError:'Required' })
-        else 
-            this.setState({ carModel: e.target.value,carModelError:''  });
+
+        if (!e.target.value)
+            this.setState({ carModelError: 'Required' })
+        else
+            this.setState({ carModel: e.target.value, carModelError: '' });
     }
 
     LocationChanged = (e) => {
-       
-        if(!e.target.value)
-            this.setState({locationError:'Required'})
+
+        if (!e.target.value)
+            this.setState({ locationError: 'Required' })
         else
-            this.setState({ location: e.target.value,locationError:''});
+            this.setState({ location: e.target.value, locationError: '' });
 
     }
 
     componentDidMount() {
-        
+
     }
 
     createCar = async (e) => {
-       e.preventDefault();
+        e.preventDefault();
 
-        if(this.state.yearError || !this.state.carMake || !this.state.carModel || !this.state.licenseNumber || !this.state.location || !this.state.price || this.state.price < 0)
+
+        if (this.state.yearError || !this.state.carMake || !this.state.carModel || !this.state.licenseNumber || !this.state.location || !this.state.price || this.state.price < 0)
             return;
-        
+
         var car: Car = new Car();
         car.carMake = this.state.carMake;
         car.carModel = this.state.carModel;
@@ -139,7 +142,7 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
         car.seats = this.state.seats;
         car.year = this.state.year;
         car.price = this.state.price;
-        
+
         //expected
         await this.props.createCar(car);
         //this.props.createCar(car);
@@ -147,12 +150,15 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     }
 
     render() {
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/logIn');
+        }
         const { carMake,
-                carModel,
-                licenseNumber,
-                seats,
-                year,
-                location} = this.state;
+            carModel,
+            licenseNumber,
+            seats,
+            year,
+            location } = this.state;
         const style: React.CSSProperties = {
             position: 'fixed',
             top: '50%',
@@ -183,7 +189,7 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                             <Form.Label>Model</Form.Label>
                             <Form.Control type="text" onChange={this.ModelChanged} />
                             <Form.Text style={{ color: 'red' }} >{this.state.carModelError}</Form.Text>
-                     
+
                         </Form.Group>
                     </Form.Row>
 
@@ -217,7 +223,7 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
                             <Form.Label>Location</Form.Label>
                             <Form.Control type="text" onChange={this.LocationChanged} />
                             <Form.Text style={{ color: 'red' }} >{this.state.locationError}</Form.Text>
-                     
+
                         </Form.Group>
                     </Form.Row>
 
@@ -236,8 +242,8 @@ class CarsAdd extends React.Component<ICarsAddProps, ICarsAddState>{
     }
 }
 
-const mapStateToProps = state => ({
-    car: state.car
+const mapStateToProps = ({ cars, authorize }: IApplicationState) => ({
+    isAuthorized: authorize.isAuthorized,
 })
 const mapDispatchToProps = (dispatch) => ({
     createCar: (car: Car) => dispatch(createCarAction(car))
