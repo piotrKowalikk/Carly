@@ -136,7 +136,7 @@ const EnhancedTableCars = (props: IEnhancedTableCarsProps) => {
     const [selected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense] = React.useState(true);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
     const handleRequestSort = (event, property) => {
         const isDesc = orderBy === property && order === 'desc';
@@ -227,7 +227,7 @@ const EnhancedTableCars = (props: IEnhancedTableCarsProps) => {
                                 </Table>
                             </TableContainer>
                             <TablePagination
-                                rowsPerPageOptions={[5, 10, 25]}
+                                rowsPerPageOptions={[5, 10,, 15, 25]}
                                 component="div"
                                 count={props.data.length}
                                 rowsPerPage={rowsPerPage}

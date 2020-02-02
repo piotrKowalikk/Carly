@@ -135,7 +135,7 @@ export function EnhancedTableReservation(props: IReservationsProps) {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(props.dense);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
     const handleRequestSort = (event, property) => {
         const isDesc = orderBy === property && order === 'desc';
