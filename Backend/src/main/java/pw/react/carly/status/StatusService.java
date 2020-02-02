@@ -19,6 +19,9 @@ import pw.react.carly.reservation.ReservationInfo;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import static pw.react.carly.status.StatusSpecifications.*;
 
 
 @Service
@@ -81,19 +84,50 @@ public class StatusService {
                     return false;
         return true;
     }
+    public List<Status> findCollidingBookedStatuses(Date from, Date to, long carId){
+       return statusRepository.findAll(collidesWithDateSpan(from,to).and(byCarId(carId).and(isType(StatusType.BOOKED))));
+    }
+    private List<Status> changeToBookedType(List<Status> statuses){
+        for (Status s: statuses
+        ) {
+            s.setType(StatusType.BOOKINGCANCELED);
+        }
+        return statuses;
+    }
 
-    public Status saveStatus(StatusDTO statusDTO){
-        if(!checkIfCorrectDate(statusDTO.getDateFrom(),statusDTO.getDateTo()))
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Wrong date");
+    private Iterable<Status> saveAll(List<Status> statuses){
+        return statusRepository.saveAll(statuses);
+    }
 
+    private void cancelCollidingReservations(Date from, Date to, long carId){
+        List<Status> statusesWhichCollidesWithNewOne = findCollidingBookedStatuses(from,to,carId);
+        if(!statusesWhichCollidesWithNewOne.isEmpty()) {
+            changeToBookedType(statusesWhichCollidesWithNewOne);
+            saveAll(statusesWhichCollidesWithNewOne);
+        }
+    }
+
+    private Status createUnavailableStatus(StatusDTO statusDTO){
         Car car = carService.getCar(statusDTO.getCarId());
         Status status = new Status();
         mapper.map(statusDTO,status);
         status.setId(null);
-        if(statusDTO.getType() == null)
-            status.setType(StatusType.UNAVAILABLE);
+        status.setType(StatusType.UNAVAILABLE);
         status.setCar(car);
+        return status;
+    }
+
+    public Status saveUnavailableStatus(StatusDTO statusDTO){
+        Date from  = statusDTO.getDateFrom();
+        Date to = statusDTO.getDateTo();
+
+        if(!checkIfCorrectDate(from,to))
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Wrong date");
+
+        cancelCollidingReservations(from,to,statusDTO.getCarId());
+        Status status = createUnavailableStatus(statusDTO);
+
         return statusRepository.save(status);
     }
     public boolean cancelReservation(Long id){

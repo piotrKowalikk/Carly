@@ -48,12 +48,12 @@ public class CarService {
 
     public Specification<Car> getAvailabilitySpec(Date from,Date to,boolean available){
         List<Status> statuses = statusRepository.findAll(
-                isUnavailableOrBooked().and(colidesWithDateSpan(from,to)));
+                isUnavailableOrBooked().and(collidesWithDateSpan(from,to)));
         return available ? isNotDeniedByStatuses(statuses) : isDeniedByStatuses(statuses);
     }
 
     public boolean checkIfAvailable(Car car, Date from, Date to){
-        List<Status> statuses = statusRepository.findAll(byCarId(car.getId()).and(isUnavailableOrBooked()).and(colidesWithDateSpan(from,to)));
+        List<Status> statuses = statusRepository.findAll(byCarId(car.getId()).and(isUnavailableOrBooked()).and(collidesWithDateSpan(from,to)));
         return statuses.isEmpty();
     }
 

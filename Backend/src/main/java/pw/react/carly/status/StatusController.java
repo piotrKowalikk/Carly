@@ -69,7 +69,7 @@ public class StatusController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Status> addStatus(@RequestBody @Valid StatusDTO statusDTO) {
-            return ResponseEntity.ok().body(statusService.saveStatus(statusDTO));
+    public ResponseEntity<Status> addUnavailableStatus(@RequestBody @Valid StatusDTO statusDTO) {
+            return ResponseEntity.ok().body(statusService.saveUnavailableStatus(statusDTO));
     }
 }

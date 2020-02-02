@@ -22,7 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
-import static pw.react.carly.status.StatusSpecifications.colidesWithDateSpan;
+import static pw.react.carly.status.StatusSpecifications.collidesWithDateSpan;
 
 @RunWith(SpringRunner.class)
 @Transactional
@@ -95,7 +95,7 @@ public class StatusSpecTests {
         statuses.add(getDummyStatus(statusFrom2,statusTo2));
 
         statusRepository.saveAll(statuses);
-        List<Status> found = statusRepository.findAll(colidesWithDateSpan(start,end));
+        List<Status> found = statusRepository.findAll(collidesWithDateSpan(start,end));
         assertEquals(true,found.isEmpty());
     }
 
@@ -121,7 +121,7 @@ public class StatusSpecTests {
         statuses.add(getDummyStatus(statusFrom,statusTo));
         statusRepository.saveAll(statuses);
 
-        List<Status> found = statusRepository.findAll(colidesWithDateSpan(start,end));
+        List<Status> found = statusRepository.findAll(collidesWithDateSpan(start,end));
 
         assertEquals(1,found.size());
     }
@@ -148,7 +148,7 @@ public class StatusSpecTests {
         statuses.add(getDummyStatus(statusFrom,statusTo));
         statusRepository.saveAll(statuses);
 
-        List<Status> found = statusRepository.findAll(colidesWithDateSpan(start,end));
+        List<Status> found = statusRepository.findAll(collidesWithDateSpan(start,end));
 
         assertEquals(1,found.size());
     }
@@ -176,7 +176,7 @@ public class StatusSpecTests {
         statuses.add(getDummyStatus(statusFrom,statusTo));
         statusRepository.saveAll(statuses);
 
-        List<Status> found = statusRepository.findAll(colidesWithDateSpan(start,end));
+        List<Status> found = statusRepository.findAll(collidesWithDateSpan(start,end));
 
         assertEquals(1,found.size());
     }
@@ -206,7 +206,7 @@ public class StatusSpecTests {
         statuses.add(getDummyStatus(statusFrom,statusTo));
         statusRepository.saveAll(statuses);
 
-        List<Status> found = statusRepository.findAll(colidesWithDateSpan(start,end));
+        List<Status> found = statusRepository.findAll(collidesWithDateSpan(start,end));
 
         assertEquals(1,found.size());
     }
@@ -237,7 +237,7 @@ public class StatusSpecTests {
         statuses.add(getDummyStatus(statusFrom2,statusTo2));
 
         statusRepository.saveAll(statuses);
-        List<Status> found = statusRepository.findAll(colidesWithDateSpan(start,end));
+        List<Status> found = statusRepository.findAll(collidesWithDateSpan(start,end));
         assertEquals(statuses.size(),found.size());
     }
 
@@ -287,7 +287,7 @@ public class StatusSpecTests {
         statuses.add(status4);
 
         statusRepository.saveAll(statuses);
-        List<Status> found = statusRepository.findAll(colidesWithDateSpan(start,end));
+        List<Status> found = statusRepository.findAll(collidesWithDateSpan(start,end));
         assertEquals(2,found.size());
         assertEquals(true,found.contains(status2));
         assertEquals(true,found.contains(status3));

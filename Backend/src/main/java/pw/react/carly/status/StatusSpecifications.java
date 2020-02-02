@@ -46,7 +46,7 @@ public class StatusSpecifications {
         return isType(StatusType.BOOKED).or(isType(StatusType.UNAVAILABLE));
     }
 
-    public static Specification<Status> colidesWithDateSpan(Date start, Date end){
+    public static Specification<Status> collidesWithDateSpan(Date start, Date end){
                 //  <start  |from---------to| end>|
         return (toDateAfter(end).and(fromDateBefore(end)))
                 //  |from---- <start-----to| end>|
