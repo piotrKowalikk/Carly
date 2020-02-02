@@ -30,7 +30,9 @@ const authorizeReducer: Reducer<IAuthorizeState, any> = (state = initialState, a
         }
         case AuthorizeActionTypes.CLEANUP: {
             return Object.assign({}, state, { initialState })
-
+        }
+        case AuthorizeActionTypes.LOAD_FROM_STORAGE: {
+            return Object.assign({}, state, { ...state, token: action.payload.token, isAuthorized: true })
         }
         default:
             return state;
