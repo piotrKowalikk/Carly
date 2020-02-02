@@ -21,8 +21,8 @@ const NavBar = (props: INavBarProps) => {
                 {/* <Link className='btn shadow-none' style={{ color: 'white' }} to="/">Home</Link> */}
                 {props.isAuthorized &&
                     <div>
-                        <Link className='btn shadow-none' style={{ color: 'white' }} to="/users">Users</Link>
                         <Link className='btn shadow-none' style={{ color: 'white' }} to="/cars">Cars</Link>
+                        <Link className='btn shadow-none' style={{ color: 'white' }} to="/users">Users</Link>
                         <Link className='btn shadow-none' style={{ color: 'white' }} to="/reservations">Reservations</Link>
                     </div>
                 }

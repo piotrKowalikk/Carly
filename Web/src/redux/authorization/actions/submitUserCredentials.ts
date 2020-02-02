@@ -2,6 +2,7 @@ import axios from 'axios'
 import { AuthorizeActionTypes } from '../types/authorizationTypes';
 import { logIn } from '../../.resources/apiURLs';
 import { store } from '../../store'
+import { StorageTwoTone } from '@material-ui/icons';
 
 export const submitUserCredentials = (login: string, password: string) => {
     return async dispatch => {
@@ -40,6 +41,7 @@ export const submitUserCredentials = (login: string, password: string) => {
 //enums would be better
 const successHandle = (data) => {
     var token = data.Authorization;
+    sessionStorage.setItem('jwtToken', token);
     return {
         type: AuthorizeActionTypes.AUTHORIZED,
         payload: {

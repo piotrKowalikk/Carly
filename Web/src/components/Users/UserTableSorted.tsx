@@ -142,7 +142,7 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(true);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
     const handleRequestSort = (event, property) => {
         const isDesc = orderBy === property && order === 'desc';
@@ -241,7 +241,7 @@ function EnhancedTableUsers(props: IEnhancedTableUsersProps) {
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[5, 10, 15, 25]}
                     component="div"
                     count={props.data.length}
                     rowsPerPage={rowsPerPage}

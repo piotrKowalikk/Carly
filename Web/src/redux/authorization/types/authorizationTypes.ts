@@ -11,5 +11,6 @@ export enum AuthorizeActionTypes {
     LOADING = '@@authorize/LOADING',
     AUTHORIZED = '@@authorize/AUTHORIZED',
     LOGOUT = '@@authorize/LOGOUT',
-    CLEANUP = "CLEANUP"
+    CLEANUP = "CLEANUP",
+    LOAD_FROM_STORAGE = "LOAD_FROM_STORAGE"
 }

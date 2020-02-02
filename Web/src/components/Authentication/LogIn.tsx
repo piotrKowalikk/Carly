@@ -9,10 +9,12 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { IApplicationState } from '../../redux/rootReducer';
 import { IAuthorizeState } from '../../redux/authorization/types/authorizationTypes';
 import { cleanUpAutorizationAction } from '../../redux/authorization/actions/cleanUpAutorizationAction';
+import { loadFromStorage } from '../../redux/authorization/actions/loadFromSotrage';
 
 interface ILogInProps extends RouteComponentProps {
     submitUserCredentials: typeof submitUserCredentials;
     cleanUpAction: typeof cleanUpAutorizationAction;
+    loadFromStorage: typeof loadFromStorage;
     isLoading: boolean;
 }
 
@@ -39,6 +41,19 @@ class LogIn extends React.Component<ILogInProps, ILogInState>{
             loading: false
         }
     }
+    componentWillMount() {
+        try {
+            var token = sessionStorage.getItem('jwtToken');
+            if (token != null && token != '') {
+                this.props.loadFromStorage(token);
+                this.props.history.push('/cars');
+            }
+        }
+        catch {
+            console.log('dupa')
+        }
+    }
+
     componentWillUnmount() {
         this.props.cleanUpAction();
     }
@@ -155,8 +170,8 @@ const mapStateToProps = ({ authorize }: IApplicationState) => {
 const mapDispatchToProps = (dispatch) => {
     var props = {
         submitUserCredentials: (login, password) => dispatch(submitUserCredentials(login, password)),
-        cleanUpAction: () => dispatch(cleanUpAutorizationAction())
-
+        cleanUpAction: () => dispatch(cleanUpAutorizationAction()),
+        loadFromStorage: (token) => dispatch(loadFromStorage(token))
     };
     return (
         props

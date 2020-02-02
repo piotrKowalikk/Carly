@@ -15,23 +15,14 @@ import CarsEdit from './Cars/CarsEdit';
 import CarsAdd from './Cars/CarsAdd';
 import { store } from '../redux/store';
 import Home from './Home';
+import AppRouter from './AppRouter';
 
 class App extends React.Component<{}, undefined> {
 
   public render() {
     return (
       <Provider store={store}>
-        <NavBar />
-        <Route exact path="/" component={Home} />
-        <Route path="/logIn" component={LogIn} />
-        <Route path="/users" component={EnhancedTableUsers} />
-        <Route path="/cars" component={EnhancedTableCars} />
-        <Route path="/car-details" component={CarsDetails} />
-        <Route path="/car-edit" component={CarsEdit} />
-        <Route path="/car-add" component={CarsAdd} />
-        <Route path="/make-unavailable" component={MakeUnavailable} />
-        <Route path="/logOut" component={LogOut} />
-        <Route path="/reservations" component={AllReservations} />
+        <AppRouter />
       </Provider>
     );
   }
