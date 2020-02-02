@@ -91,7 +91,7 @@ class Reservations extends Component<any,any> {
                     renderItem={this.renderItem}
                     onRefresh={this.fetchData}
                     refreshing={isFetching}
-                    ListHeaderComponent={fetchedProperly ? (reservations.length > 0 ? null :
+                    ListHeaderComponent={fetchedProperly ? ((reservations.length > 0 || isFetching) ? null :
                         <ListItem
                           leftIcon={{ type: 'material-icons', color: "#B22222", name: 'error-outline' }}
                           title={"No reservations for this car!"}

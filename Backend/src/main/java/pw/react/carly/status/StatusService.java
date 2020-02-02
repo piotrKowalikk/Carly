@@ -63,6 +63,7 @@ public class StatusService {
         status.setDateTo(reservationData.getToDate());
         status.setType(StatusType.BOOKED);
         status.setComment("Bookly reservation");
+
         return statusRepository.save(status);
     }
     public Status updateStatus(Status status){
@@ -93,7 +94,6 @@ public class StatusService {
         if(statusDTO.getType() == null)
             status.setType(StatusType.UNAVAILABLE);
         status.setCar(car);
-        status.setCreatedAt(new Date());
         return statusRepository.save(status);
     }
     public boolean cancelReservation(Long id){

@@ -1,5 +1,6 @@
 package pw.react.carly.status;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import pw.react.carly.bookingUserInfo.BookingUserInfo;
 import pw.react.carly.car.Car;
@@ -21,6 +22,7 @@ public class Status {
     @ManyToOne(cascade = CascadeType.ALL)
     private BookingUserInfo bookingUserInfo;
     private String comment;
+    @CreationTimestamp
     private Date createdAt;
 
     @NotNull
@@ -40,11 +42,11 @@ public class Status {
     public Status() {
     }
 
-    public Status(@NotNull Car car, BookingUserInfo bookingUserInfo, String comment, Date createdAt, @NotNull Date dateFrom, @NotNull Date dateTo, @NotNull StatusType type) {
+    public Status(@NotNull Car car, BookingUserInfo bookingUserInfo, String comment,@NotNull Date dateFrom, @NotNull Date dateTo, @NotNull StatusType type) {
         this.car = car;
         this.bookingUserInfo = bookingUserInfo;
         this.comment = comment;
-        this.createdAt = createdAt;
+
         this.dateFrom = dateFrom;
         this.dateTo = dateTo;
         this.type = type;
