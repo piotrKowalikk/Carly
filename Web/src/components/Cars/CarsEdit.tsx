@@ -65,7 +65,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         // console.log(exampleCarEdit);
         //this.props.carEdit(this.state.car);
         await this.props.selectCar(exampleCarEdit);
-        this.props.carEdit(exampleCarEdit);
+        await this.props.carEdit(exampleCarEdit);
         this.props.history.push('/cars');
 
     }
