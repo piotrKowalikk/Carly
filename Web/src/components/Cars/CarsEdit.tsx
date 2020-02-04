@@ -55,7 +55,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         // console.log(this.state);
     }
 
-    editCar = (e) => {
+    editCar = async (e) => {
         e.preventDefault();
         var exampleCarEdit: Car = this.props.car;
         exampleCarEdit.location = this.state.location;
@@ -64,7 +64,7 @@ class CarsEdit extends React.Component<ICarsEditProps, ICarsEditState>{
         exampleCarEdit.price = this.state.price;
         // console.log(exampleCarEdit);
         //this.props.carEdit(this.state.car);
-        this.props.selectCar(exampleCarEdit);
+        await this.props.selectCar(exampleCarEdit);
         this.props.carEdit(exampleCarEdit);
         this.props.history.push('/cars');
 
