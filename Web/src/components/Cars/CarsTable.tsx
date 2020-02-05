@@ -25,15 +25,10 @@ import { AddBox, DriveEta } from '@material-ui/icons';
 import { selectCarAction } from '../../redux/cars/actions/selectCarAction';
 
 function desc(a, b, orderBy) {
-    var yearA: number = a[orderBy];
-    var yearB: number = b[orderBy];
-    if (yearA == 10 || yearB == 10) {
-    }
-    if (yearB < yearA)
-        return -1;
-    if (yearB > yearA)
-        return 1;
-    return 0;
+    var yearA: string = a[orderBy];
+    var yearB: string = b[orderBy];
+    var result =yearB.localeCompare(yearA);
+    return result;
 }
 
 function stableSort(array, cmp) {
@@ -132,7 +127,7 @@ const EnhancedTableCars = (props: IEnhancedTableCarsProps) => {
 
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('year');
+    const [orderBy, setOrderBy] = React.useState('location');
     const [selected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense] = React.useState(true);
@@ -227,7 +222,7 @@ const EnhancedTableCars = (props: IEnhancedTableCarsProps) => {
                                 </Table>
                             </TableContainer>
                             <TablePagination
-                                rowsPerPageOptions={[5, 10,, 15, 25]}
+                                rowsPerPageOptions={[5, 10, , 15, 25]}
                                 component="div"
                                 count={props.data.length}
                                 rowsPerPage={rowsPerPage}
