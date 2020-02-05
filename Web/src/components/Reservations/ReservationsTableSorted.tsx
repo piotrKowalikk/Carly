@@ -27,8 +27,11 @@ import { fetchAllReservations } from '../../redux/reservations/actions/fetchAllR
 
 
 function desc(a, b, orderBy) {
-    var yearA: number = a[orderBy];
-    var yearB: number = b[orderBy];
+    var yearA: any = a[orderBy];
+    var yearB: any = b[orderBy];
+    if (orderBy == 'dateFrom') {
+        return Date.parse(yearA) - Date.parse(yearB);
+    }
     if (yearA == 10 || yearB == 10) {
         var p = 1;
     }
@@ -76,9 +79,7 @@ function EnhancedTableHead(props) {
                 </TableCell>
                 {showCarData &&
                     <TableCell>
-                        <TableSortLabel >
-                            Car Data
-                        </TableSortLabel>
+                        Car Data
                     </TableCell>
                 }
                 <TableCell sortDirection={orderBy === 'type' ? order : false}>
@@ -131,15 +132,15 @@ export function EnhancedTableReservation(props: IReservationsProps) {
 
     const classes = useStyles({});
     const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('year');
+    const [orderBy, setOrderBy] = React.useState('dateFrom');
     const [selected, setSelected] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(props.dense);
     const [rowsPerPage, setRowsPerPage] = React.useState(15);
 
     const handleRequestSort = (event, property) => {
-        const isDesc = orderBy === property && order === 'desc';
-        setOrder(isDesc ? 'asc' : 'desc');
+        const isDesc = orderBy === property && order === 'asc';
+        setOrder(isDesc ? 'desc' : 'asc');
         setOrderBy(property);
         setPage(0);
     };
@@ -190,7 +191,7 @@ export function EnhancedTableReservation(props: IReservationsProps) {
                                                 const labelId = `enhanced-table-checkbox-${index}`;
                                                 return (
                                                     <TableRow key={row.id} hover selected={isItemSelected}>
-                                                        <TableCell >{row.dateFrom.getDate() + "/" + (row.dateFrom.getMonth() > 9 ? row.dateFrom.getMonth() + 1 : '0' + (row.dateFrom.getMonth() + 1)) + ' - ' + row.dateTo.toLocaleDateString('en-GB')}</TableCell>
+                                                        <TableCell >{row.dateFrom.getDate() + "/" + (row.dateFrom.getMonth() >= 9 ? row.dateFrom.getMonth() + 1 : '0' + (row.dateFrom.getMonth() + 1)) + ' - ' + row.dateTo.toLocaleDateString('en-GB')}</TableCell>
                                                         {props.showCarData &&
                                                             <TableCell >{row.carData ?? ''}</TableCell>
                                                         }
